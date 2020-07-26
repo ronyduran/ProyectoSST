@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title>SST Manager</title>
+        <link rel="stylesheet" href="main.css">
+
+    </head>
+    <body>
+        <div id="divbanner">
+            <img src="Imgenes/S.S.T..png" id="banner">
+        </div>
+        <div id="menu">
+            <ul>
+                <li class="active"><a href="#">Inicio</a></li>
+                <li><a href="#">Datos Estadisticos</a></li>
+                <li><a href="#">Infomacion del Proyecto</a></li>
+            </ul>
+        </div>
+       <div class="contenido">
+            <div class="info">
+                <div id="est">
+                    <form >
+                        <div> <b>Estado:</b>
+                            <input type="submit" disabled value="Encendido/Apagado" id="estado">
+                        </div>
+                    </form>
+                </div>
+                <div id="cant">
+                    <form> 
+                        <div> <b>Cantidad de Usuarios al dia: </b>
+                            <input type="number" disabled placeholder="personas/dia">
+                        </div>
+                    </form>
+
+                </div>
+                <div id="nivel">
+                    <label><b> Capacidad Actual:</b></label> </br>
+                    <meter id="lv" value="50" min="0" max="100"></meter>
+
+                </div>
+            </div>
+            <div class="info">
+                <div id="not"><h3>Notificaciones</h3></div>
+                <div id="area"></div>
+            </div>
+       </div>
+       <footer>
+
+       </footer>
+
+
+    </body>
+
+
+</html>
