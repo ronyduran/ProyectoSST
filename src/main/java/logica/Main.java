@@ -8,5 +8,6 @@ public class Main {
             javalinConfig.addStaticFiles("/Web SST");
         } ).start(7000);
 
+
     }
 }
