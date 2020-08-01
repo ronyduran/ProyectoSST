@@ -10,6 +10,16 @@
         <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
         <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js" integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI" crossorigin="anonymous"></script>
 
+        <script>
+            $(document).ready(function() {
+                // auto refresh page after 1 second
+                setInterval('refreshPage()', 5000);
+            });
+
+            function refreshPage() {
+                location.reload();
+            }
+        </script>
         <style th:inline="css">
             .spro{
                 width: [[${taman}]]%;
@@ -46,6 +56,7 @@
                 <div id="est" >
                     <form >
                         <div> <b>Estado:</b>
+
                             <input type="text" disabled name="estado" value="Encendido/Apagado" th:value="${esta}"  id="estado" align="center">
                         </div>
                     </form>
@@ -72,7 +83,7 @@
                 <div id="not" ><h3>Notificaciones</h3></div>
                 <div id="anot">
                     <ul>
-                        <li>Primer elemento de prueba que va a notificar lo que est[a pasando  </li>
+                        <li th:each="n : ${notifi}" th:text="${n}" >Primer elemento de prueba que va a notificar lo que est[a pasando  </li>
 
                     </ul>
                 </div>
