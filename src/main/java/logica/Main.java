@@ -9,7 +9,9 @@ import java.util.Map;
 
 import static io.javalin.apibuilder.ApiBuilder.*;
 
+
 public class Main {
+
     public static void main(String[] args) {
 
         Javalin app = Javalin.create(javalinConfig ->{
@@ -20,6 +22,11 @@ public class Main {
 
         ModelWeb mode =new ModelWeb();
         mode.insertNoti("Esta la alarta de personas sin mascarillas 1");
+        ManejoRemover mr = new ManejoRemover(mode);
+        mr.hilo.start();
+
+
+
 
 
         app.routes(() -> {
@@ -56,4 +63,6 @@ public class Main {
             });
         });
     }
+
+
 }
