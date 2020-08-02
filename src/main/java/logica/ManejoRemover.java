@@ -18,7 +18,8 @@ public class ManejoRemover implements Runnable{
         while (ct == hilo) {
             modelo.eliminarNoti();
             try {
-                Thread.sleep(7000);
+                //Aqui el hilo se va a dormir por un minuto
+                Thread.sleep(60000);
             } catch (InterruptedException e) {
             }
         }

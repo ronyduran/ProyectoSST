@@ -1,7 +1,10 @@
 package logica;
 
+import java.text.DateFormat;
 import java.util.ArrayList;
 import java.util.List;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 public class ModelWeb {
     private String estado;
@@ -49,10 +52,18 @@ public class ModelWeb {
     }
 
     public void insertNoti(String n){
-        notificaciones.add(n);
+        notificaciones.add(fecha()+"---"+n);
     }
 
     public void eliminarNoti(){
-        if (notificaciones.size()>0){
-            notificaciones.remove(0);} }
+        if (notificaciones.size()>1){
+            notificaciones.remove(0);}
+    }
+    public String fecha(){
+        Date fecha1 = new Date();
+        DateFormat hourdateFormat = new SimpleDateFormat("HH:mm:ss dd/MM/yyyy");
+        return hourdateFormat.format(fecha1);
+    }
+
+
 }

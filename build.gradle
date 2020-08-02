@@ -1,6 +1,7 @@
 plugins {
     id 'java'
     id 'application'
+    id 'com.github.johnrengelman.shadow' version '5.2.0'
 }
 
 group 'org.example'
@@ -19,4 +20,9 @@ dependencies {
     compile "org.slf4j:slf4j-simple:1.8.0-beta4"
     compile "org.slf4j:slf4j-api:1.8.0-beta4"
     compile 'org.thymeleaf:thymeleaf:3.0.5.RELEASE'
+}
+shadowJar{
+    baseName = 'SSTproject'
+    classifier = ''
+    archiveVersion = ''
 }
