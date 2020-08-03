@@ -21,8 +21,10 @@ public class Main {
         JavalinRenderer.register(JavalinThymeleaf.INSTANCE, ".html");
 
         ModelWeb mode =new ModelWeb();
-        mode.insertNoti("Esta la alarta de personas sin mascarillas 1");
+        mode.insertNoti("Esperando Notificaciones.....");
+
         ManejoRemover mr = new ManejoRemover(mode);
+
         mr.hilo.start();
 
 
@@ -40,6 +42,7 @@ public class Main {
                     modelo.put("numero",mode.getContador());
                     modelo.put("taman",mode.getNivel());
                     modelo.put("notifi",mode.getNotificaciones());
+
                     ctx.render("/Web SST/index.html", modelo);});
 
                 post("/noti",ctx -> {
