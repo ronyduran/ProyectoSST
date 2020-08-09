@@ -10,13 +10,17 @@ public class ModelWeb {
     private String estado;
     private String contador;
     private Integer nivel;
+    private List<String> userMascarillla;
+    private List<String> userSinMascarillla;
     private List<String> notificaciones;
 
     public ModelWeb() {
         this.estado = "Apagado";
         this.contador = "0";
-        this.nivel = 75;
+        this.nivel = 0;
         this.notificaciones = new ArrayList<>();
+        this.userMascarillla= new ArrayList<>();
+        this.userSinMascarillla= new ArrayList<>();
     }
 
     public String getEstado() {
@@ -66,4 +70,27 @@ public class ModelWeb {
     }
 
 
+    public List<String> getUserMascarillla() {
+        return userMascarillla;
+    }
+
+    public void setUserMascarillla(List<String> userMascarillla) {
+        this.userMascarillla = userMascarillla;
+
+    }
+
+    public List<String> getUserSinMascarillla() {
+        return userSinMascarillla;
+    }
+
+    public void setUserSinMascarillla(List<String> userSinMascarillla) {
+        this.userSinMascarillla = userSinMascarillla;
+    }
+
+    public void sinMascarilla(String sm){
+        userSinMascarillla.add(sm);
+    }
+    public void conMascarilla(String m){
+        userMascarillla.add(m);
+    }
 }
