@@ -103,6 +103,9 @@ li a {
 footer{
     background-color: black;
     color: white;
+    bottom: 0;
+   /* position: absolute;*/
+    width: 100%;
 }
 /*footer {
     background-color: black;

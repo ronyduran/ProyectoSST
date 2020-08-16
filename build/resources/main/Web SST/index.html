@@ -14,7 +14,9 @@
         <script>
             var webSocket;
             var tiempoReconectar = 5000;
-            var tiempoRemover = 10000;
+            var tiempoRemover = 6000;
+            var comprobar=0;
+
             $(document).ready(function() {
 
                 conectar();
@@ -52,16 +54,27 @@
                 if(mensaje.data.startsWith("noficiaciones:")){
                     console.log(mensaje.data);
                     var text=mensaje.data.substring(14);
+                    var aux=mensaje.data.substring(14);
                     var li = document.createElement("li");
                     var text = document.createTextNode(text);
                     li.appendChild(text);
                    // var element= document.getElementById("notifi").append(li);
                     var element= document.getElementById("notifi");
                     element.insertBefore(li, element.childNodes[0]);
+                    if (aux.localeCompare("En Espera de Notificaciones")==0){
+                        comprobar=0;
+                    }else if(aux.localeCompare("En Espera de Notificaciones")!=0 && comprobar<2){
+                        comprobar=1;
+                        element.removeChild(element.childNodes[1]);
+                        comprobar=2;
+                    }
 
                 }
             };
             function conectar() {
+                //Esto es para el WebSocket Secure para el HTTPS
+                // webSocket= new WebSocket("wss://" + location.hostname + ":" + location.port + "/WSEnvio");
+                //Esto es para el WebSocket para el HTTP
                 webSocket= new WebSocket("ws://" + location.hostname + ":" + location.port + "/WSEnvio");
 
                 webSocket.onmessage = function(data){recibirInformacionServidor(data); console.log("Recibido");}
@@ -77,14 +90,15 @@
                 }
             }
             function removerPrimerHijoNotificaciones() {
-                //console.log("entro"+ new Date())
-                var element= document.getElementById("notifi");
-                try {
-                    if(element.firstChild.valueOf())
-                    element.removeChild(element.lastChild);
-                }
-                catch(err) {
-                    console.log("Aun no hay hijos")
+                if(comprobar>0) {
+                    //console.log("entro"+ new Date())
+                    var element = document.getElementById("notifi");
+                    try {
+                        if (element.firstChild.valueOf())
+                            element.removeChild(element.lastChild);
+                    } catch (err) {
+                        console.log("Aun no hay hijos")
+                    }
                 }
 
             }
@@ -112,9 +126,9 @@
 
         </div>
         <nav class="nav nav-pills nav-justified border" >
-            <a class="nav-item nav-link active" href="#">Inicio</a>
-            <a class="nav-item nav-link" href="#">Datos Estadisticos</a>
-            <a class="nav-item nav-link" href="#">Informacion del Proyecto</a>
+            <a class="nav-item nav-link active" href="index.html">Inicio</a>
+            <a class="nav-item nav-link" href="Estadisticas.html">Datos Estadísticos</a>
+            <a class="nav-item nav-link" href="Acerca_de.html">Información del Proyecto</a>
         </nav>
        <div class="contenido" >
             <div class="info">
@@ -143,7 +157,7 @@
                 <div id="not" ><h3>Notificaciones</h3></div>
                 <div id="anot">
                     <ul id="notifi" >
-                        <li>Esperando Notificaciones.....</li>
+                       <!-- <li>Esperando Notificaciones.....</li>-->
                     </ul>
                 </div>
             </div>

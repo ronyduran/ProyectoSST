@@ -20,7 +20,7 @@ public class Main {
     public static void main(String[] args) {
 
         Javalin app = Javalin.create(javalinConfig ->{
-            javalinConfig.addStaticFiles("/Web SST");
+            javalinConfig.addStaticFiles("/Web SST/");
         } ).start(7000);
 
         JavalinRenderer.register(JavalinThymeleaf.INSTANCE, ".html");
@@ -34,7 +34,7 @@ public class Main {
         //-----------------------------
         //---------------------------------------------------------------------------------------
         //Prueba WebSockect-----------------------------------------------------------------------
-
+        
         app.ws("/WSEnvio",ws->{
             ws.onConnect(ctx -> {
                 System.out.println("Conexión Iniciada - " + ctx.getSessionId());
@@ -42,6 +42,11 @@ public class Main {
                 enviarMensajeAClientesConectados("estado:"+mode.getEstado());
                 enviarMensajeAClientesConectados("cont:"+mode.getContador());
                 enviarMensajeAClientesConectados("nivel:"+Integer.toString(mode.getNivel()));
+                enviarMensajeAClientesConectados("noficiaciones:En Espera de Notificaciones");
+                enviarMensajeAClientesConectados("connMas:"+mode.getUserMascarillla().size());
+                enviarMensajeAClientesConectados("sinMas:"+mode.getUserSinMascarillla().size());
+
+
             });
             ws.onMessage(ctx -> {
 
@@ -55,7 +60,6 @@ public class Main {
                 System.out.println("Ocurrió un error en el WS");
             });
 
-
         });
 
         //---------------------------------------------------------------------------------------
@@ -63,13 +67,16 @@ public class Main {
         app.routes(() -> {
             path( "/", () -> {
                 get("/",ctx -> {
+                    ctx.redirect("/index.html");
+                        });
+                /*get("/",ctx -> {
                     Map<String,Object> modelo = new HashMap<>();
                     modelo.put("esta",mode.getEstado());
                     modelo.put("numero",mode.getContador());
                     modelo.put("taman",mode.getNivel());
                     modelo.put("notifi",mode.getNotificaciones());
 
-                    ctx.render("/Web SST/index.html", modelo);});
+                    ctx.render("/Web SST/index.html", modelo);});*/
 
                 post("/noti",ctx -> {
                     String noti=ctx.formParam("notfi",String.class).get();
@@ -82,11 +89,13 @@ public class Main {
                     mode.conMascarilla(noti);
                     System.out.println(noti+"---"+"Cantidad:"+mode.getUserMascarillla().size());
                     enviarMensajeAClientesConectados("noficiaciones:"+mode.fecha()+"---"+noti);
+                    enviarMensajeAClientesConectados("connMas:"+mode.getUserMascarillla().size());
                 });post("/sinmascarilla",ctx -> {
                     String noti=ctx.formParam("notfi",String.class).get();
                     mode.sinMascarilla(noti);
                     System.out.println(noti+"---"+"Cantidad:"+mode.getUserSinMascarillla().size());
                     enviarMensajeAClientesConectados("noficiaciones:"+mode.fecha()+"---"+noti);
+                    enviarMensajeAClientesConectados("sinMas:"+mode.getUserSinMascarillla().size());
                 });
                 post("/nivel",ctx -> {
                     mode.setNivel(ctx.formParam("taman",Integer.class).get());
