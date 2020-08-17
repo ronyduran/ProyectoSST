@@ -26,7 +26,7 @@ public class Main {
         JavalinRenderer.register(JavalinThymeleaf.INSTANCE, ".html");
 
         ModelWeb mode =new ModelWeb();
-        mode.insertNoti("Esperando Notificaciones.....");
+
 
         ManejoRemover mr = new ManejoRemover(mode);
 
@@ -42,7 +42,14 @@ public class Main {
                 enviarMensajeAClientesConectados("estado:"+mode.getEstado());
                 enviarMensajeAClientesConectados("cont:"+mode.getContador());
                 enviarMensajeAClientesConectados("nivel:"+Integer.toString(mode.getNivel()));
-                enviarMensajeAClientesConectados("noficiaciones:En Espera de Notificaciones");
+                if(mode.getNotificaciones().size()==0){
+                    enviarMensajeAClientesConectados("noficiaciones:En Espera de Notificaciones");
+                }else{
+                    for (String n:mode.getNotificaciones()) {
+                        enviarMensajeAClientesConectados("noficiaciones:"+n);
+                    }
+                } 
+                
                 enviarMensajeAClientesConectados("conMas:"+mode.getUserMascarillla().size());
                 enviarMensajeAClientesConectados("sinMas:"+mode.getUserSinMascarillla().size());
 
@@ -82,19 +89,21 @@ public class Main {
                     String noti=ctx.formParam("notfi",String.class).get();
                     mode.insertNoti(noti);
                     System.out.println(noti);
-                    enviarMensajeAClientesConectados("noficiaciones:"+mode.fecha()+"---"+noti);
+                    enviarMensajeAClientesConectados("noficiaciones:"+mode.fecha()+"--"+noti);
                 });
                 post("/mascarilla",ctx -> {
                     String noti=ctx.formParam("notfi",String.class).get();
                     mode.conMascarilla(noti);
-                    System.out.println(noti+"---"+"Cantidad:"+mode.getUserMascarillla().size());
-                    enviarMensajeAClientesConectados("noficiaciones:"+mode.fecha()+"---"+noti);
+                    mode.insertNoti(noti);
+                    System.out.println(noti+"--"+"Cantidad:"+mode.getUserMascarillla().size());
+                    enviarMensajeAClientesConectados("noficiaciones:"+mode.fecha()+"--"+noti);
                     enviarMensajeAClientesConectados("conMas:"+mode.getUserMascarillla().size());
                 });post("/sinmascarilla",ctx -> {
                     String noti=ctx.formParam("notfi",String.class).get();
                     mode.sinMascarilla(noti);
-                    System.out.println(noti+"---"+"Cantidad:"+mode.getUserSinMascarillla().size());
-                    enviarMensajeAClientesConectados("noficiaciones:"+mode.fecha()+"---"+noti);
+                    mode.insertNoti(noti);
+                    System.out.println(noti+"--"+"Cantidad:"+mode.getUserSinMascarillla().size());
+                    enviarMensajeAClientesConectados("noficiaciones:"+mode.fecha()+"--"+noti);
                     enviarMensajeAClientesConectados("sinMas:"+mode.getUserSinMascarillla().size());
                 });
                 post("/nivel",ctx -> {
