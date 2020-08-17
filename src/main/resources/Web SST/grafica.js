@@ -33,7 +33,7 @@
     function ActualizarDatos(){
         var options = {
             exportEnabled: true,
-           // animationEnabled: true,
+            //animationEnabled: true,
             title:{
                 text: "Gráfica de Usuarios con Mascarillas vs Usuarios sin Mascarillas"
             },
@@ -56,4 +56,18 @@
         $("#chartContainer").CanvasJSChart(options);
     };
 
-setInterval(ActualizarDatos,2000);
+    function SinDatos(){
+        var options = {
+            exportEnabled: true,
+            //animationEnabled: true,
+            title:{
+                text: "En espera de Datos"
+            }
+
+        };
+        $("#chartContainer").CanvasJSChart(options);
+    };
+
+
+
+//setInterval(ActualizarDatos,2000);

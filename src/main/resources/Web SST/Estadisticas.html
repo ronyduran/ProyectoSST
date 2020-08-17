@@ -13,12 +13,15 @@
         <script>
             var webSocket;
             var tiempoReconectar = 5000;
-            var conMascarilla=1;
-            var sinMascarilla=1;
+            var conMascarilla=0;
+            var sinMascarilla=0;
+            var comienzo=0;
             $(document).ready(function() {
 
                 conectar();
-                cargarGrafica();
+                if((sinMascarilla==0 && conMascarilla==0)&&comienzo==0){
+                    SinDatos();
+                }
             });
             /**
              *
@@ -29,11 +32,25 @@
                  if(mensaje.data.startsWith("sinMas:")){
                    sinMascarilla= parseInt(mensaje.data.substring(7));
                    console.log(sinMascarilla);
-                }
-                if(mensaje.data.startsWith("conMas:")){
+                   if((sinMascarilla>0 || conMascarilla>0)&&comienzo==0){
+                       cargarGrafica();
+                       comienzo=1;
+                   }
+                   if(comienzo==1){
+                       ActualizarDatos();
+                   }
+                 }
+                 if(mensaje.data.startsWith("conMas:")){
                     conMascarilla= parseInt(mensaje.data.substring(7));
                     console.log(conMascarilla);
-                }
+                    if((sinMascarilla>0 || conMascarilla>0)&&comienzo==0){
+                        cargarGrafica();
+                        comienzo=1;
+                    }
+                    if(comienzo==1){
+                        ActualizarDatos();
+                    }
+                 }
 
             };
             function conectar() {

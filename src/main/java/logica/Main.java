@@ -43,7 +43,7 @@ public class Main {
                 enviarMensajeAClientesConectados("cont:"+mode.getContador());
                 enviarMensajeAClientesConectados("nivel:"+Integer.toString(mode.getNivel()));
                 enviarMensajeAClientesConectados("noficiaciones:En Espera de Notificaciones");
-                enviarMensajeAClientesConectados("connMas:"+mode.getUserMascarillla().size());
+                enviarMensajeAClientesConectados("conMas:"+mode.getUserMascarillla().size());
                 enviarMensajeAClientesConectados("sinMas:"+mode.getUserSinMascarillla().size());
 
 
@@ -89,7 +89,7 @@ public class Main {
                     mode.conMascarilla(noti);
                     System.out.println(noti+"---"+"Cantidad:"+mode.getUserMascarillla().size());
                     enviarMensajeAClientesConectados("noficiaciones:"+mode.fecha()+"---"+noti);
-                    enviarMensajeAClientesConectados("connMas:"+mode.getUserMascarillla().size());
+                    enviarMensajeAClientesConectados("conMas:"+mode.getUserMascarillla().size());
                 });post("/sinmascarilla",ctx -> {
                     String noti=ctx.formParam("notfi",String.class).get();
                     mode.sinMascarilla(noti);
