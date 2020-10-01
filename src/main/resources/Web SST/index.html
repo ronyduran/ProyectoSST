@@ -1,173 +1,202 @@
 <!DOCTYPE html>
-<!--<html lang="en" xmlns:th="http://www.thymeleaf.org">-->
-<html lang="en">
-    <head>
-        <meta charset="utf-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>SST Manager</title>
-        <link rel="stylesheet" href="main.css">
-        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
-        <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
-        <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
-        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js" integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI" crossorigin="anonymous"></script>
+<html>
 
-        <script>
-            var webSocket;
-            var tiempoReconectar = 5000;
-            var tiempoRemover = 600000;
-            var comprobar=0;
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
+    <title>Dashboard - Brand</title>
+    <link rel="stylesheet" href="assets/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i">
+    <link rel="stylesheet" href="assets/fonts/fontawesome-all.min.css">
+    <link rel="stylesheet" href="assets/fonts/font-awesome.min.css">
+    <link rel="stylesheet" href="assets/fonts/fontawesome5-overrides.min.css">
+    <link rel="stylesheet" href="assets/css/Team-Boxed.css">
+    <script src="assets/js/webSocket.js"></script>
 
-            $(document).ready(function() {
+</head>
 
-                conectar();
-            });
-            /**
-             *
-             * @param mensaje
-             */
-
-            function recibirInformacionServidor(mensaje){
-                 if(mensaje.data.startsWith("cont:")){
-                    var element = document.getElementById("cont");
-                    element.setAttribute("value",mensaje.data.substring(5));
-                    console.log(mensaje.data.substring(5));
-                }
-                if(mensaje.data.startsWith("estado:")){
-                    var element = document.getElementById("estado");
-                    var text=mensaje.data.substring(7);
-                    element.setAttribute("value",text);
-                    console.log(mensaje.data.substring(7));
-                    if(text ==="Encendido"){
-                        element.style.color= "green";
-                    }
-                    if(text ==="Apagado"){
-                        element.style.color= "red";
-                    }
-                }
-                if(mensaje.data.startsWith("nivel:")){
-                    console.log(mensaje.data);
-                    var element = document.getElementById("nivel");
-                    var text=mensaje.data.substring(6);
-                    element.style.width= text+"%";
-                    document.getElementById("textnivel").innerHTML= text;
-                }
-                if(mensaje.data.startsWith("noficiaciones:")){
-                    console.log(mensaje.data);
-                    var text=mensaje.data.substring(14);
-                    var aux=mensaje.data.substring(14);
-                    var li = document.createElement("li");
-                    var text = document.createTextNode(text);
-                    li.appendChild(text);
-                   // var element= document.getElementById("notifi").append(li);
-                    var element= document.getElementById("notifi");
-                    element.insertBefore(li, element.childNodes[0]);
-                    if (aux.localeCompare("En Espera de Notificaciones")==0){
-                        comprobar=0;
-                    }else if(aux.localeCompare("En Espera de Notificaciones")!=0 && comprobar<2){
-                        comprobar=1;
-                        element.removeChild(element.childNodes[1]);
-                        comprobar=2;
-                    }
-
-                }
-            };
-            function conectar() {
-                //Esto es para el WebSocket Secure para el HTTPS
-                webSocket= new WebSocket("wss://" + location.hostname + ":" + location.port + "/WSEnvio");
-                //Esto es para el WebSocket para el HTTP
-               // webSocket= new WebSocket("ws://" + location.hostname + ":" + location.port + "/WSEnvio");
-
-                webSocket.onmessage = function(data){recibirInformacionServidor(data); console.log("Recibido");}
-                webSocket.onopen  = function(e){ console.log("Conectado - status "+this.readyState); };
-                webSocket.onclose = function(e){
-                    console.log("Desconectado - status "+this.readyState);
-                };
-
-            }
-            function verificarConexion(){
-                if(!webSocket || webSocket.readyState == 3){
-                    conectar();
-                }
-            }
-            function removerPrimerHijoNotificaciones() {
-                if(comprobar>0) {
-                    //console.log("entro"+ new Date())
-                    var element = document.getElementById("notifi");
-                    try {
-                        if (element.firstChild.valueOf())
-                            element.removeChild(element.lastChild);
-                    } catch (err) {
-                        console.log("Aun no hay hijos")
-                    }
-                }
-
-            }
-
-
-            setInterval(verificarConexion,tiempoReconectar);
-            //setInterval(removerPrimerHijoNotificaciones,tiempoRemover);
-
-
-        </script>
-
-        <style >
-
-
-            @media screen and (max-width: 1000px) {
-                .contenido {
-                    flex-direction: column!important;
-                }}
-
-        </style>
-    </head>
-    <body>
-        <div id="divbanner">
-            <img src="Imgenes/S.S.T..png" id="banner">
-
-        </div>
-        <nav class="nav nav-pills nav-justified border" >
-            <a class="nav-item nav-link active" href="index.html">Inicio</a>
-            <a class="nav-item nav-link" href="Estadisticas.html">Datos Estadísticos</a>
-            <a class="nav-item nav-link" href="Acerca_de.html">Información del Proyecto</a>
+<body id="page-top">
+    <div id="wrapper">
+        <nav class="navbar navbar-dark align-items-start sidebar sidebar-dark accordion bg-gradient-primary p-0" style="background: linear-gradient(black, rgb(78,200,227) 63%, rgb(245,245,245) 100%);background-color: rgb(15,142,205);color: rgb(43,23,166);">
+            <div class="container-fluid d-flex flex-column p-0">
+                <a class="navbar-brand d-flex justify-content-center align-items-center sidebar-brand m-0" href="index.html">
+                    <div class="sidebar-brand-icon rotate-n-15"></div>
+                    <div class="sidebar-brand-text mx-3"><span>SST Project</span></div>
+                </a>
+                <hr class="sidebar-divider my-0">
+                <ul class="nav navbar-nav text-light" id="accordionSidebar">
+                    <li class="nav-item"><a class="nav-link active" href="index.html"><i class="fas fa-tachometer-alt"></i><span>Dashboard</span></a></li>
+                    <li class="nav-item"></li>
+                    <li class="nav-item"><a class="nav-link" href="table.html"><i class="fas fa-table"></i><span>Registro Usuarios</span></a></li>
+                    <li class="nav-item"></li>
+                    <li class="nav-item"></li>
+                    <li class="nav-item"></li>
+                    <li class="nav-item"></li>
+                    <li class="nav-item"><a class="nav-link" href="Grafica%20Estadistica.html"><i class="fas fa-window-maximize"></i><span>Gráficos Estadísticos</span></a></li>
+                    <li class="nav-item"><a class="nav-link" href="Creación%20de%20Usuarios.html"><i class="fas fa-user"></i><span>Creación de Perfiles</span></a></li>
+                    <li class="nav-item"><a class="nav-link" href="infoGeneral.html"><i class="fas fa-user"></i><span>Información General</span></a></li>
+                </ul>
+                <div class="text-center d-none d-md-inline"><button class="btn rounded-circle border-0" id="sidebarToggle" type="button"></button></div>
+            </div>
         </nav>
-       <div class="contenido" >
-            <div class="info">
-                <div id="est" >
-                    <form >
-                        <div> <b>Estado:</b>
-                            <input type="text" disabled name="estado" value="Encendido/Apagado"  id="estado" align="center">
-                        </div>
-                    </form>
-                </div>
-                <div id="cant">
-                    <form>
-                        <div> <b>Cantidad de Usuarios al dia: </b>
-                            <input id="cont" type="text" disabled placeholder="personas/dia"  align="center">
-                        </div>
-                    </form>
-
-                </div>
-                <b> Capacidad Actual:</b> <span id="textnivel"></span> % </br>
-                <div class="progress" style="height: 75px">
-                    <div id="nivel" class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" aria-valuenow="75" aria-valuemin="0" aria-valuemax="100" ></div>
-                </div>
-
-            </div>
-            <div class="info">
-                <div id="not" ><h3>Notificaciones</h3></div>
-                <div id="anot">
-                    <ul id="notifi" >
-                       <!-- <li>Esperando Notificaciones.....</li>-->
+        <div class="d-flex flex-column" id="content-wrapper">
+            <div id="content">
+                <nav class="navbar navbar-light navbar-expand bg-white shadow mb-4 topbar static-top">
+                    <div class="container-fluid"><button class="btn btn-link d-md-none rounded-circle mr-3" id="sidebarToggleTop" type="button"><i class="fas fa-bars"></i></button>
+                        <form class="form-inline d-none d-sm-inline-block mr-auto ml-md-3 my-2 my-md-0 mw-100 navbar-search">
+                            <div class="input-group"><span class="text-uppercase" style="font-size: 21px;">Smart Sanitizing Tunnel- SST</span>
+                                <div class="input-group-append"></div>
+                            </div>
+                        </form>
+                        <ul class="nav navbar-nav flex-nowrap ml-auto">
+                            <li class="nav-item dropdown d-sm-none no-arrow"><a class="dropdown-toggle nav-link" data-toggle="dropdown" aria-expanded="false" href="#"><i class="fas fa-search"></i></a>
+                                <div class="dropdown-menu dropdown-menu-right p-3 animated--grow-in" aria-labelledby="searchDropdown">
+                                    <form class="form-inline mr-auto navbar-search w-100">
+                                        <div class="input-group"><input class="bg-light form-control border-0 small" type="text" placeholder="Search for ...">
+                                            <div class="input-group-append"><button class="btn btn-primary py-0" type="button"><i class="fas fa-search"></i></button></div>
+                                        </div>
+                                    </form>
+                                </div>
+                            </li>
+                            <li class="nav-item dropdown no-arrow mx-1">
+                                <div class="nav-item dropdown no-arrow"><a class="dropdown-toggle nav-link" data-toggle="dropdown" aria-expanded="false" href="#"><span class="badge badge-danger badge-counter">3+</span><i class="fas fa-bell fa-fw"></i></a>
+                                    <div class="dropdown-menu dropdown-menu-right dropdown-list dropdown-menu-right animated--grow-in">
+                                        <h6 class="dropdown-header">alerts center</h6>
+                                        <a class="d-flex align-items-center dropdown-item" href="#">
+                                            <div class="mr-3">
+                                                <div class="bg-primary icon-circle"><i class="fas fa-file-alt text-white"></i></div>
+                                            </div>
+                                            <div><span class="small text-gray-500">December 12, 2019</span>
+                                                <p>A new monthly report is ready to download!</p>
+                                            </div>
+                                        </a>
+                                        <a class="d-flex align-items-center dropdown-item" href="#">
+                                            <div class="mr-3">
+                                                <div class="bg-success icon-circle"><i class="fas fa-donate text-white"></i></div>
+                                            </div>
+                                            <div><span class="small text-gray-500">December 7, 2019</span>
+                                                <p>$290.29 has been deposited into your account!</p>
+                                            </div>
+                                        </a>
+                                        <a class="d-flex align-items-center dropdown-item" href="#">
+                                            <div class="mr-3">
+                                                <div class="bg-warning icon-circle"><i class="fas fa-exclamation-triangle text-white"></i></div>
+                                            </div>
+                                            <div><span class="small text-gray-500">December 2, 2019</span>
+                                                <p>Spending Alert: We've noticed unusually high spending for your account.</p>
+                                            </div>
+                                        </a><a class="text-center dropdown-item small text-gray-500" href="#">Show All Alerts</a></div>
+                                </div>
+                            </li>
+                            <li class="nav-item dropdown no-arrow">
+                                <div class="nav-item dropdown no-arrow"><a class="dropdown-toggle nav-link" data-toggle="dropdown" aria-expanded="false" href="#"><span class="text-uppercase d-none d-lg-inline mr-2 text-gray-600 small">Admin</span><i class="fa fa-user-circle-o" style="height: 17px;width: 7px;"></i></a>
+                                    <div
+                                        class="dropdown-menu shadow dropdown-menu-right animated--grow-in"><a class="dropdown-item" href="Perfil.html"><i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i>&nbsp;Profile</a>
+                                        <div class="dropdown-divider"></div><a class="dropdown-item" href="login.html"><i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>&nbsp;Logout</a></div>
+                    </div>
+                    </li>
                     </ul>
+            </div>
+            </nav>
+            <div class="container-fluid">
+                <div class="d-sm-flex justify-content-between align-items-center mb-4">
+                    <h3 class="text-dark mb-0">Dashboard</h3>
+                </div>
+                <div class="row justify-content-center align-items-center">
+                    <div class="col-md-6 col-xl-3 mb-4">
+                        <div class="card shadow border-left-primary py-2">
+                            <div class="card-body">
+                                <div class="row align-items-center no-gutters">
+                                    <div class="col mr-2">
+                                        <div class="text-uppercase text-primary font-weight-bold text-xs mb-1"><span style="font-size: 15px;">Visitantes del Día</span></div>
+                                        <div class="text-dark font-weight-bold h5 mb-0"><span id="cont">10,000</span></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6 col-xl-3 mb-4">
+                        <div class="card shadow border-left-success py-2">
+                            <div class="card-body">
+                                <div class="row align-items-center no-gutters">
+                                    <div class="col mr-2">
+                                        <div class="text-uppercase text-success font-weight-bold text-xs mb-1" style="font-size: 9px;"><span style="font-size: 16px;">Estado de La Sistema</span></div>
+                                        <div class="text-dark font-weight-bold h5 mb-0"><span id="estado">Apagado</span></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6 col-xl-3 mb-4">
+                        <div class="card shadow border-left-info py-2">
+                            <div class="card-body">
+                                <div class="row align-items-center no-gutters">
+                                    <div class="col mr-2">
+                                        <div class="text-uppercase text-info font-weight-bold text-xs mb-1"><span style="font-size: 16px;">Nivel del Líquido</span></div>
+                                        <div class="row no-gutters align-items-center">
+                                            <div class="col-auto">
+                                                <div class="text-dark font-weight-bold h5 mb-0 mr-3"><span id="textnivel">10%</span></div>
+                                            </div>
+                                            <div class="col">
+                                                <div class="progress progress-sm" style="height: 21px;">
+                                                    <div class="progress-bar bg-info"  id="nivel" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100" style="width: 10%;"><span class="sr-only" >50%</span></div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-lg-7 col-xl-8">
+                        <div class="card shadow mb-4">
+                            <div class="card-header d-flex justify-content-between align-items-center">
+                                <h6 class="text-primary font-weight-bold m-0">Promedio de Visitantes por Día de la Semana</h6>
+                                <div class="dropdown no-arrow"><button class="btn btn-link btn-sm dropdown-toggle" data-toggle="dropdown" aria-expanded="false" type="button"></button>
+                                    <div class="dropdown-menu shadow dropdown-menu-right animated--fade-in">
+                                        <p class="text-center dropdown-header">dropdown header:</p><a class="dropdown-item" href="#">&nbsp;Action</a><a class="dropdown-item" href="#">&nbsp;Another action</a>
+                                        <div class="dropdown-divider"></div><a class="dropdown-item" href="#">&nbsp;Something else here</a></div>
+                                </div>
+                            </div>
+                            <div class="card-body">
+                                <div class="chart-area"><canvas data-bs-chart="{&quot;type&quot;:&quot;bar&quot;,&quot;data&quot;:{&quot;labels&quot;:[&quot;Lunes&quot;,&quot;Martes&quot;,&quot;Miercoles&quot;,&quot;Jueves&quot;,&quot;Viernes&quot;,&quot;Sábado&quot;,&quot;Domingo&quot;],&quot;datasets&quot;:[{&quot;label&quot;:&quot;Earnings&quot;,&quot;backgroundColor&quot;:&quot;rgba(78, 115, 223, 0.05)&quot;,&quot;borderColor&quot;:&quot;rgba(78, 115, 223, 1)&quot;,&quot;data&quot;:[&quot;0&quot;,&quot;50&quot;,&quot;100&quot;,&quot;200&quot;,&quot;300&quot;,&quot;400&quot;,&quot;500&quot;]}]},&quot;options&quot;:{&quot;maintainAspectRatio&quot;:false,&quot;legend&quot;:{&quot;display&quot;:false},&quot;title&quot;:{&quot;display&quot;:false},&quot;scales&quot;:{&quot;xAxes&quot;:[{&quot;gridLines&quot;:{&quot;color&quot;:&quot;rgb(234, 236, 244)&quot;,&quot;zeroLineColor&quot;:&quot;rgb(234, 236, 244)&quot;,&quot;drawBorder&quot;:false,&quot;drawTicks&quot;:false,&quot;borderDash&quot;:[&quot;2&quot;],&quot;zeroLineBorderDash&quot;:[&quot;2&quot;],&quot;drawOnChartArea&quot;:false},&quot;ticks&quot;:{&quot;fontColor&quot;:&quot;#858796&quot;,&quot;padding&quot;:20}}],&quot;yAxes&quot;:[{&quot;gridLines&quot;:{&quot;color&quot;:&quot;rgb(234, 236, 244)&quot;,&quot;zeroLineColor&quot;:&quot;rgb(234, 236, 244)&quot;,&quot;drawBorder&quot;:false,&quot;drawTicks&quot;:false,&quot;borderDash&quot;:[&quot;2&quot;],&quot;zeroLineBorderDash&quot;:[&quot;2&quot;]},&quot;ticks&quot;:{&quot;fontColor&quot;:&quot;#858796&quot;,&quot;padding&quot;:20}}]}}}"></canvas></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-5 col-xl-4">
+                        <div class="card shadow mb-4">
+                            <div class="card-header d-flex justify-content-between align-items-center">
+                                <h6 class="text-center text-primary font-weight-bold m-0">Cantidad de Usuarios destectados con y sin Mascarillas del Día</h6>
+                                <div class="dropdown no-arrow"><button class="btn btn-link btn-sm dropdown-toggle" data-toggle="dropdown" aria-expanded="false" type="button"></button>
+                                    <div class="dropdown-menu shadow dropdown-menu-right animated--fade-in">
+                                        <p class="text-center dropdown-header">dropdown header:</p><a class="dropdown-item" href="#">&nbsp;Action</a><a class="dropdown-item" href="#">&nbsp;Another action</a>
+                                        <div class="dropdown-divider"></div><a class="dropdown-item" href="#">&nbsp;Something else here</a></div>
+                                </div>
+                            </div>
+                            <div class="card-body">
+                                <div class="chart-area"><canvas data-bs-chart="{&quot;type&quot;:&quot;pie&quot;,&quot;data&quot;:{&quot;labels&quot;:[&quot;Sin Mascarilla&quot;,&quot;Con Mascarilla&quot;],&quot;datasets&quot;:[{&quot;label&quot;:&quot;Valores&quot;,&quot;backgroundColor&quot;:[&quot;#4e73df&quot;,&quot;#1cc88a&quot;],&quot;borderColor&quot;:[&quot;#ffffff&quot;,&quot;#ffffff&quot;],&quot;data&quot;:[&quot;valor&quot;,&quot;0&quot;]}]},&quot;options&quot;:{&quot;maintainAspectRatio&quot;:false,&quot;legend&quot;:{&quot;display&quot;:false},&quot;title&quot;:{}}}"></canvas></div>
+                                <div
+                                    class="text-center small mt-4"><span class="mr-2"><i class="fas fa-circle text-primary"></i>Con Mascarilla</span><span class="mr-2"><i class="fas fa-circle text-success"></i>&nbsp;Sin Mascarilla</span></div>
+                        </div>
+                    </div>
                 </div>
             </div>
-       </div>
-       <footer class="page-footer font-small">
-            <div class="footer-copyright text-center py-3">© 2020 Copyright:
-                <a href="#"> Durán y Espinal</a>
-            </div>
-       </footer>
-
-    </body>
+        </div>
+    </div>
+    <footer class="bg-white sticky-footer" style="background-color: rgb(116,115,93);">
+        <div class="container my-auto">
+            <div class="text-center my-auto copyright"><span class="text-capitalize text-center" style="font-size: 16px;color: rgb(5,8,31);"><strong>Copyright ©&nbsp; Durán &amp; Espinal 2020</strong></span></div>
+        </div>
+    </footer>
+    </div><a class="border rounded d-inline scroll-to-top" href="#page-top"><i class="fas fa-angle-up"></i></a></div>
+    <script src="assets/js/jquery.min.js"></script>
+    <script src="assets/bootstrap/js/bootstrap.min.js"></script>
+    <script src="assets/js/chart.min.js"></script>
+    <script src="assets/js/bs-init.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-easing/1.4.1/jquery.easing.js"></script>
+    <script src="assets/js/theme.js"></script>
+</body>
 
 </html>

@@ -23,7 +23,7 @@ public class Main {
             javalinConfig.addStaticFiles("/Web SST/");
         } ).start(7000);
 
-        JavalinRenderer.register(JavalinThymeleaf.INSTANCE, ".html");
+        //JavalinRenderer.register(JavalinThymeleaf.INSTANCE, ".html");
 
         ModelWeb mode =new ModelWeb();
 
