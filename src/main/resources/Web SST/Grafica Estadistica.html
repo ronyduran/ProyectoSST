@@ -11,6 +11,23 @@
     <link rel="stylesheet" href="assets/fonts/font-awesome.min.css">
     <link rel="stylesheet" href="assets/fonts/fontawesome5-overrides.min.css">
     <link rel="stylesheet" href="assets/css/Team-Boxed.css">
+    <script src="assets/js/grafica.js"></script>
+    <script src="assets/js/webSocket.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.3/Chart.min.js" integrity="sha512-s+xg36jbIujB2S2VKfpGmlC3T5V2TF3lY48DX7u2r9XzGzgPsa6wTpOQA7J9iffvdeBN0q9tKzRxVxw1JviZPg==" crossorigin="anonymous"></script>
+    <script src="assets/js/jquery.min.js"></script>
+    <script src="assets/bootstrap/js/bootstrap.min.js"></script>
+    <script src="assets/js/bs-init.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-easing/1.4.1/jquery.easing.js"></script>
+    <script src="assets/js/theme.js"></script>
+    <script>
+        $(document).ready(function() {
+
+            conectar();
+            cargarGrafica();
+
+        });
+
+    </script>
 </head>
 
 <body id="page-top">
@@ -56,36 +73,6 @@
                                     </form>
                                 </div>
                             </li>
-                            <li class="nav-item dropdown no-arrow mx-1">
-                                <div class="nav-item dropdown no-arrow"><a class="dropdown-toggle nav-link" data-toggle="dropdown" aria-expanded="false" href="#"><span class="badge badge-danger badge-counter">3+</span><i class="fas fa-bell fa-fw"></i></a>
-                                    <div class="dropdown-menu dropdown-menu-right dropdown-list dropdown-menu-right animated--grow-in">
-                                        <h6 class="dropdown-header">alerts center</h6>
-                                        <a class="d-flex align-items-center dropdown-item" href="#">
-                                            <div class="mr-3">
-                                                <div class="bg-primary icon-circle"><i class="fas fa-file-alt text-white"></i></div>
-                                            </div>
-                                            <div><span class="small text-gray-500">December 12, 2019</span>
-                                                <p>A new monthly report is ready to download!</p>
-                                            </div>
-                                        </a>
-                                        <a class="d-flex align-items-center dropdown-item" href="#">
-                                            <div class="mr-3">
-                                                <div class="bg-success icon-circle"><i class="fas fa-donate text-white"></i></div>
-                                            </div>
-                                            <div><span class="small text-gray-500">December 7, 2019</span>
-                                                <p>$290.29 has been deposited into your account!</p>
-                                            </div>
-                                        </a>
-                                        <a class="d-flex align-items-center dropdown-item" href="#">
-                                            <div class="mr-3">
-                                                <div class="bg-warning icon-circle"><i class="fas fa-exclamation-triangle text-white"></i></div>
-                                            </div>
-                                            <div><span class="small text-gray-500">December 2, 2019</span>
-                                                <p>Spending Alert: We've noticed unusually high spending for your account.</p>
-                                            </div>
-                                        </a><a class="text-center dropdown-item small text-gray-500" href="#">Show All Alerts</a></div>
-                                </div>
-                            </li>
                             <li class="nav-item dropdown no-arrow">
                                 <div class="nav-item dropdown no-arrow"><a class="dropdown-toggle nav-link" data-toggle="dropdown" aria-expanded="false" href="#"><span class="text-uppercase d-none d-lg-inline mr-2 text-gray-600 small">Admin</span><i class="fa fa-user-circle-o" style="height: 17px;width: 7px;"></i></a>
                                     <div
@@ -98,21 +85,67 @@
             </nav>
             <div class="container-fluid">
                 <h3 class="text-dark mb-1">Gráficos Estadísticos</h3>
-                <div class="chart-area" style="background: #ffffff;"><canvas data-bs-chart="{&quot;type&quot;:&quot;line&quot;,&quot;data&quot;:{&quot;labels&quot;:[&quot;8 AM&quot;,&quot;10 AM&quot;,&quot;12 PM&quot;,&quot;2 PM&quot;,&quot;4 PM&quot;,&quot;6 PM&quot;,&quot;8 PM&quot;,&quot;10PM&quot;],&quot;datasets&quot;:[{&quot;label&quot;:&quot;Cantidad de Usuarios&quot;,&quot;fill&quot;:true,&quot;data&quot;:[&quot;0&quot;,&quot;150&quot;,&quot;100&quot;,&quot;100&quot;,&quot;200&quot;,&quot;150&quot;,&quot;125&quot;,&quot;75&quot;],&quot;backgroundColor&quot;:&quot;rgba(78, 115, 223, 0.05)&quot;,&quot;borderColor&quot;:&quot;rgba(78, 115, 223, 1)&quot;}]},&quot;options&quot;:{&quot;maintainAspectRatio&quot;:false,&quot;legend&quot;:{&quot;display&quot;:false,&quot;position&quot;:&quot;left&quot;,&quot;reverse&quot;:false},&quot;title&quot;:{&quot;display&quot;:true,&quot;text&quot;:&quot;Cantidad de Usuarios por hora&quot;,&quot;fontSize&quot;:&quot;19&quot;},&quot;scales&quot;:{&quot;xAxes&quot;:[{&quot;gridLines&quot;:{&quot;color&quot;:&quot;rgb(234, 236, 244)&quot;,&quot;zeroLineColor&quot;:&quot;rgb(234, 236, 244)&quot;,&quot;drawBorder&quot;:false,&quot;drawTicks&quot;:false,&quot;borderDash&quot;:[&quot;2&quot;],&quot;zeroLineBorderDash&quot;:[&quot;2&quot;],&quot;drawOnChartArea&quot;:true},&quot;ticks&quot;:{&quot;fontColor&quot;:&quot;#858796&quot;,&quot;beginAtZero&quot;:false,&quot;padding&quot;:20}}],&quot;yAxes&quot;:[{&quot;gridLines&quot;:{&quot;color&quot;:&quot;rgb(234, 236, 244)&quot;,&quot;zeroLineColor&quot;:&quot;rgb(234, 236, 244)&quot;,&quot;drawBorder&quot;:false,&quot;drawTicks&quot;:false,&quot;borderDash&quot;:[&quot;2&quot;],&quot;zeroLineBorderDash&quot;:[&quot;2&quot;],&quot;drawOnChartArea&quot;:true},&quot;ticks&quot;:{&quot;fontColor&quot;:&quot;#858796&quot;,&quot;beginAtZero&quot;:false,&quot;padding&quot;:20}}]}}}"></canvas></div>
             </div>
+                <div class="row">
+                    <div class="col-lg-7 col-xl-8">
+                        <div class="card shadow mb-4">
+                            <div class="card-header text-left d-flex justify-content-between align-items-center">
+                                <h6 class="text-left text-primary font-weight-bold m-0" style="font-size: 21px;color: #020921;">Seleccione gráfico a mostrar:</h6>
+                                <div class="dropdown no-arrow"><button class="btn btn-link btn-sm dropdown-toggle" data-toggle="dropdown" aria-expanded="false" type="button"></button>
+                                    <div class="dropdown-menu shadow dropdown-menu-right animated--fade-in">
+                                        <p class="text-center dropdown-header">dropdown header:</p><a class="dropdown-item" href="#">&nbsp;Action</a><a class="dropdown-item" href="#">&nbsp;Another action</a>
+                                        <div class="dropdown-divider"></div><a class="dropdown-item" href="#">&nbsp;Something else here</a></div>
+                                </div><select name="roles"><optgroup label="Asigne Un Rol"><option value="12">Admin</option><option value="13">Supervisor</option><option value="14">Auxiliar</option></optgroup></select></div>
+
+                            <div class="card-header d-flex justify-content-between align-items-center">
+                                <h6 class="text-primary font-weight-bold m-0">Promedio de Visitantes por Día de la Semana</h6>
+                                <div class="dropdown no-arrow"><button class="btn btn-link btn-sm dropdown-toggle" data-toggle="dropdown" aria-expanded="false" type="button"></button>
+                                    <div class="dropdown-menu shadow dropdown-menu-right animated--fade-in">
+                                        <p class="text-center dropdown-header">dropdown header:</p><a class="dropdown-item" href="#">&nbsp;Action</a><a class="dropdown-item" href="#">&nbsp;Another action</a>
+                                        <div class="dropdown-divider"></div><a class="dropdown-item" href="#">&nbsp;Something else here</a></div>
+                                </div>
+                            </div>
+                            <div class="card-body">
+                                <div class="chart-area"><canvas id="graf1"></canvas></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-5 col-xl-4">
+                        <div class="card shadow mb-4">
+                            <div class="card-header text-left d-flex justify-content-between align-items-center">
+                                <h6 class="text-left text-primary font-weight-bold m-0" style="font-size: 21px;color: #020921;">Seleccione gráfico a mostrar:</h6>
+                                <div class="dropdown no-arrow"><button class="btn btn-link btn-sm dropdown-toggle" data-toggle="dropdown" aria-expanded="false" type="button"></button>
+                                    <div class="dropdown-menu shadow dropdown-menu-right animated--fade-in">
+                                        <p class="text-center dropdown-header">dropdown header:</p><a class="dropdown-item" href="#">&nbsp;Action</a><a class="dropdown-item" href="#">&nbsp;Another action</a>
+                                        <div class="dropdown-divider"></div><a class="dropdown-item" href="#">&nbsp;Something else here</a></div>
+                                </div><select name="roles"><optgroup label="Asigne Un Rol"><option value="12">Admin</option><option value="13">Supervisor</option><option value="14">Auxiliar</option></optgroup></select></div>
+
+                            <div class="card-header d-flex justify-content-between align-items-center">
+                                <h6 class="text-center text-primary font-weight-bold m-0">Cantidad de Usuarios destectados con y sin Mascarillas del Día</h6>
+                                <div class="dropdown no-arrow"><button class="btn btn-link btn-sm dropdown-toggle" data-toggle="dropdown" aria-expanded="false" type="button"></button>
+                                    <div class="dropdown-menu shadow dropdown-menu-right animated--fade-in">
+                                        <p class="text-center dropdown-header">dropdown header:</p><a class="dropdown-item" href="#">&nbsp;Action</a><a class="dropdown-item" href="#">&nbsp;Another action</a>
+                                        <div class="dropdown-divider"></div><a class="dropdown-item" href="#">&nbsp;Something else here</a></div>
+                                </div>
+                            </div>
+                            <div class="card-body">
+                                <!--  <div class="chart-area"><canvas id="graf2" data-bs-chart="{&quot;type&quot;:&quot;pie&quot;,&quot;data&quot;:{&quot;labels&quot;:[&quot;Sin Mascarilla&quot;,&quot;Con Mascarilla&quot;],&quot;datasets&quot;:[{&quot;label&quot;:&quot;Valores&quot;,&quot;backgroundColor&quot;:[&quot;#4e73df&quot;,&quot;#1cc88a&quot;],&quot;borderColor&quot;:[&quot;#ffffff&quot;,&quot;#ffffff&quot;],&quot;data&quot;:[&quot; id='pe'&quot;,&quot;25&quot;]}]},&quot;options&quot;:{&quot;maintainAspectRatio&quot;:false,&quot;legend&quot;:{&quot;display&quot;:false},&quot;title&quot;:{}}}"></canvas></div>-->
+                                <div class="chart-area"><canvas id="graf2" ></canvas></div>
+                                <div class="text-center small mt-4"><span class="mr-2"><i class="fas fa-circle text-primary"></i>Con Mascarilla</span><span class="mr-2"><i class="fas fa-circle text-success"></i>&nbsp;Sin Mascarilla</span></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <footer class="bg-white sticky-footer" style="background-color: rgb(116,115,93);">
+                <div class="container my-auto">
+                    <div class="text-center my-auto copyright"><span class="text-capitalize text-center" style="font-size: 16px;color: rgb(5,8,31);"><strong>Copyright ©&nbsp; Durán &amp; Espinal 2020</strong></span></div>
+                </div>
+            </footer>
         </div>
-        <footer class="bg-white sticky-footer" style="background-color: rgb(116,115,93);">
-            <div class="container my-auto">
-                <div class="text-center my-auto copyright"><span class="text-capitalize text-center" style="font-size: 16px;color: rgb(5,8,31);"><strong>Copyright ©&nbsp; Durán &amp; Espinal 2020</strong></span></div>
-            </div>
-        </footer>
+
     </div><a class="border rounded d-inline scroll-to-top" href="#page-top"><i class="fas fa-angle-up"></i></a></div>
-    <script src="assets/js/jquery.min.js"></script>
-    <script src="assets/bootstrap/js/bootstrap.min.js"></script>
-    <script src="assets/js/chart.min.js"></script>
-    <script src="assets/js/bs-init.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-easing/1.4.1/jquery.easing.js"></script>
-    <script src="assets/js/theme.js"></script>
+
 </body>
 
 </html>

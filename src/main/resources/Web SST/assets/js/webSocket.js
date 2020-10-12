@@ -2,7 +2,7 @@ var webSocket;
 var tiempoReconectar = 5000;
 var tiempoRemover = 600000;
 var comprobar=0;
-
+var prueba=0;
 /*$(document).ready(function() {
 
     conectar();
@@ -17,8 +17,10 @@ function recibirInformacionServidor(mensaje){
         var element = document.getElementById("cont");
        // element.setAttribute("value",mensaje.data.substring(5));
         element.innerText=  mensaje.data.substring(5);
+        prueba=mensaje.data.substring(5);
         console.log(mensaje.data.substring(5));
-        console.log(document.getElementById("cvs").getAttributeNames());
+       // console.log(document.getElementById("cvs").getAttributeNames());
+        actualizar();
     }
     if(mensaje.data.startsWith("estado:")){
         var element = document.getElementById("estado");
@@ -47,9 +49,9 @@ function recibirInformacionServidor(mensaje){
 };
 function conectar() {
     //Esto es para el WebSocket Secure para el HTTPS
-    webSocket= new WebSocket("wss://" + location.hostname + ":" + location.port + "/WSEnvio");
+    //webSocket= new WebSocket("wss://" + location.hostname + ":" + location.port + "/WSEnvio");
     //Esto es para el WebSocket para el HTTP
-    //webSocket= new WebSocket("ws://" + location.hostname + ":" + location.port + "/WSEnvio");
+    webSocket= new WebSocket("ws://" + location.hostname + ":" + location.port + "/WSEnvio");
 
     webSocket.onmessage = function(data){recibirInformacionServidor(data); console.log("Recibido");}
     webSocket.onopen  = function(e){ console.log("Conectado - status "+this.readyState); };
