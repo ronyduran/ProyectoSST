@@ -13,14 +13,19 @@ var prueba=0;
  */
 
 function recibirInformacionServidor(mensaje){
+
      if(mensaje.data.startsWith("cont:")){
+         prueba=mensaje.data.substring(5);
+         actualizar();
         var element = document.getElementById("cont");
        // element.setAttribute("value",mensaje.data.substring(5));
         element.innerText=  mensaje.data.substring(5);
-        prueba=mensaje.data.substring(5);
         console.log(mensaje.data.substring(5));
        // console.log(document.getElementById("cvs").getAttributeNames());
-        actualizar();
+
+    }
+    if(mensaje.data.startsWith("noti:")){
+
     }
     if(mensaje.data.startsWith("estado:")){
         var element = document.getElementById("estado");

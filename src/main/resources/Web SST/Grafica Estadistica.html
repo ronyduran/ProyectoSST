@@ -4,7 +4,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
-    <title>Blank Page - Brand</title>
+    <title>Gráficos Estadísticos</title>
     <link rel="stylesheet" href="assets/bootstrap/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i">
     <link rel="stylesheet" href="assets/fonts/fontawesome-all.min.css">
@@ -19,13 +19,28 @@
     <script src="assets/js/bs-init.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-easing/1.4.1/jquery.easing.js"></script>
     <script src="assets/js/theme.js"></script>
+
     <script>
+
         $(document).ready(function() {
 
             conectar();
             cargarGrafica();
 
         });
+
+        function cambioGra1(){
+            var select1 = document.getElementById("selecgraf1");
+            var i = select1.selectedIndex;
+            modiGra1f(select1.options[i].text);
+            console.log(select1.options[i].text);
+        }
+        function cambioGra2(){
+            var select2 = document.getElementById("selecgraf2");
+            var i = select2.selectedIndex;
+            modiGra2f(select2.options[i].text);
+            console.log(select2.options[i].text);
+        }
 
     </script>
 </head>
@@ -95,7 +110,7 @@
                                     <div class="dropdown-menu shadow dropdown-menu-right animated--fade-in">
                                         <p class="text-center dropdown-header">dropdown header:</p><a class="dropdown-item" href="#">&nbsp;Action</a><a class="dropdown-item" href="#">&nbsp;Another action</a>
                                         <div class="dropdown-divider"></div><a class="dropdown-item" href="#">&nbsp;Something else here</a></div>
-                                </div><select name="roles"><optgroup label="Asigne Un Rol"><option value="12">Admin</option><option value="13">Supervisor</option><option value="14">Auxiliar</option></optgroup></select></div>
+                                </div><select name="roles" id="selecgraf1" onchange="cambioGra1()" style="width: auto"><optgroup label="Asigne Un Rol"><option value="12">Admin</option><option value="13">Supervisor</option><option value="14">Auxiliar</option></optgroup></select></div>
 
                             <div class="card-header d-flex justify-content-between align-items-center">
                                 <h6 class="text-primary font-weight-bold m-0">Promedio de Visitantes por Día de la Semana</h6>
@@ -118,10 +133,10 @@
                                     <div class="dropdown-menu shadow dropdown-menu-right animated--fade-in">
                                         <p class="text-center dropdown-header">dropdown header:</p><a class="dropdown-item" href="#">&nbsp;Action</a><a class="dropdown-item" href="#">&nbsp;Another action</a>
                                         <div class="dropdown-divider"></div><a class="dropdown-item" href="#">&nbsp;Something else here</a></div>
-                                </div><select name="roles"><optgroup label="Asigne Un Rol"><option value="12">Admin</option><option value="13">Supervisor</option><option value="14">Auxiliar</option></optgroup></select></div>
+                                </div><select name="roles"id="selecgraf2" onchange="cambioGra2()" style="width: 100%"><optgroup label="Seleccione una Opción de Gráfica"><option value="12">Usarios con mascarillas vs sin mascarillas</option><option value="13">Usuarios hombres vs usarios mujeres</option><option value="14">Auxiliar</option></optgroup></select></div>
 
                             <div class="card-header d-flex justify-content-between align-items-center">
-                                <h6 class="text-center text-primary font-weight-bold m-0">Cantidad de Usuarios destectados con y sin Mascarillas del Día</h6>
+                                <h6 class="text-center text-primary font-weight-bold m-0" id="titulo2">Cantidad de Usuarios destectados con y sin Mascarillas del Día</h6>
                                 <div class="dropdown no-arrow"><button class="btn btn-link btn-sm dropdown-toggle" data-toggle="dropdown" aria-expanded="false" type="button"></button>
                                     <div class="dropdown-menu shadow dropdown-menu-right animated--fade-in">
                                         <p class="text-center dropdown-header">dropdown header:</p><a class="dropdown-item" href="#">&nbsp;Action</a><a class="dropdown-item" href="#">&nbsp;Another action</a>
@@ -131,7 +146,7 @@
                             <div class="card-body">
                                 <!--  <div class="chart-area"><canvas id="graf2" data-bs-chart="{&quot;type&quot;:&quot;pie&quot;,&quot;data&quot;:{&quot;labels&quot;:[&quot;Sin Mascarilla&quot;,&quot;Con Mascarilla&quot;],&quot;datasets&quot;:[{&quot;label&quot;:&quot;Valores&quot;,&quot;backgroundColor&quot;:[&quot;#4e73df&quot;,&quot;#1cc88a&quot;],&quot;borderColor&quot;:[&quot;#ffffff&quot;,&quot;#ffffff&quot;],&quot;data&quot;:[&quot; id='pe'&quot;,&quot;25&quot;]}]},&quot;options&quot;:{&quot;maintainAspectRatio&quot;:false,&quot;legend&quot;:{&quot;display&quot;:false},&quot;title&quot;:{}}}"></canvas></div>-->
                                 <div class="chart-area"><canvas id="graf2" ></canvas></div>
-                                <div class="text-center small mt-4"><span class="mr-2"><i class="fas fa-circle text-primary"></i>Con Mascarilla</span><span class="mr-2"><i class="fas fa-circle text-success"></i>&nbsp;Sin Mascarilla</span></div>
+                                <div class="text-center small mt-4"><span class="mr-2" id="legend1graf2" ><i class="fas fa-circle text-primary"></i>Con Mascarilla</span><span class="mr-2" id="legend2graf2"><i class="fas fa-circle text-success"></i>Sin Mascarilla</span></div>
                             </div>
                         </div>
                     </div>

@@ -42,13 +42,13 @@ public class Main {
                 enviarMensajeAClientesConectados("estado:"+mode.getEstado());
                 enviarMensajeAClientesConectados("cont:"+mode.getContador());
                 enviarMensajeAClientesConectados("nivel:"+Integer.toString(mode.getNivel()));
-                if(mode.getNotificaciones().size()==0){
+                /*if(mode.getNotificaciones().size()==0){
                     enviarMensajeAClientesConectados("noficiaciones:En Espera de Notificaciones");
                 }else{
                     for (String n:mode.getNotificaciones()) {
                         enviarMensajeAClientesConectados("noficiaciones:"+n);
                     }
-                } 
+                } */
                 
                 enviarMensajeAClientesConectados("conMas:"+mode.getUserMascarillla().size());
                 enviarMensajeAClientesConectados("sinMas:"+mode.getUserSinMascarillla().size());
@@ -89,7 +89,9 @@ public class Main {
                     String noti=ctx.formParam("notfi",String.class).get();
                     mode.insertNoti(noti);
                     System.out.println(noti);
-                    enviarMensajeAClientesConectados("noficiaciones:"+mode.fecha()+"--"+noti);
+                    String mensaje="[Tiger Nixon,System Architect,Edinburgh,5421,2011/04/25,$3,120]";
+                    enviarMensajeAClientesConectados("noti:"+mensaje);
+
                 });
                 post("/mascarilla",ctx -> {
                     String noti=ctx.formParam("notfi",String.class).get();
@@ -98,6 +100,7 @@ public class Main {
                     System.out.println(noti+"--"+"Cantidad:"+mode.getUserMascarillla().size());
                     enviarMensajeAClientesConectados("noficiaciones:"+mode.fecha()+"--"+noti);
                     enviarMensajeAClientesConectados("conMas:"+mode.getUserMascarillla().size());
+
                 });post("/sinmascarilla",ctx -> {
                     String noti=ctx.formParam("notfi",String.class).get();
                     mode.sinMascarilla(noti);

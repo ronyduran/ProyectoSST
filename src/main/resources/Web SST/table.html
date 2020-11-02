@@ -4,13 +4,51 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
-    <title>Table - Brand</title>
+    <title>Tablas</title>
     <link rel="stylesheet" href="assets/bootstrap/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i">
     <link rel="stylesheet" href="assets/fonts/fontawesome-all.min.css">
     <link rel="stylesheet" href="assets/fonts/font-awesome.min.css">
     <link rel="stylesheet" href="assets/fonts/fontawesome5-overrides.min.css">
     <link rel="stylesheet" href="assets/css/Team-Boxed.css">
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/dt/dt-1.10.22/datatables.min.css"/>
+    <script src="assets/js/jquery.min.js"></script>
+    <script src="assets/bootstrap/js/bootstrap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.3/Chart.min.js" integrity="sha512-s+xg36jbIujB2S2VKfpGmlC3T5V2TF3lY48DX7u2r9XzGzgPsa6wTpOQA7J9iffvdeBN0q9tKzRxVxw1JviZPg==" crossorigin="anonymous"></script>
+    <script src="assets/js/bs-init.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-easing/1.4.1/jquery.easing.js"></script>
+    <script src="assets/js/theme.js"></script>
+    <script type="text/javascript" src="https://cdn.datatables.net/v/dt/dt-1.10.22/datatables.min.js"></script>
+    <script src="assets/js/webSocket.js"></script>
+    <script>
+
+        var data = [
+            [
+                "Tiger Nixon",
+                "System Architect",
+                "Edinburgh",
+                "5421",
+                "2011/04/25",
+                "$3,120"
+            ],
+            [
+                "Garrett Winters",
+                "Director",
+                "Edinburgh",
+                "8422",
+                "2011/07/25",
+                "$5,300"
+            ]
+        ]
+        $(document).ready( function () {
+            $('#example').DataTable( {
+                data: data
+            } );
+        } );
+    </script>
+
+
+
 </head>
 
 <body id="page-top">
@@ -103,56 +141,40 @@
                         <p class="text-primary m-0 font-weight-bold">Información General</p>
                     </div>
                     <div class="card-body">
-                        <div class="row">
+                       <!-- <div class="row">
                             <div class="col-md-6 text-nowrap">
                                 <div id="dataTable_length" class="dataTables_length" aria-controls="dataTable"><label>Mostrar<select class="form-control form-control-sm custom-select custom-select-sm"><option value="10" selected="">10</option><option value="25">25</option><option value="50">50</option><option value="100">100</option></select>&nbsp;</label></div>
                             </div>
                             <div class="col-md-6">
                                 <div class="text-md-right dataTables_filter" id="dataTable_filter"><label><input type="search" class="form-control form-control-sm" aria-controls="dataTable" placeholder="Search"></label></div>
                             </div>
-                        </div>
+                        </div>-->
                         <div class="table-responsive table mt-2" id="dataTableP" role="grid" aria-describedby="dataTable_info">
-                            <table class="table my-0" id="dataTableH">
+                           <!-- <table class="table my-0" id="dataTableH">-->
+                            <table id="example" class="display" style="width:100%">
                                 <thead>
-                                    <tr>
-                                        <th>ID</th>
-                                        <th>Nombre</th>
-                                        <th>Fecha</th>
-                                    </tr>
+                                <tr>
+                                    <th>Name</th>
+                                    <th>Position</th>
+                                    <th>Office</th>
+                                    <th>Extn.</th>
+                                    <th>Start date</th>
+                                    <th>Salary</th>
+                                </tr>
                                 </thead>
-                                <tbody>
-                                    <tr></tr>
-                                    <tr>
-                                        <td>00001<br></td>
-                                        <td>Rony David Durán&nbsp;</td>
-                                        <td>20/2/2020</td>
-                                    </tr>
-                                    <tr>
-                                        <td>00002</td>
-                                        <td>Johan Suarez</td>
-                                        <td>20/2/2020</td>
-                                    </tr>
-                                    <tr>
-                                        <td>00004</td>
-                                        <td>Pedro Castillo</td>
-                                        <td>21/3/2020</td>
-                                    </tr>
-                                    <tr>
-                                        <td>00005</td>
-                                        <td>Eduardo Espinal</td>
-                                        <td>23/3/2020</td>
-                                    </tr>
-                                </tbody>
                                 <tfoot>
-                                    <tr>
-                                        <td>ID</td>
-                                        <td><strong>Nombre</strong></td>
-                                        <td><strong>Fecha</strong></td>
-                                    </tr>
+                                <tr>
+                                    <th>Name</th>
+                                    <th>Position</th>
+                                    <th>Office</th>
+                                    <th>Extn.</th>
+                                    <th>Start date</th>
+                                    <th>Salary</th>
+                                </tr>
                                 </tfoot>
                             </table>
                         </div>
-                        <div class="row">
+                       <!-- <div class="row">
                             <div class="col-md-6 align-self-center">
                                 <p id="dataTable_info" class="dataTables_info" role="status" aria-live="polite">Mostrando 1 a 10 de 27</p>
                             </div>
@@ -167,7 +189,7 @@
                                     </ul>
                                 </nav>
                             </div>
-                        </div>
+                        </div>-->
                     </div>
                 </div>
             </div>
@@ -178,12 +200,7 @@
             </div>
         </footer>
     </div><a class="border rounded d-inline scroll-to-top" href="#page-top"><i class="fas fa-angle-up"></i></a></div>
-    <script src="assets/js/jquery.min.js"></script>
-    <script src="assets/bootstrap/js/bootstrap.min.js"></script>
-    <script src="assets/js/chart.min.js"></script>
-    <script src="assets/js/bs-init.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-easing/1.4.1/jquery.easing.js"></script>
-    <script src="assets/js/theme.js"></script>
+
 </body>
 
 </html>
