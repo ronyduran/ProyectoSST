@@ -43,7 +43,7 @@ public class Main {
         ModelWeb mode =new ModelWeb();
 
 
-        ManejoRemover mr = new ManejoRemover(mode);
+       // ManejoRemover mr = new ManejoRemover(mode);
 
        // mr.hilo.start();
         //-----------------------------
@@ -222,8 +222,15 @@ public class Main {
         }
     };*/
     public static String getModoConexion(){
-           return modoConexion;
+
+        return modoConexion;
     }
+
+    public static void setModoConexion(String modoConexion) {
+        Main.modoConexion = modoConexion;
+    }
+
+
 
 
 }

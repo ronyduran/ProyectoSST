@@ -7,7 +7,7 @@ import javax.persistence.*;
 @Entity
 public class EventoTunelNivleLiquido implements Serializable  {
     @Id
-    @GeneratedValue
+    @GeneratedValue (strategy = GenerationType.IDENTITY)
     private Integer idEventoNivelLiquido;
     private String nivel;
     private Date fecha;

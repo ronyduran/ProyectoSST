@@ -21,6 +21,7 @@ dependencies {
     compile "org.slf4j:slf4j-api:1.8.0-beta4"
     compile 'org.thymeleaf:thymeleaf:3.0.5.RELEASE'
     compile 'com.h2database:h2:1.4.200' //agregando dependencia de H2, represanta el Drive de la conexion.
+    compile 'org.postgresql:postgresql:42.2.1'
     //ORM - Hibernate.
     compile 'org.hibernate:hibernate-core:5.4.17.Final'
     compile 'org.hibernate:hibernate-entitymanager:5.4.17.Final'

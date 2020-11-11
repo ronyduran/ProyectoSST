@@ -19,11 +19,9 @@ public class GestionDB<T> {
 
     public GestionDB(Class<T> clase) {
         if(entityManagerFactory == null) {
-            if(Main.getModoConexion().equalsIgnoreCase("Heroku")){
-                entityManagerFactory = getConfiguracionBaseDatosHeroku();
-            }else{
+
                 entityManagerFactory = Persistence.createEntityManagerFactory("WebSST");
-            }
+
         }
         this.claseEntidad = claseEntidad;
     }
@@ -31,27 +29,7 @@ public class GestionDB<T> {
     public static EntityManager getEntityManager() {
         return entityManagerFactory.createEntityManager();
     }
-    private EntityManagerFactory getConfiguracionBaseDatosHeroku(){
-        //Leyendo la información de la variable de ambiente de Heroku
-        String databaseUrl = System.getenv("DATABASE_URL");
-        StringTokenizer st = new StringTokenizer(databaseUrl, ":@/");
-        //Separando las información del conexión.
-        String dbVendor = st.nextToken();
-        String userName = st.nextToken();
-        String password = st.nextToken();
-        String host = st.nextToken();
-        String port = st.nextToken();
-        String databaseName = st.nextToken();
-        //creando la jbdc String
-        String jdbcUrl = String.format("jdbc:postgresql://%s:%s/%s", host, port, databaseName);
-        //pasando las propiedades.
-        Map<String, String> properties = new HashMap<>();
-        properties.put("javax.persistence.jdbc.url", jdbcUrl );
-        properties.put("javax.persistence.jdbc.user", userName );
-        properties.put("javax.persistence.jdbc.password", password );
-        //
-        return Persistence.createEntityManagerFactory("Heroku", properties);
-    }
+
 
     /**
      * Permite obtener el valor del campo
