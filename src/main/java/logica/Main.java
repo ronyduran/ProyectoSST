@@ -1,27 +1,42 @@
 package logica;
 
+import Servicios.ServicioTunelLiquifo;
 import io.javalin.Javalin;
-import io.javalin.plugin.rendering.JavalinRenderer;
-import io.javalin.plugin.rendering.template.JavalinThymeleaf;
 import org.eclipse.jetty.websocket.api.Session;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.sql.SQLException;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.*;
+import logica.EventoTunelNivleLiquido;
 
 import static io.javalin.apibuilder.ApiBuilder.*;
 
 
 public class Main {
+    private static String modoConexion = "";
     public static List<Session> usuariosConectados = new ArrayList<>();
+    public static List<EventoTunelClientes> listaEventosClientes = new ArrayList<>();
+    public static List<EventoTunelNivleLiquido> listaEventosNivelLiquido = new ArrayList<>();
+    
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws SQLException {
 
         Javalin app = Javalin.create(javalinConfig ->{
             javalinConfig.addStaticFiles("/Web SST/");
         } ).start(7000);
+
+        if(modoConexion.isEmpty()) {
+            ConexionDB.getInstance().InciarDB();
+            System.out.println("Inicio");
+
+        }
+        for(int i=0;i<50;i++){
+            ServicioTunelLiquifo.getIntacia().crearObjeto(new EventoTunelNivleLiquido("55",fecha()));
+        }
+
 
         //JavalinRenderer.register(JavalinThymeleaf.INSTANCE, ".html");
 
@@ -49,7 +64,7 @@ public class Main {
                         enviarMensajeAClientesConectados("noficiaciones:"+n);
                     }
                 } */
-                
+
                 enviarMensajeAClientesConectados("conMas:"+mode.getUserMascarillla().size());
                 enviarMensajeAClientesConectados("sinMas:"+mode.getUserSinMascarillla().size());
 
@@ -136,6 +151,78 @@ public class Main {
                 e.printStackTrace();
             }
         }
+    }
+
+   /* public Integer crearIdEventosTunelClientes(){
+       int cantActEventoClientes= listaEventosClientes.size();
+       int nuevoId=cantActEventoClientes++;
+         return nuevoId;
+    };
+
+    public void crearEventoTunelClientes(@NotNull String idCliente, String estadoMascarilla, String temperatura){
+
+        if(!idCliente.contentEquals("") && (estadoMascarilla.contentEquals("True") || estadoMascarilla.contentEquals("False")) && !temperatura.contentEquals("") ) {
+            //EventoTunelClientes ec1 = new EventoTunelClientes(crearIdEventosTunelClientes(),idCliente,estadoMascarilla,temperatura,fecha());
+           // listaEventosClientes.add(ec1);
+        };
+
+    };*/
+
+
+    public static Date fecha(){
+        Date fecha1 = new Date();
+        DateFormat hourdateFormat = new SimpleDateFormat("HH:mm:ss dd/MM/yyyy");
+        String fechaString = hourdateFormat.format(fecha1);
+        Date fechaMod= new Date();
+        try {
+            fechaMod= hourdateFormat.parse(fechaString);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return fechaMod;
+    };
+
+    public Integer contClientesdelActual () {
+
+        Date fecha1 = new Date();
+        int cont=0;
+        for (EventoTunelClientes aux: listaEventosClientes) {
+            if(cambiarFormatoFecha(aux.getFecha()).compareTo(cambiarFormatoFecha(fecha1))==0){
+               cont++;
+            }
+        }
+        return cont;
+    };
+
+    public Date cambiarFormatoFecha (Date f1){
+
+        DateFormat hourdateFormat = new SimpleDateFormat("dd/MM/yyyy");
+        String fechaString = hourdateFormat.format(f1);
+
+        try {
+            f1= hourdateFormat.parse(fechaString);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return f1;
+    };
+
+   /* public String crearIdEventosNivel(){
+        int cantActEventoNivel= listaEventosNivelLiquido.size();
+        int nuevoId=cantActEventoNivel++;
+        String nId="EvN"+nuevoId;
+        return nId;
+    };
+
+    public void insetarEventoNivel (String nivel){
+
+        if(!nivel.contentEquals("")){
+            //EventoTunelNivleLiquido n1= new EventoTunelNivleLiquido(crearIdEventosNivel(),nivel,fecha());
+            //listaEventosNivelLiquido.add(n1);
+        }
+    };*/
+    public static String getModoConexion(){
+           return modoConexion;
     }
 
 

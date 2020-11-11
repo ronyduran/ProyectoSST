@@ -20,6 +20,10 @@ dependencies {
     compile "org.slf4j:slf4j-simple:1.8.0-beta4"
     compile "org.slf4j:slf4j-api:1.8.0-beta4"
     compile 'org.thymeleaf:thymeleaf:3.0.5.RELEASE'
+    compile 'com.h2database:h2:1.4.200' //agregando dependencia de H2, represanta el Drive de la conexion.
+    //ORM - Hibernate.
+    compile 'org.hibernate:hibernate-core:5.4.17.Final'
+    compile 'org.hibernate:hibernate-entitymanager:5.4.17.Final'
 }
 shadowJar{
     baseName = 'SSTproject'
