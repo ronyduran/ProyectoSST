@@ -18,8 +18,7 @@ public class EventoTunelClientes implements Serializable {
     public EventoTunelClientes(){
     }
 
-    public EventoTunelClientes(Integer idEventoCTunelCliente, String idCliente, String estadoMascarilla, String temperatura, Date fecha) {
-        this.idEventoCTunelCliente = idEventoCTunelCliente;
+    public EventoTunelClientes( String idCliente, String estadoMascarilla, String temperatura, Date fecha) {
         this.idCliente = idCliente;
         this.estadoMascarilla = estadoMascarilla;
         this.temperatura = temperatura;

@@ -63,7 +63,8 @@ function cargarGrafica() {
                     label:"Valores",
                     backgroundColor:["#4e73df","#1cc88a"],
                     borderColor:["#ffffff","#ffffff"],
-                    data: [100-prueba,prueba]
+                    //data: [100-prueba,prueba]
+                    data: [conMas,sinMas]
                 }]
         },
         options: {
@@ -85,7 +86,8 @@ function cargarGrafica() {
 
 function actualizar() {
 
-    var data= [100-prueba, prueba];
+    //var data= [100-prueba, prueba];
+    var data= [conMas,sinMas];
     myChart2.data.datasets[0].data= data;
     myChart2.update();
 }

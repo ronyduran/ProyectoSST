@@ -1,5 +1,6 @@
 package logica;
 
+import Servicios.ServicioTunelClientes;
 import Servicios.ServicioTunelLiquifo;
 import io.javalin.Javalin;
 import org.eclipse.jetty.websocket.api.Session;
@@ -19,8 +20,7 @@ public class Main {
     private static String modoConexion = "";
     public static List<Session> usuariosConectados = new ArrayList<>();
     public static List<EventoTunelClientes> listaEventosClientes = new ArrayList<>();
-    public static List<EventoTunelNivleLiquido> listaEventosNivelLiquido = new ArrayList<>();
-    
+
 
     public static void main(String[] args) throws SQLException {
 
@@ -33,9 +33,9 @@ public class Main {
             System.out.println("Inicio");
 
         }
-        for(int i=0;i<50;i++){
+        /*for(int i=0;i<50;i++){
             ServicioTunelLiquifo.getIntacia().crearObjeto(new EventoTunelNivleLiquido("55",fecha()));
-        }
+        }*/
 
 
         //JavalinRenderer.register(JavalinThymeleaf.INSTANCE, ".html");
@@ -54,9 +54,9 @@ public class Main {
             ws.onConnect(ctx -> {
                 System.out.println("Conexión Iniciada - " + ctx.getSessionId());
                 usuariosConectados.add(ctx.session);
-                enviarMensajeAClientesConectados("estado:"+mode.getEstado());
-                enviarMensajeAClientesConectados("cont:"+mode.getContador());
-                enviarMensajeAClientesConectados("nivel:"+Integer.toString(mode.getNivel()));
+                enviarMensajeAClientesConectados("estado:"+"Encendido");
+                enviarMensajeAClientesConectados("cont:"+contClientesdelActual());
+                enviarMensajeAClientesConectados("nivel:"+ServicioTunelLiquifo.getIntacia().ultimoEvento());
                 /*if(mode.getNotificaciones().size()==0){
                     enviarMensajeAClientesConectados("noficiaciones:En Espera de Notificaciones");
                 }else{
@@ -65,8 +65,8 @@ public class Main {
                     }
                 } */
 
-                enviarMensajeAClientesConectados("conMas:"+mode.getUserMascarillla().size());
-                enviarMensajeAClientesConectados("sinMas:"+mode.getUserSinMascarillla().size());
+                enviarMensajeAClientesConectados("conMasc:"+contMasc());
+                enviarMensajeAClientesConectados("sinMasc:"+sintMasc());
 
 
             });
@@ -107,6 +107,24 @@ public class Main {
                     String mensaje="[Tiger Nixon,System Architect,Edinburgh,5421,2011/04/25,$3,120]";
                     enviarMensajeAClientesConectados("noti:"+mensaje);
 
+
+
+                });
+                post("/cliente",ctx -> {
+                    String id=ctx.formParam("id",String.class).get();
+                    String masc= ctx.formParam("masc",String.class).get();
+                    String temp= ctx.formParam("temp",String.class).get();
+
+                    System.out.println("Id:"+id+"--"+"Mascarilla:"+masc+"Temperatura:"+temp);
+                    ServicioTunelClientes.getInstancia().crearObjeto(new EventoTunelClientes(id,masc,temp,fecha()));
+
+
+                    enviarMensajeAClientesConectados("cont:"+contClientesdelActual());
+                    enviarMensajeAClientesConectados("conMasc:"+contMasc());
+                    enviarMensajeAClientesConectados("sinMasc:"+sintMasc());
+
+
+
                 });
                 post("/mascarilla",ctx -> {
                     String noti=ctx.formParam("notfi",String.class).get();
@@ -125,10 +143,14 @@ public class Main {
                     enviarMensajeAClientesConectados("sinMas:"+mode.getUserSinMascarillla().size());
                 });
                 post("/nivel",ctx -> {
-                    mode.setNivel(ctx.formParam("taman",Integer.class).get());
-                    System.out.println(ctx.formParam("taman",Integer.class).get());
-                    enviarMensajeAClientesConectados("nivel:"+mode.getNivel());
+                    String nivel= ctx.formParam("taman",String.class).get();
+                    ServicioTunelLiquifo.getIntacia().crearObjeto(new EventoTunelNivleLiquido(nivel,fecha()));
+                    //mode.setNivel(ctx.formParam("taman",Integer.class).get());
+                    System.out.println(ctx.formParam("taman",String.class).get());
+                    enviarMensajeAClientesConectados("nivel:"+nivel);
                 });
+
+
                 post("/estado",ctx -> {
                     mode.setEstado(ctx.formParam("esta",String.class).get());
                     System.out.println(ctx.formParam("esta",String.class).get());
@@ -182,11 +204,11 @@ public class Main {
         return fechaMod;
     };
 
-    public Integer contClientesdelActual () {
+    public static Integer contClientesdelActual () {
 
         Date fecha1 = new Date();
         int cont=0;
-        for (EventoTunelClientes aux: listaEventosClientes) {
+        for (EventoTunelClientes aux: ServicioTunelClientes.getInstancia().todos()) {
             if(cambiarFormatoFecha(aux.getFecha()).compareTo(cambiarFormatoFecha(fecha1))==0){
                cont++;
             }
@@ -194,7 +216,7 @@ public class Main {
         return cont;
     };
 
-    public Date cambiarFormatoFecha (Date f1){
+    public static Date cambiarFormatoFecha (Date f1){
 
         DateFormat hourdateFormat = new SimpleDateFormat("dd/MM/yyyy");
         String fechaString = hourdateFormat.format(f1);
@@ -228,6 +250,28 @@ public class Main {
 
     public static void setModoConexion(String modoConexion) {
         Main.modoConexion = modoConexion;
+    }
+
+    public static Integer contMasc(){
+        Integer mas=0;
+        for (EventoTunelClientes aux: ServicioTunelClientes.getInstancia().todos()) {
+            if(aux.getEstadoMascarilla().equalsIgnoreCase("Si")){
+                mas++;
+            }
+        }
+
+        return mas;
+    }
+
+    public static Integer sintMasc(){
+        Integer sinMas=0;
+        for (EventoTunelClientes aux: ServicioTunelClientes.getInstancia().todos()) {
+            if(aux.getEstadoMascarilla().equalsIgnoreCase("No")){
+                sinMas++;
+            }
+        }
+
+        return sinMas;
     }
 
 

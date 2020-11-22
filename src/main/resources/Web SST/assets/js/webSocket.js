@@ -3,6 +3,8 @@ var tiempoReconectar = 5000;
 var tiempoRemover = 600000;
 var comprobar=0;
 var prueba=0;
+var conMas=0;
+var sinMas=100;
 /*$(document).ready(function() {
 
     conectar();
@@ -15,8 +17,8 @@ var prueba=0;
 function recibirInformacionServidor(mensaje){
 
      if(mensaje.data.startsWith("cont:")){
-         prueba=mensaje.data.substring(5);
-         actualizar();
+         //prueba=mensaje.data.substring(5);
+
         var element = document.getElementById("cont");
        // element.setAttribute("value",mensaje.data.substring(5));
         element.innerText=  mensaje.data.substring(5);
@@ -24,8 +26,15 @@ function recibirInformacionServidor(mensaje){
        // console.log(document.getElementById("cvs").getAttributeNames());
 
     }
-    if(mensaje.data.startsWith("noti:")){
-
+    if(mensaje.data.startsWith("conMasc:")){
+        conMas = mensaje.data.substring(8);
+        console.log(conMas);
+        actualizar();
+    }
+    if(mensaje.data.startsWith("sinMasc:")){
+        sinMas = mensaje.data.substring(8);
+        console.log(sinMas);
+        actualizar();
     }
     if(mensaje.data.startsWith("estado:")){
         var element = document.getElementById("estado");
