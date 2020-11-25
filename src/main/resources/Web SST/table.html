@@ -22,7 +22,7 @@
     <script src="assets/js/webSocket.js"></script>
     <script>
 
-        var data = [
+       /* var data = [
             [
                 "Tiger Nixon",
                 "System Architect",
@@ -39,10 +39,19 @@
                 "2011/07/25",
                 "$5,300"
             ]
-        ]
+        ]*/
         $(document).ready( function () {
             $('#example').DataTable( {
-                data: data
+             //   data: data
+                "ajax": "http://"+ location.hostname + ":" + location.port +"/tableEventosClientes",
+                "columns": [
+                    { "data": "idEventoCTunelCliente" },
+                    { "data": "idCliente" },
+                    { "data": "estadoMascarilla" },
+                    { "data": "temperatura" },
+                    { "data": "fecha" }
+                ]
+
             } );
         } );
     </script>
@@ -154,22 +163,20 @@
                             <table id="example" class="display" style="width:100%">
                                 <thead>
                                 <tr>
-                                    <th>Name</th>
-                                    <th>Position</th>
-                                    <th>Office</th>
-                                    <th>Extn.</th>
-                                    <th>Start date</th>
-                                    <th>Salary</th>
+                                    <th>ID Evento</th>
+                                    <th>ID Cliente</th>
+                                    <th>Estado Mascarilla</th>
+                                    <th>Temperatura</th>
+                                    <th>Fecha</th>
                                 </tr>
                                 </thead>
                                 <tfoot>
                                 <tr>
-                                    <th>Name</th>
-                                    <th>Position</th>
-                                    <th>Office</th>
-                                    <th>Extn.</th>
-                                    <th>Start date</th>
-                                    <th>Salary</th>
+                                    <th>ID Evento</th>
+                                    <th>ID Cliente</th>
+                                    <th>Estado Mascarilla</th>
+                                    <th>Temperatura</th>
+                                    <th>Fecha</th>
                                 </tr>
                                 </tfoot>
                             </table>

@@ -2,6 +2,7 @@ package logica;
 
 import Servicios.ServicioTunelClientes;
 import Servicios.ServicioTunelLiquifo;
+import com.google.gson.Gson;
 import io.javalin.Javalin;
 import org.eclipse.jetty.websocket.api.Session;
 
@@ -69,6 +70,7 @@ public class Main {
                 enviarMensajeAClientesConectados("sinMasc:"+sintMasc());
 
 
+
             });
             ws.onMessage(ctx -> {
 
@@ -91,6 +93,20 @@ public class Main {
                 get("/",ctx -> {
                     ctx.redirect("/index.html");
                         });
+                get("/tableEventosClientes",ctx -> {
+                    List<EventoTunelClientes> list;
+                    HashMap map = new HashMap();
+
+                    list = ServicioTunelClientes.getInstancia().todos();
+                    map.put("data", list);
+                    Gson g = new Gson();
+                    String res = g.toJson(map);
+                    ctx.header("Content-Type","application/json");
+                    ctx.result(res);
+
+                    //ctx.json(map);
+
+                });
                 /*get("/",ctx -> {
                     Map<String,Object> modelo = new HashMap<>();
                     modelo.put("esta",mode.getEstado());
@@ -109,6 +125,7 @@ public class Main {
 
 
 
+
                 });
                 post("/cliente",ctx -> {
                     String id=ctx.formParam("id",String.class).get();
@@ -122,7 +139,6 @@ public class Main {
                     enviarMensajeAClientesConectados("cont:"+contClientesdelActual());
                     enviarMensajeAClientesConectados("conMasc:"+contMasc());
                     enviarMensajeAClientesConectados("sinMasc:"+sintMasc());
-
 
 
                 });
