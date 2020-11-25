@@ -5,6 +5,7 @@ var comprobar=0;
 var prueba=0;
 var conMas=0;
 var sinMas=100;
+var datadias= [0,0,0,0,0,0,0];
 /*$(document).ready(function() {
 
     conectar();
@@ -56,6 +57,35 @@ function recibirInformacionServidor(mensaje){
         element.style.width= text+"%";
         //element.setAttribute("value",mensaje.data.substring(5));
         document.getElementById("textnivel").innerText= text+"%";
+    }
+    if(mensaje.data.startsWith("lu:")){
+        datadias[0]= mensaje.data.substring(3);
+        actualizarGraf1();
+    }
+    if(mensaje.data.startsWith("ma:")){
+        datadias[1]= mensaje.data.substring(3);
+        actualizarGraf1();
+    }
+    if(mensaje.data.startsWith("mi:")){
+        datadias[2]= mensaje.data.substring(3);
+        actualizarGraf1();
+    }
+    if(mensaje.data.startsWith("ju:")){
+        datadias[3]= mensaje.data.substring(3);
+        actualizarGraf1();
+    }
+    if(mensaje.data.startsWith("vi:")){
+        datadias[4]= mensaje.data.substring(3);
+        actualizarGraf1();
+    }
+    if(mensaje.data.startsWith("sa:")){
+        datadias[5]= mensaje.data.substring(3);
+        actualizarGraf1();
+    }
+    if(mensaje.data.startsWith("dom:")){
+        datadias[6]= mensaje.data.substring(4);
+        console.log(datadias[7]);
+        actualizarGraf1();
     }
 
 

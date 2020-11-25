@@ -19,30 +19,13 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-easing/1.4.1/jquery.easing.js"></script>
     <script src="assets/js/theme.js"></script>
     <script type="text/javascript" src="https://cdn.datatables.net/v/dt/dt-1.10.22/datatables.min.js"></script>
-    <script src="assets/js/webSocket.js"></script>
+   <!-- <script src="assets/js/webSocket.js"></script>-->
     <script>
 
-       /* var data = [
-            [
-                "Tiger Nixon",
-                "System Architect",
-                "Edinburgh",
-                "5421",
-                "2011/04/25",
-                "$3,120"
-            ],
-            [
-                "Garrett Winters",
-                "Director",
-                "Edinburgh",
-                "8422",
-                "2011/07/25",
-                "$5,300"
-            ]
-        ]*/
+
         $(document).ready( function () {
-            $('#example').DataTable( {
-             //   data: data
+           let tbl = $('#example').DataTable( {
+
                 "ajax": "http://"+ location.hostname + ":" + location.port +"/tableEventosClientes",
                 "columns": [
                     { "data": "idEventoCTunelCliente" },
@@ -52,8 +35,15 @@
                     { "data": "fecha" }
                 ]
 
+
             } );
+       setInterval( function () {
+
+            tbl.ajax.reload( null, false );
+            }, 15000 );
         } );
+
+
     </script>
 
 
@@ -208,6 +198,7 @@
         </footer>
     </div><a class="border rounded d-inline scroll-to-top" href="#page-top"><i class="fas fa-angle-up"></i></a></div>
 
+    <script src="assets/js/theme.js"></script>
 </body>
 
 </html>

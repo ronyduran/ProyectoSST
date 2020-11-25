@@ -12,7 +12,8 @@ function cargarGrafica() {
                 label: "Visitantes",
                 backgroundColor: "blue",
                 borderColor: "rgba(78, 115, 223, 1)",
-                data: [0,50,100,200,300,400,500]}
+                //data: [0,50,100,200,300,400,500]}
+                data: datadias}
             ] },
         options: {
             maintainAspectRatio: false,
@@ -82,6 +83,11 @@ function cargarGrafica() {
 
 
 
+}
+
+function actualizarGraf1(){
+    myChart1.data.datasets[0].data = datadias;
+    myChart1.update();
 }
 
 function actualizar() {

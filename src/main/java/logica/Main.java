@@ -69,7 +69,7 @@ public class Main {
                 enviarMensajeAClientesConectados("conMasc:"+contMasc());
                 enviarMensajeAClientesConectados("sinMasc:"+sintMasc());
 
-
+                diasUserGraf();
 
             });
             ws.onMessage(ctx -> {
@@ -139,7 +139,7 @@ public class Main {
                     enviarMensajeAClientesConectados("cont:"+contClientesdelActual());
                     enviarMensajeAClientesConectados("conMasc:"+contMasc());
                     enviarMensajeAClientesConectados("sinMasc:"+sintMasc());
-
+                    diasUserGraf();
 
                 });
                 post("/mascarilla",ctx -> {
@@ -288,6 +288,35 @@ public class Main {
         }
 
         return sinMas;
+    }
+
+    public static void diasUserGraf(){
+
+        Integer lu=0,ma=0,mi=0,ju=0,vi=0,sa=0,dom=0;
+
+        for (EventoTunelClientes aux: ServicioTunelClientes.getInstancia().todos()) {
+
+
+
+            if(aux.getFecha().getDay()==0){ dom++; }
+            if(aux.getFecha().getDay()==1){ lu++; }
+            if(aux.getFecha().getDay()==2){ ma++; }
+            if(aux.getFecha().getDay()==3){ mi++; }
+            if(aux.getFecha().getDay()==4){ ju++; }
+            if(aux.getFecha().getDay()==5){ vi++; }
+            if(aux.getFecha().getDay()==6){ sa++; }
+
+        }
+        System.out.println(lu+"--"+ma+"--"+mi+"--"+ju+"--"+vi+"--"+sa+"--"+dom);
+        enviarMensajeAClientesConectados("lu:"+lu);
+        enviarMensajeAClientesConectados("ma:"+ma);
+        enviarMensajeAClientesConectados("mi:"+mi);
+        enviarMensajeAClientesConectados("ju:"+ju);
+        enviarMensajeAClientesConectados("vi:"+vi);
+        enviarMensajeAClientesConectados("sa:"+sa);
+        enviarMensajeAClientesConectados("dom:"+dom);
+
+
     }
 
 
