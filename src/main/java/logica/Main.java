@@ -296,7 +296,7 @@ public class Main {
 
         for (EventoTunelClientes aux: ServicioTunelClientes.getInstancia().todos()) {
 
-
+            //if(aux.getFecha().g){}
 
             if(aux.getFecha().getDay()==0){ dom++; }
             if(aux.getFecha().getDay()==1){ lu++; }
