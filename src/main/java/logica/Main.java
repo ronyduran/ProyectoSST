@@ -6,6 +6,9 @@ import com.google.gson.Gson;
 import io.javalin.Javalin;
 import org.eclipse.jetty.websocket.api.Session;
 
+import java.sql.Time;
+import java.util.Calendar;
+
 import java.io.IOException;
 import java.sql.SQLException;
 import java.text.DateFormat;
@@ -296,15 +299,15 @@ public class Main {
 
         for (EventoTunelClientes aux: ServicioTunelClientes.getInstancia().todos()) {
 
-            //if(aux.getFecha().g){}
-
-            if(aux.getFecha().getDay()==0){ dom++; }
-            if(aux.getFecha().getDay()==1){ lu++; }
-            if(aux.getFecha().getDay()==2){ ma++; }
-            if(aux.getFecha().getDay()==3){ mi++; }
-            if(aux.getFecha().getDay()==4){ ju++; }
-            if(aux.getFecha().getDay()==5){ vi++; }
-            if(aux.getFecha().getDay()==6){ sa++; }
+           if (fechaSemana(aux.getFecha())){
+               if(aux.getFecha().getDay()==0){ dom++; }
+               if(aux.getFecha().getDay()==1){ lu++; }
+               if(aux.getFecha().getDay()==2){ ma++; }
+               if(aux.getFecha().getDay()==3){ mi++; }
+               if(aux.getFecha().getDay()==4){ ju++; }
+               if(aux.getFecha().getDay()==5){ vi++; }
+               if(aux.getFecha().getDay()==6){ sa++; }
+           }
 
         }
         System.out.println(lu+"--"+ma+"--"+mi+"--"+ju+"--"+vi+"--"+sa+"--"+dom);
@@ -319,7 +322,21 @@ public class Main {
 
     }
 
+    public static boolean fechaSemana(Date d1){
+        boolean out=false;
+        Calendar cal = Calendar.getInstance();
+        Calendar cal2 = Calendar.getInstance();
+        System.out.println(cal.getTime());
+        cal2.setTime(d1);
 
+        if(cal.get(Calendar.WEEK_OF_YEAR) == cal2.get(Calendar.WEEK_OF_YEAR)){
+            out=true;
+            System.out.println(cal.getTime());
+            System.out.println("Current week of year is : " +cal.get(Calendar.WEEK_OF_YEAR));
+        }
+
+        return out;
+    }
 
 
 }
