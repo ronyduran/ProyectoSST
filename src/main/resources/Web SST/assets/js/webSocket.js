@@ -4,7 +4,7 @@ var tiempoRemover = 600000;
 var comprobar=0;
 var prueba=0;
 var conMas=0;
-var sinMas=100;
+var sinMas=0;
 var datadias= [0,0,0,0,0,0,0];
 /*$(document).ready(function() {
 
@@ -16,7 +16,15 @@ var datadias= [0,0,0,0,0,0,0];
  */
 
 function recibirInformacionServidor(mensaje){
+    if(mensaje.data.startsWith("contGeneral:")){
+        //prueba=mensaje.data.substring(5);
 
+        var element = document.getElementById("contGeneral");
+        element.innerText=  mensaje.data.substring(12);
+        console.log(mensaje.data.substring(12));
+        // console.log(document.getElementById("cvs").getAttributeNames());
+
+    }
      if(mensaje.data.startsWith("cont:")){
          //prueba=mensaje.data.substring(5);
 

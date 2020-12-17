@@ -1,13 +1,17 @@
 package logica;
 
+import org.hibernate.annotations.GeneratorType;
+
 import java.io.Serializable;
 import java.util.Date;
 import javax.persistence.*;
 
 @Entity
 public class EventoTunelClientes implements Serializable {
+    private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+
     private Integer idEventoCTunelCliente;
     private String idCliente;
     private String estadoMascarilla;

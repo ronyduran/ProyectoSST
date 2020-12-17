@@ -3,6 +3,7 @@ package logica;
 import Servicios.ServicioTunelClientes;
 import Servicios.ServicioTunelLiquifo;
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import io.javalin.Javalin;
 import org.eclipse.jetty.websocket.api.Session;
 
@@ -68,7 +69,7 @@ public class Main {
                         enviarMensajeAClientesConectados("noficiaciones:"+n);
                     }
                 } */
-
+                enviarMensajeAClientesConectados("contGeneral:"+contClientesdelGeneral());
                 enviarMensajeAClientesConectados("conMasc:"+contMasc());
                 enviarMensajeAClientesConectados("sinMasc:"+sintMasc());
 
@@ -101,11 +102,14 @@ public class Main {
                     HashMap map = new HashMap();
 
                     list = ServicioTunelClientes.getInstancia().todos();
+
                     map.put("data", list);
-                    Gson g = new Gson();
+
+                    Gson g = new GsonBuilder().setDateFormat("dd/MM/yyyy HH:mm:ss").create();
                     String res = g.toJson(map);
                     ctx.header("Content-Type","application/json");
                     ctx.result(res);
+                    System.out.println(res);
 
                     //ctx.json(map);
 
@@ -119,17 +123,9 @@ public class Main {
 
                     ctx.render("/Web SST/index.html", modelo);});*/
 
-                post("/noti",ctx -> {
-                    String noti=ctx.formParam("notfi",String.class).get();
-                    mode.insertNoti(noti);
-                    System.out.println(noti);
-                    String mensaje="[Tiger Nixon,System Architect,Edinburgh,5421,2011/04/25,$3,120]";
-                    enviarMensajeAClientesConectados("noti:"+mensaje);
-
-
-
-
-                });
+               /* post("/noti",ctx -> {
+                    
+                });*/
                 post("/cliente",ctx -> {
                     String id=ctx.formParam("id",String.class).get();
                     String masc= ctx.formParam("masc",String.class).get();
@@ -140,12 +136,13 @@ public class Main {
 
 
                     enviarMensajeAClientesConectados("cont:"+contClientesdelActual());
+                    enviarMensajeAClientesConectados("contGeneral:"+contClientesdelGeneral());
                     enviarMensajeAClientesConectados("conMasc:"+contMasc());
                     enviarMensajeAClientesConectados("sinMasc:"+sintMasc());
                     diasUserGraf();
 
                 });
-                post("/mascarilla",ctx -> {
+               /* post("/mascarilla",ctx -> {
                     String noti=ctx.formParam("notfi",String.class).get();
                     mode.conMascarilla(noti);
                     mode.insertNoti(noti);
@@ -160,7 +157,7 @@ public class Main {
                     System.out.println(noti+"--"+"Cantidad:"+mode.getUserSinMascarillla().size());
                     enviarMensajeAClientesConectados("noficiaciones:"+mode.fecha()+"--"+noti);
                     enviarMensajeAClientesConectados("sinMas:"+mode.getUserSinMascarillla().size());
-                });
+                });*/
                 post("/nivel",ctx -> {
                     String nivel= ctx.formParam("taman",String.class).get();
                     ServicioTunelLiquifo.getIntacia().crearObjeto(new EventoTunelNivleLiquido(nivel,fecha()));
@@ -175,11 +172,11 @@ public class Main {
                     System.out.println(ctx.formParam("esta",String.class).get());
                     enviarMensajeAClientesConectados("estado:"+mode.getEstado());
                 });
-                post("/contador",ctx -> {
+                /*post("/contador",ctx -> {
                     mode.setContador(ctx.formParam("numero",String.class).get());
                     System.out.println(ctx.formParam("numero",String.class).get());
                     enviarMensajeAClientesConectados("cont:"+mode.getContador());
-                });
+                });*/
 
             });
         });
@@ -221,6 +218,17 @@ public class Main {
             e.printStackTrace();
         }
         return fechaMod;
+    };
+
+    public static Integer contClientesdelGeneral () {
+
+        int cont=0;
+        for (EventoTunelClientes aux: ServicioTunelClientes.getInstancia().todos()) {
+                cont++;
+        }
+        System.out.println("La cantidad general es:"+cont);
+        return cont;
+
     };
 
     public static Integer contClientesdelActual () {
@@ -273,9 +281,13 @@ public class Main {
 
     public static Integer contMasc(){
         Integer mas=0;
+        Date fecha1 = new Date();
+
         for (EventoTunelClientes aux: ServicioTunelClientes.getInstancia().todos()) {
             if(aux.getEstadoMascarilla().equalsIgnoreCase("Si")){
+                if(cambiarFormatoFecha(aux.getFecha()).compareTo(cambiarFormatoFecha(fecha1))==0){
                 mas++;
+                }
             }
         }
 
@@ -284,9 +296,12 @@ public class Main {
 
     public static Integer sintMasc(){
         Integer sinMas=0;
+        Date fecha1 = new Date();
         for (EventoTunelClientes aux: ServicioTunelClientes.getInstancia().todos()) {
             if(aux.getEstadoMascarilla().equalsIgnoreCase("No")){
-                sinMas++;
+                if(cambiarFormatoFecha(aux.getFecha()).compareTo(cambiarFormatoFecha(fecha1))==0) {
+                    sinMas++;
+                }
             }
         }
 

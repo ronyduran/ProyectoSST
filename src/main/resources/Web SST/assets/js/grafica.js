@@ -55,18 +55,18 @@ function cargarGrafica() {
         }
     })
 
-        var ctx = document.getElementById('graf2').getContext('2d');
+    var ctx = document.getElementById('graf2').getContext('2d');
     myChart2 = new Chart(ctx, {
         type: "pie",
         data: {
             labels:["Con Mascarilla", "Sin Mascarilla"],
             datasets:[{
-                    label:"Valores",
-                    backgroundColor:["#4e73df","#1cc88a"],
-                    borderColor:["#ffffff","#ffffff"],
-                    //data: [100-prueba,prueba]
-                    data: [conMas,sinMas]
-                }]
+                label:"Valores",
+                backgroundColor:["#4e73df","#1cc88a"],
+                borderColor:["#ffffff","#ffffff"],
+                //data: [100-prueba,prueba]
+                data: [conMas,sinMas]
+            }]
         },
         options: {
             maintainAspectRatio:false,
