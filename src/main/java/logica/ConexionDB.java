@@ -37,29 +37,21 @@ public class ConexionDB {
 
     }
     public static void detenerDB() throws SQLException {
-        // Server.shutdownTcpServer("tcp://localhost:9092", "", true, true);
+
+        //Server.shutdownTcpServer("tcp://localhost:9092", " ", true, true);
         tcp.stop();
     }
-    /**
-     * Registrar Driver. 1er paso para hacer una conectividad JDBS
-     */
+
     private void registroDriver() {
         try {
             Class.forName("org.h2.Driver");
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
         }
-        /**
-         * No es necesario hacerlo En los Driver modernos porque se registran automatico.
-         * pero se hace con fines educativos
-         */
+
     }
 
 
-    /**
-     * Abrir Objeto de conexion. 2do paso.
-     * URL = protocolo:subprotocolo://servidor:puerto/subnombre
-     */
     public Connection getConexion() {
         Connection con = null;
         try {
@@ -73,14 +65,5 @@ public class ConexionDB {
     }
 
 
-    /**
-     * Abrir objeto Statement para poder trabjar. 3er paso
-     */
-    /**
-     * Hacer la consulta de los elementos deseado. 4to paso
-     */
-    /**
-     * Cerrar conexion. 5to paso.
-     */
 
 }

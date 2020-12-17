@@ -38,6 +38,8 @@ public class Main {
             System.out.println("Inicio");
 
         }
+
+
         /*for(int i=0;i<50;i++){
             ServicioTunelLiquifo.getIntacia().crearObjeto(new EventoTunelNivleLiquido("55",fecha()));
         }*/
@@ -180,6 +182,7 @@ public class Main {
 
             });
         });
+       // ConexionDB.getInstance().detenerDB();
     }
     public static void enviarMensajeAClientesConectados(String mensaje){
         for(Session sesionConectada : usuariosConectados){

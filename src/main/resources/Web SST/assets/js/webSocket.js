@@ -6,6 +6,7 @@ var prueba=0;
 var conMas=0;
 var sinMas=0;
 var datadias= [0,0,0,0,0,0,0];
+
 /*$(document).ready(function() {
 
     conectar();
@@ -62,6 +63,17 @@ function recibirInformacionServidor(mensaje){
         console.log(mensaje.data);
         var element = document.getElementById("nivel");
         var text=mensaje.data.substring(6);
+        if(text<10){
+            //alert("Favor verificar el nivel de líquido, estado:"+text+"%");
+            //bootbox.alert("Hello world!");
+            Swal.fire({
+                position: 'top-end',
+                icon: 'warning',
+                title: "Favor verificar el nivel de líquido, estado:"+text+"%",
+                showConfirmButton: false,
+                timer: 5000
+            })
+        }
         element.style.width= text+"%";
         //element.setAttribute("value",mensaje.data.substring(5));
         document.getElementById("textnivel").innerText= text+"%";
