@@ -116,6 +116,23 @@ public class Main {
                     //ctx.json(map);
 
                 });
+                get("/tableEventosLiquido",ctx -> {
+                    List<EventoTunelNivleLiquido> list;
+                    HashMap map = new HashMap();
+
+                    list = ServicioTunelLiquifo.getIntacia().todos();
+
+                    map.put("data", list);
+
+                    Gson g = new GsonBuilder().setDateFormat("dd/MM/yyyy HH:mm:ss").create();
+                    String res = g.toJson(map);
+                    ctx.header("Content-Type","application/json");
+                    ctx.result(res);
+                    System.out.println(res);
+
+                    //ctx.json(map);
+
+                });
                 /*get("/",ctx -> {
                     Map<String,Object> modelo = new HashMap<>();
                     modelo.put("esta",mode.getEstado());

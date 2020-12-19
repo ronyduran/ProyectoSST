@@ -4,15 +4,50 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
-    <title>Información General</title>
+    <title>Tablas</title>
     <link rel="stylesheet" href="assets/bootstrap/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i">
     <link rel="stylesheet" href="assets/fonts/fontawesome-all.min.css">
     <link rel="stylesheet" href="assets/fonts/font-awesome.min.css">
     <link rel="stylesheet" href="assets/fonts/fontawesome5-overrides.min.css">
     <link rel="stylesheet" href="assets/css/Team-Boxed.css">
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/dt/dt-1.10.22/datatables.min.css"/>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+    <script src="assets/js/jquery.min.js"></script>
+    <script src="assets/bootstrap/js/bootstrap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.3/Chart.min.js" integrity="sha512-s+xg36jbIujB2S2VKfpGmlC3T5V2TF3lY48DX7u2r9XzGzgPsa6wTpOQA7J9iffvdeBN0q9tKzRxVxw1JviZPg==" crossorigin="anonymous"></script>
+    <script src="assets/js/bs-init.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-easing/1.4.1/jquery.easing.js"></script>
+    <script src="assets/js/theme.js"></script>
+    <script type="text/javascript" src="https://cdn.datatables.net/v/dt/dt-1.10.22/datatables.min.js"></script>
     <script src="assets/js/webSocket.js"></script>
+
+    <script>
+
+
+        $(document).ready( function () {
+           let tbl = $('#example').DataTable( {
+
+               // "ajax": "http://"+ location.hostname + ":" + location.port +"/tableEventosLiquido",
+                "ajax": "https://"+ location.hostname + ":" + location.port +"/tableEventosLiquido",
+                "columns": [
+                    { "data": "idEventoNivelLiquido" },
+                    { "data": "nivel" },
+                    { "data": "fecha" }
+                ]
+
+
+            } );
+       setInterval( function () {
+
+            tbl.ajax.reload( null, false );
+            }, 15000 );
+        } );
+
+
+    </script>
+
+
 
 </head>
 
@@ -28,15 +63,15 @@
                 <ul class="nav navbar-nav text-light" id="accordionSidebar">
                     <li class="nav-item"><a class="nav-link" href="index.html"><i class="fas fa-tachometer-alt"></i><span>Dashboard</span></a></li>
                     <li class="nav-item"></li>
-                    <li class="nav-item"><a class="nav-link" href="table.html"><i class="fas fa-table"></i><span>Registro Usuarios</span></a></li>
-                    <li class="nav-item"><a class="nav-link" href="tableLiquido.html"><i class="fas fa-table"></i><span>Registro Eventos Líquido</span></a></li>
+                    <li class="nav-item"><a class="nav-link " href="table.html"><i class="fas fa-table"></i><span>Registro Usuarios</span></a></li>
+                    <li class="nav-item"><a class="nav-link active" href="tableLiquido.html"><i class="fas fa-table"></i><span>Registro Eventos Líquido</span></a></li>
                     <li class="nav-item"></li>
                     <li class="nav-item"></li>
                     <li class="nav-item"></li>
                     <li class="nav-item"></li>
                     <li class="nav-item"><a class="nav-link" href="Grafica%20Estadistica.html"><i class="fas fa-window-maximize"></i><span>Gráficos Estadísticos</span></a></li>
                     <li class="nav-item"><a class="nav-link" href="Creación%20de%20Usuarios.html"><i class="fas fa-user"></i><span>Creación de Perfiles</span></a></li>
-                    <li class="nav-item"><a class="nav-link active" href="infoGeneral.html"><i class="fas fa-user"></i><span>Información General</span></a></li>
+                    <li class="nav-item"><a class="nav-link" href="infoGeneral.html"><i class="fas fa-user"></i><span>Información General</span></a></li>
                 </ul>
                 <div class="text-center d-none d-md-inline"><button class="btn rounded-circle border-0" id="sidebarToggle" type="button"></button></div>
             </div>
@@ -100,33 +135,56 @@
                     </ul>
             </div>
             </nav>
-            <div class="row" style="padding-top: 0px;">
-                <div class="col d-md-flex justify-content-md-center align-items-md-center" style="padding: 0px;text-align: center;color: rgb(6,6,7);"><span class="text-center text-dark" style="font-size: 26px;color: rgb(22,22,27);font-weight: bold;"><br>¿Que es S.S.T?<br><br></span></div>
-            </div>
-            <div class="container">
-                <div class="row">
-                    <div class="col" style="padding-bottom: 25px;"><span class="d-md-flex" style="text-align: center;font-size: 19px;color: rgb(65,66,72);background-color: #ffffff;"><br>Smart Sanitizing Tunnel: " Este proyecto consiste en un túnel higienizante, en cual se activará de forma automática, es decir, sin tener ninguna interacción por parte del usuario, por tanto, funcionara de manera autónoma, además, se buscará que cada persona que vaya a ingresar al local donde este está instalado, porte mascarilla, como una medida de protección y prevención. También, mediante este túnel se podrá saber el flujo de personas que pasa a través de él, así como los datos básicos de estas personas, lo cual puede servir como información a analizar para el local, si así lo desea."<br><br></span></div>
-                </div>
-            </div>
-            <div class="container" style="padding-bottom: 37px;">
-                <div class="intro">
-                    <h2 class="text-center d-xl-flex justify-content-xl-center align-items-xl-center" style="font-size: 25px;background-color: #ffffff;height: 65px;font-style: normal;text-align: center;color: rgb(23,23,25);font-weight: bold;">Equipo desarrollador</h2>
-                    <p class="text-center"></p>
-                </div>
-                <div class="row d-xl-flex justify-content-xl-center align-items-xl-center people" style="background-color: #ffffff;margin-right: 0;margin-left: 0;padding-top: 0px;margin-top: -16px;">
-                    <div class="col-md-6 col-lg-4 d-xl-flex item">
-                        <div class="box">
-                            <h3 class="d-xl-flex justify-content-xl-center align-items-xl-center name" style="font-size: 19px;color: rgb(1,1,1);text-align: center;">Rony David Durán Núñez</h3>
-                            <div class="d-xl-flex justify-content-xl-center"><img class="d-xl-flex align-self-center" src="assets/img/Avatars/bussiness-man.png" style="height: 100px;margin-left: 0px;text-align: center;"></div>
-                            <p class="description" style="text-align: center;"><br>Estudiante de Ingeniería Telemática, de la PUCMM (Pontificia Universidad Católica Madre y Maestra)<br><br></p>
-                        </div>
+            <div class="container-fluid">
+                <h3 class="text-dark mb-4">Registro de eventos del nivel del líquido del SST</h3>
+                <div class="card shadow">
+                    <div class="card-header py-3">
+                        <p class="text-primary m-0 font-weight-bold">Información General</p>
                     </div>
-                    <div class="col-md-6 col-lg-4 item">
-                        <div class="box">
-                            <h3 class="d-xl-flex justify-content-xl-center align-items-xl-center name" style="font-size: 19px;color: rgb(2,2,3);text-align: center;">Eduardo Espinal Madera</h3>
-                            <div class="d-xl-flex justify-content-xl-center"><img class="d-xl-flex justify-content-xl-center" src="assets/img/Avatars/business-man.png" style="height: 100px;padding-left: 0px;text-align: center;"></div>
-                            <p class="description" style="text-align: center;"><br>Estudiante de Ingeniería Telemática, de la PUCMM (Pontificia Universidad Católica Madre y Maestra)<br><br></p>
+                    <div class="card-body">
+                       <!-- <div class="row">
+                            <div class="col-md-6 text-nowrap">
+                                <div id="dataTable_length" class="dataTables_length" aria-controls="dataTable"><label>Mostrar<select class="form-control form-control-sm custom-select custom-select-sm"><option value="10" selected="">10</option><option value="25">25</option><option value="50">50</option><option value="100">100</option></select>&nbsp;</label></div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="text-md-right dataTables_filter" id="dataTable_filter"><label><input type="search" class="form-control form-control-sm" aria-controls="dataTable" placeholder="Search"></label></div>
+                            </div>
+                        </div>-->
+                        <div class="table-responsive table mt-2" id="dataTableP" role="grid" aria-describedby="dataTable_info">
+                           <!-- <table class="table my-0" id="dataTableH">-->
+                            <table id="example" class="display" style="width:100%">
+                                <thead>
+                                <tr>
+                                    <th>ID Evento</th>
+                                    <th>Nivel (%)</th>
+                                    <th>Fecha</th>
+                                </tr>
+                                </thead>
+                                <tfoot>
+                                <tr>
+                                    <th>ID Evento</th>
+                                    <th>Nivel (%)</th>
+                                    <th>Fecha</th>
+                                </tr>
+                                </tfoot>
+                            </table>
                         </div>
+                       <!-- <div class="row">
+                            <div class="col-md-6 align-self-center">
+                                <p id="dataTable_info" class="dataTables_info" role="status" aria-live="polite">Mostrando 1 a 10 de 27</p>
+                            </div>
+                            <div class="col-md-6">
+                                <nav class="d-lg-flex justify-content-lg-end dataTables_paginate paging_simple_numbers">
+                                    <ul class="pagination">
+                                        <li class="page-item disabled"><a class="page-link" href="#" aria-label="Previous"><span aria-hidden="true">«</span></a></li>
+                                        <li class="page-item active"><a class="page-link" href="#">1</a></li>
+                                        <li class="page-item"><a class="page-link" href="#">2</a></li>
+                                        <li class="page-item"><a class="page-link" href="#">3</a></li>
+                                        <li class="page-item"><a class="page-link" href="#" aria-label="Next"><span aria-hidden="true">»</span></a></li>
+                                    </ul>
+                                </nav>
+                            </div>
+                        </div>-->
                     </div>
                 </div>
             </div>
@@ -137,12 +195,7 @@
             </div>
         </footer>
     </div><a class="border rounded d-inline scroll-to-top" href="#page-top"><i class="fas fa-angle-up"></i></a></div>
-    <div class="team-boxed"></div>
-    <script src="assets/js/jquery.min.js"></script>
-    <script src="assets/bootstrap/js/bootstrap.min.js"></script>
-    <script src="assets/js/chart.min.js"></script>
-    <script src="assets/js/bs-init.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-easing/1.4.1/jquery.easing.js"></script>
+
     <script src="assets/js/theme.js"></script>
 </body>
 
