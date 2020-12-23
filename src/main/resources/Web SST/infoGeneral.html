@@ -11,9 +11,20 @@
     <link rel="stylesheet" href="assets/fonts/font-awesome.min.css">
     <link rel="stylesheet" href="assets/fonts/fontawesome5-overrides.min.css">
     <link rel="stylesheet" href="assets/css/Team-Boxed.css">
+    <script src="assets/js/jquery.min.js"></script>
+    <script src="assets/bootstrap/js/bootstrap.min.js"></script>
+
+    <script src="assets/js/bs-init.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-easing/1.4.1/jquery.easing.js"></script>
+    <script src="assets/js/theme.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
     <script src="assets/js/webSocket.js"></script>
 
+    <script>
+        $(document).ready(function() {
+            conectar();
+        });
+    </script>
 </head>
 
 <body id="page-top">
@@ -91,10 +102,10 @@
                                 </div>
                             </li>
                             <li class="nav-item dropdown no-arrow">
-                                <div class="nav-item dropdown no-arrow"><a class="dropdown-toggle nav-link" data-toggle="dropdown" aria-expanded="false" href="#"><span class="text-uppercase d-none d-lg-inline mr-2 text-gray-600 small">Admin</span><i class="fa fa-user-circle-o" style="height: 17px;width: 7px;"></i></a>
+                                <div class="nav-item dropdown no-arrow"><a class="dropdown-toggle nav-link" data-toggle="dropdown" aria-expanded="false" href="#"><span class="text-uppercase d-none d-lg-inline mr-2 text-gray-600 small"id="usuario">Admin</span><i class="fa fa-user-circle-o" style="height: 17px;width: 7px;"></i></a>
                                     <div
                                         class="dropdown-menu shadow dropdown-menu-right animated--grow-in"><a class="dropdown-item" href="Perfil.html"><i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i>&nbsp;Profile</a>
-                                        <div class="dropdown-divider"></div><a class="dropdown-item" href="login.html"><i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>&nbsp;Logout</a></div>
+                                        <div class="dropdown-divider"></div><a class="dropdown-item" href="login-actualzado.html"><i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>&nbsp;Logout</a></div>
                     </div>
                     </li>
                     </ul>
@@ -138,12 +149,7 @@
         </footer>
     </div><a class="border rounded d-inline scroll-to-top" href="#page-top"><i class="fas fa-angle-up"></i></a></div>
     <div class="team-boxed"></div>
-    <script src="assets/js/jquery.min.js"></script>
-    <script src="assets/bootstrap/js/bootstrap.min.js"></script>
-    <script src="assets/js/chart.min.js"></script>
-    <script src="assets/js/bs-init.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-easing/1.4.1/jquery.easing.js"></script>
-    <script src="assets/js/theme.js"></script>
+
 </body>
 
 </html>

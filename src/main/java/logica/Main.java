@@ -2,9 +2,12 @@ package logica;
 
 import Servicios.ServicioTunelClientes;
 import Servicios.ServicioTunelLiquifo;
+import Servicios.ServiciosUserWeb;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import io.javalin.Javalin;
+import io.javalin.plugin.rendering.JavalinRenderer;
+import io.javalin.plugin.rendering.template.JavalinThymeleaf;
 import org.eclipse.jetty.websocket.api.Session;
 
 import java.sql.Time;
@@ -17,6 +20,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
 import logica.EventoTunelNivleLiquido;
+import org.jasypt.encryption.pbe.StandardPBEStringEncryptor;
 
 import static io.javalin.apibuilder.ApiBuilder.*;
 
@@ -36,7 +40,13 @@ public class Main {
         if(modoConexion.isEmpty()) {
             ConexionDB.getInstance().InciarDB();
             System.out.println("Inicio");
-
+            //UserWeb us= new UserWeb("01", "rony", "rony@sst.com", "pucmm","admin","Rony","Duran");
+            if(ServiciosUserWeb.getInstancia().todos().isEmpty()){
+            UserWeb us= new UserWeb();
+            us.setIdUserWeb("001");
+            us.setUserName("rony");
+            us.setPassword("pucmm");
+            ServiciosUserWeb.getInstancia().crearObjeto(us);}
         }
 
 
@@ -74,6 +84,7 @@ public class Main {
                 enviarMensajeAClientesConectados("contGeneral:"+contClientesdelGeneral());
                 enviarMensajeAClientesConectados("conMasc:"+contMasc());
                 enviarMensajeAClientesConectados("sinMasc:"+sintMasc());
+                enviarMensajeAClientesConectados("usuario:"+((UserWeb)ctx.sessionAttribute("usuario")).getUserName());
 
                 diasUserGraf();
 
@@ -96,9 +107,40 @@ public class Main {
 
         app.routes(() -> {
             path( "/", () -> {
+                before("/",ctx -> {
+                    if(ctx.sessionAttribute("usuario")==null){
+                        ctx.redirect("login-actualzado.html");
+                    }else {
+                        ctx.redirect("/index.html");
+                    }
+
+
+                });
                 get("/",ctx -> {
-                    ctx.redirect("/index.html");
+                    //ctx.redirect("/index.html");
+                    ctx.redirect("login-actualzado.html");
                         });
+
+                post("/autenticar",ctx -> {
+                    String nombreUsuario = ctx.formParam("username");
+                    String password = ctx.formParam("pass");
+                     System.out.print("\n Nombre de usuario: " + nombreUsuario +"----- "+"pass: " + password);
+
+
+                    UserWeb aux = validar(nombreUsuario,password);
+                    Map<String, Object> modelo = new HashMap<>();
+                    modelo.put("usuario",modelo);
+
+                   if(aux!=null){
+                        ctx.sessionAttribute("usuario", aux);
+                       enviarMensajeAClientesConectados("usuario:"+aux.getUserName());
+                        ctx.redirect("/index.html");
+                    }else {
+
+                       ctx.redirect("/login-actualzado.html");
+                       enviarMensajeAClientesConectados("error");
+                   }
+                });
                 get("/tableEventosClientes",ctx -> {
                     List<EventoTunelClientes> list;
                     HashMap map = new HashMap();
@@ -111,7 +153,7 @@ public class Main {
                     String res = g.toJson(map);
                     ctx.header("Content-Type","application/json");
                     ctx.result(res);
-                    System.out.println(res);
+                    //System.out.println(res);
 
                     //ctx.json(map);
 
@@ -128,7 +170,7 @@ public class Main {
                     String res = g.toJson(map);
                     ctx.header("Content-Type","application/json");
                     ctx.result(res);
-                    System.out.println(res);
+                    //System.out.println(res);
 
                     //ctx.json(map);
 
@@ -345,7 +387,7 @@ public class Main {
            }
 
         }
-        System.out.println(lu+"--"+ma+"--"+mi+"--"+ju+"--"+vi+"--"+sa+"--"+dom);
+        //System.out.println(lu+"--"+ma+"--"+mi+"--"+ju+"--"+vi+"--"+sa+"--"+dom);
         enviarMensajeAClientesConectados("lu:"+lu);
         enviarMensajeAClientesConectados("ma:"+ma);
         enviarMensajeAClientesConectados("mi:"+mi);
@@ -361,17 +403,34 @@ public class Main {
         boolean out=false;
         Calendar cal = Calendar.getInstance();
         Calendar cal2 = Calendar.getInstance();
-        System.out.println(cal.getTime());
+        //System.out.println(cal.getTime());
         cal2.setTime(d1);
 
         if(cal.get(Calendar.WEEK_OF_YEAR) == cal2.get(Calendar.WEEK_OF_YEAR)){
             out=true;
-            System.out.println(cal.getTime());
-            System.out.println("Current week of year is : " +cal.get(Calendar.WEEK_OF_YEAR));
+            //System.out.println(cal.getTime());
+            //System.out.println("Current week of year is : " +cal.get(Calendar.WEEK_OF_YEAR));
         }
 
         return out;
     }
 
+    public static UserWeb validar(String user, String pass){
+
+            UserWeb u1= null;
+
+        for (UserWeb aux:ServiciosUserWeb.getInstancia().todos()) {
+            if(aux.getUserName().equalsIgnoreCase(user)&&aux.getPassword().equalsIgnoreCase(pass)){
+                System.out.println("Validado");
+                u1=aux;
+            }else {
+                System.out.println("No se puede validar");
+                u1=null;
+            }
+        }
+
+
+            return u1;
+    }
 
 }

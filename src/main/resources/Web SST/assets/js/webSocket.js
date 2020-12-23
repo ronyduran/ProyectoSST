@@ -6,17 +6,34 @@ var prueba=0;
 var conMas=0;
 var sinMas=0;
 var datadias= [0,0,0,0,0,0,0];
+var usuario="NO Usuario";
 
-/*$(document).ready(function() {
 
-    conectar();
-});*/
+
+
 /**
  *
  * @param mensaje
  */
 
 function recibirInformacionServidor(mensaje){
+    if(mensaje.data.startsWith("usuario:")){
+
+        var element = document.getElementById("usuario");
+        var u=mensaje.data.substring(8);
+        if(u==="null"){
+            element.innerText=  "No User";
+            usuario="NO USER";
+            console.log("no validado");
+        }else{
+            element.innerText=  u;
+            usuario=u;
+            console.log(usuario);
+            console.log("validado");
+
+        }
+        console.log(mensaje.data.substring(8));
+    }
     if(mensaje.data.startsWith("contGeneral:")){
         //prueba=mensaje.data.substring(5);
 
@@ -107,15 +124,21 @@ function recibirInformacionServidor(mensaje){
         console.log(datadias[7]);
         actualizarGraf1();
     }
+    if(mensaje.data.startsWith("error")){
 
-
+            Swal.fire({
+                icon: 'error',
+                title: "Usurio y/o contraseña incorrectos",
+                showConfirmButton: false
+            })
+        }
 
 };
 function conectar() {
     //Esto es para el WebSocket Secure para el HTTPS
-    webSocket= new WebSocket("wss://" + location.hostname + ":" + location.port + "/WSEnvio");
+    //webSocket= new WebSocket("wss://" + location.hostname + ":" + location.port + "/WSEnvio");
     //Esto es para el WebSocket para el HTTP
-    //webSocket= new WebSocket("ws://" + location.hostname + ":" + location.port + "/WSEnvio");
+    webSocket= new WebSocket("ws://" + location.hostname + ":" + location.port + "/WSEnvio");
 
     webSocket.onmessage = function(data){recibirInformacionServidor(data); console.log("Recibido");}
     webSocket.onopen  = function(e){ console.log("Conectado - status "+this.readyState); };
