@@ -1,9 +1,10 @@
 <!DOCTYPE html>
-<html lang="en" >
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
 <head>
 	<title>Login</title>
-	<meta charset="UTF-8">
+	<meta http-equiv="content-type" content="text/html;charset=utf-8" />
 	<meta name="viewport" content="width=device-width, initial-scale=1">
+
 <!--===============================================================================================-->	
 	<link rel="icon" type="image/png" href="Login_v3/images/icons/favicon.ico"/>
 <!--===============================================================================================-->
@@ -26,6 +27,8 @@
 	<link rel="stylesheet" type="text/css" href="Login_v3/css/util.css">
 	<link rel="stylesheet" type="text/css" href="Login_v3/css/main.css">
 <!--===============================================================================================-->
+	<script src="assets/js/jquery.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-easing/1.4.1/jquery.easing.js"></script>
 	<script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
 	<script src="assets/js/webSocket.js"></script>
 	<script>
@@ -47,7 +50,12 @@
 					<span class="login100-form-title p-b-34 p-t-27">
 						SST Manager Login
 					</span>
-
+					<div>
+						<span class="text-center" style="color: red"th:utext="${error}"></span>
+						<div class="text-center">
+							<hr>
+						</div>
+					</div>
 					<div class="wrap-input100 validate-input" data-validate = "Enter username">
 						<input class="input100" type="text" name="username" placeholder="Username">
 						<span class="focus-input100" data-placeholder="&#xf207;"></span>
@@ -59,23 +67,23 @@
 					</div>
 
 					<div class="contact100-form-checkbox">
-						<input class="input-checkbox100" id="ckb1" type="checkbox" name="remember-me">
+						<input class="input-checkbox100" id="ckb1" type="checkbox" name="recordar">
 						<label class="label-checkbox100" for="ckb1">
-							Recuerdame
+							Remember me
 						</label>
 					</div>
 
 					<div class="container-login100-form-btn">
 						<button class="login100-form-btn">
-							Iniciar Sesión
+							Login
 						</button>
 					</div>
 
-					<div class="text-center p-t-90">
+					<!--<div class="text-center p-t-90">
 						<a class="txt1" href="Olvidar.html">
 							¿Olvidó su Contraseña?
 						</a>
-					</div>
+					</div>-->
 				</form>
 			</div>
 		</div>

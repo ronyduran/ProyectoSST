@@ -29,12 +29,14 @@ public class Main {
     private static String modoConexion = "";
     public static List<Session> usuariosConectados = new ArrayList<>();
     public static List<EventoTunelClientes> listaEventosClientes = new ArrayList<>();
+    private static String mpCryptoPassword = "ProyectoFinalITT";
 
 
     public static void main(String[] args) throws SQLException {
 
         Javalin app = Javalin.create(javalinConfig ->{
             javalinConfig.addStaticFiles("/Web SST/");
+            javalinConfig.enableCorsForAllOrigins();
         } ).start(7000);
 
         if(modoConexion.isEmpty()) {
@@ -84,8 +86,9 @@ public class Main {
                 enviarMensajeAClientesConectados("contGeneral:"+contClientesdelGeneral());
                 enviarMensajeAClientesConectados("conMasc:"+contMasc());
                 enviarMensajeAClientesConectados("sinMasc:"+sintMasc());
-                enviarMensajeAClientesConectados("usuario:"+((UserWeb)ctx.sessionAttribute("usuario")).getUserName());
-
+                if(!((UserWeb)ctx.sessionAttribute("usuario") ==null)) {
+                    enviarMensajeAClientesConectados("usuario:" + ((UserWeb) ctx.sessionAttribute("usuario")).getUserName());
+                }
                 diasUserGraf();
 
             });
@@ -106,11 +109,26 @@ public class Main {
         //---------------------------------------------------------------------------------------
 
         app.routes(() -> {
+
             path( "/", () -> {
-                before("/",ctx -> {
-                    if(ctx.sessionAttribute("usuario")==null){
-                        ctx.redirect("login-actualzado.html");
-                    }else {
+               before("/",ctx -> {
+                   UserWeb user = ctx.sessionAttribute("usuario");
+                    if(user==null){
+                        String usuario = ctx.cookie("usuario");
+                        String password = ctx.cookie("password");
+                        if(usuario != null  && password !=null){
+
+                            StandardPBEStringEncryptor decryptor = new StandardPBEStringEncryptor();
+                            decryptor.setPassword(mpCryptoPassword);
+                            user  = validar(usuario, decryptor.decrypt(password));
+                            if(user != null){
+                                ctx.sessionAttribute("usuario", user);
+                                ctx.redirect("/index.html");
+                            }
+
+                        }
+
+                    }else{
                         ctx.redirect("/index.html");
                     }
 
@@ -118,28 +136,44 @@ public class Main {
                 });
                 get("/",ctx -> {
                     //ctx.redirect("/index.html");
-                    ctx.redirect("login-actualzado.html");
+                   ctx.redirect("login-actualzado.html");
                         });
 
                 post("/autenticar",ctx -> {
+                    String recordar= ctx.formParam("recordar");
                     String nombreUsuario = ctx.formParam("username");
                     String password = ctx.formParam("pass");
                      System.out.print("\n Nombre de usuario: " + nombreUsuario +"----- "+"pass: " + password);
-
+                    System.out.println("Recordar"+recordar);
 
                     UserWeb aux = validar(nombreUsuario,password);
                     Map<String, Object> modelo = new HashMap<>();
                     modelo.put("usuario",modelo);
 
                    if(aux!=null){
+                       if(recordar!=null && recordar.equalsIgnoreCase("on")){
+                           System.out.println("Creando cookie...\n");
+                           StandardPBEStringEncryptor encryptor = new StandardPBEStringEncryptor();
+                           encryptor.setPassword(mpCryptoPassword);
+                           encryptor.encrypt(aux.getPassword());
+
+                           ctx.cookie("usuario", aux.getUserName(), 604800);// se crea la cookie por una semana
+                           ctx.cookie("password",   encryptor.encrypt(aux.getPassword()), 604800);
+                       }
                         ctx.sessionAttribute("usuario", aux);
                        enviarMensajeAClientesConectados("usuario:"+aux.getUserName());
                         ctx.redirect("/index.html");
                     }else {
+                       modelo.put("error","Please check username & password!");
+                       ctx.render("Web SST/login-actualzado.html",modelo);
 
-                       ctx.redirect("/login-actualzado.html");
-                       enviarMensajeAClientesConectados("error");
                    }
+                });
+                get("/logout",ctx -> {
+                    ctx.sessionAttribute("usuario", null);
+                    ctx.removeCookie("usuario");
+                    ctx.removeCookie("password");
+                    ctx.redirect("/login-actualzado.html");
                 });
                 get("/tableEventosClientes",ctx -> {
                     List<EventoTunelClientes> list;
@@ -185,7 +219,7 @@ public class Main {
                     ctx.render("/Web SST/index.html", modelo);});*/
 
                /* post("/noti",ctx -> {
-                    
+
                 });*/
                 post("/cliente",ctx -> {
                     String id=ctx.formParam("id",String.class).get();

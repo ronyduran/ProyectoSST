@@ -125,7 +125,7 @@ function recibirInformacionServidor(mensaje){
         actualizarGraf1();
     }
     if(mensaje.data.startsWith("error")){
-
+            console.log("error")
             Swal.fire({
                 icon: 'error',
                 title: "Usurio y/o contraseña incorrectos",
