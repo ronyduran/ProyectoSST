@@ -30,6 +30,9 @@ public class Main {
     public static List<Session> usuariosConectados = new ArrayList<>();
     public static List<EventoTunelClientes> listaEventosClientes = new ArrayList<>();
     private static String mpCryptoPassword = "ProyectoFinalITT";
+    private static Integer grafica1=0;
+    private static Integer grafica2=0;
+    private static Integer mes1=new Date().getMonth();
 
 
     public static void main(String[] args) throws SQLException {
@@ -71,6 +74,9 @@ public class Main {
         
         app.ws("/WSEnvio",ws->{
             ws.onConnect(ctx -> {
+                grafica1=0;
+                grafica2=0;
+                mes1=new Date().getMonth();
                 System.out.println("Conexión Iniciada - " + ctx.getSessionId());
                 usuariosConectados.add(ctx.session);
                 enviarMensajeAClientesConectados("estado:"+"Encendido");
@@ -89,10 +95,32 @@ public class Main {
                 if(!((UserWeb)ctx.sessionAttribute("usuario") ==null)) {
                     enviarMensajeAClientesConectados("usuario:" + ((UserWeb) ctx.sessionAttribute("usuario")).getUserName());
                 }
-                diasUserGraf();
+                diasUserGraf1();
 
             });
             ws.onMessage(ctx -> {
+                String data=ctx.message();
+                if(data.startsWith("grafica1:")){
+                    String recortada=data.substring(9);
+                    System.out.println("Mensaje desde grafica 1:"+recortada);
+                    grafica1=Integer.parseInt(recortada);
+                    diasUserGraf1();
+
+                }
+                if(data.startsWith("Mes1:")){
+                    String recortada=data.substring(5);
+                    System.out.println("Mes seleccionado en Grafica 1:"+recortada);
+                    mes1=Integer.parseInt(recortada);
+                    diasUserGraf1();
+                }
+                if(data.startsWith("grafica2:")){
+                    String recortada=data.substring(9);
+                    System.out.println("Mensaje desde grafica 2:"+recortada);
+                    grafica2=Integer.parseInt(recortada);
+                    //diasUserGraf1();
+                }
+
+
 
             });
 
@@ -234,7 +262,7 @@ public class Main {
                     enviarMensajeAClientesConectados("contGeneral:"+contClientesdelGeneral());
                     enviarMensajeAClientesConectados("conMasc:"+contMasc());
                     enviarMensajeAClientesConectados("sinMasc:"+sintMasc());
-                    diasUserGraf();
+                    diasUserGraf1();
 
                 });
                /* post("/mascarilla",ctx -> {
@@ -404,7 +432,7 @@ public class Main {
         return sinMas;
     }
 
-    public static void diasUserGraf(){
+    public static void diasUserGraf1(){
 
         Integer lu=0,ma=0,mi=0,ju=0,vi=0,sa=0,dom=0;
 
@@ -439,12 +467,29 @@ public class Main {
         Calendar cal2 = Calendar.getInstance();
         //System.out.println(cal.getTime());
         cal2.setTime(d1);
-
-        if(cal.get(Calendar.WEEK_OF_YEAR) == cal2.get(Calendar.WEEK_OF_YEAR)){
-            out=true;
-            //System.out.println(cal.getTime());
-            //System.out.println("Current week of year is : " +cal.get(Calendar.WEEK_OF_YEAR));
+        if(grafica1==0){
+            if(cal.get(Calendar.WEEK_OF_YEAR) == cal2.get(Calendar.WEEK_OF_YEAR)){
+                out=true;
+                //System.out.println(cal.getTime());
+                //System.out.println("Current week of year is : " +cal.get(Calendar.WEEK_OF_YEAR));
+            }
         }
+        if(grafica1==1){
+            //if(cal.get(Calendar.MONTH) == cal2.get(Calendar.MONTH)){
+            if(mes1 == cal2.get(Calendar.MONTH)){
+                out=true;
+                //System.out.println(cal.getTime());
+                System.out.println("Mes Actual: " +cal2.get(Calendar.MONTH));
+            }
+        }
+        if(grafica1==2){
+            if(cal.get(Calendar.YEAR) == cal2.get(Calendar.YEAR)){
+                out=true;
+                //System.out.println(cal.getTime());
+                //System.out.println("Current week of year is : " +cal.get(Calendar.WEEK_OF_YEAR));
+            }
+        }
+
 
         return out;
     }

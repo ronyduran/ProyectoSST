@@ -16,6 +16,11 @@ var usuario="NO Usuario";
  * @param mensaje
  */
 
+function enviarinfoServer(data){
+    webSocket.send(data);
+}
+
+
 function recibirInformacionServidor(mensaje){
     if(mensaje.data.startsWith("usuario:")){
 

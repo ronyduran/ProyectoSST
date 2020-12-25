@@ -23,6 +23,7 @@
     <script src="assets/js/theme.js"></script>
 
     <script>
+        var val1=0;
 
         $(document).ready(function() {
 
@@ -56,14 +57,42 @@
         function cambioGra1(){
             var select1 = document.getElementById("selecgraf1");
             var i = select1.selectedIndex;
-            modiGra1f(select1.options[i].text);
+           if(i==1 && val1==0){
+                var array = ["Enero","Febrero","Marzo","Abril","Mayo","Junio","Julio","Agosto","Septiembre","Octubre","Noviembre","Diciembre"];
+                var div= document.getElementById("select1-2");
+                var select12 = document.createElement("select");
+                select12.id = "mySelect";
+                div.appendChild(select12);
+                for (var j = 0; j < array.length; j++) {
+                    var option = document.createElement("option");
+                    option.value = j;
+                    option.text = array[j];
+                    select12.appendChild(option);
+                };
+                select12.value= new Date().getMonth();
+                document.getElementById("mySelect").onchange = function() {
+                    enviarinfoServer("Mes1:"+document.getElementById("mySelect").selectedIndex);
+                    console.log("Mes1:"+document.getElementById("mySelect").selectedIndex);
+                };
+                val1=1;
+
+            }else {
+               if(val1==1){
+                   var selec12= document.getElementById("mySelect").remove();
+                    val1=0;
+               }
+            }
+            //console.log("Selecto 2 valor"+document.getElementById("mySelect").selectedIndex);
+            //modiGra1f(select1.options[i].text);
             console.log(select1.options[i].text);
+            enviarinfoServer("grafica1:"+i);
         }
         function cambioGra2(){
             var select2 = document.getElementById("selecgraf2");
             var i = select2.selectedIndex;
             modiGra2f(select2.options[i].text);
             console.log(select2.options[i].text);
+            enviarinfoServer("grafica2:"+i);
         }
 
     </script>
@@ -129,13 +158,16 @@
                 <div class="row">
                     <div class="col-lg-7 col-xl-8">
                         <div class="card shadow mb-4">
-                            <div class="card-header text-left d-flex justify-content-between align-items-center">
+                            <div id="select1-2" class="card-header text-left d-flex justify-content-between align-items-center">
                                 <h6 class="text-left text-primary font-weight-bold m-0" style="font-size: 21px;color: #020921;">Seleccione gráfico a mostrar:</h6>
                                 <div class="dropdown no-arrow"><button class="btn btn-link btn-sm dropdown-toggle" data-toggle="dropdown" aria-expanded="false" type="button"></button>
                                     <div class="dropdown-menu shadow dropdown-menu-right animated--fade-in">
                                         <p class="text-center dropdown-header">dropdown header:</p><a class="dropdown-item" href="#">&nbsp;Action</a><a class="dropdown-item" href="#">&nbsp;Another action</a>
                                         <div class="dropdown-divider"></div><a class="dropdown-item" href="#">&nbsp;Something else here</a></div>
-                                </div><select name="roles" id="selecgraf1" onchange="cambioGra1()" style="width: auto"><optgroup label="Asigne Un Rol"><option value="12">Admin</option><option value="13">Supervisor</option><option value="14">Auxiliar</option></optgroup></select></div>
+                                </div>
+                                <select name="roles" id="selecgraf1" onchange="cambioGra1()" style="width: auto"><option value="12">Semana</option><option value="13">Mes</option><option value="14">Año</option></select>
+
+                            </div>
 
                             <div class="card-header d-flex justify-content-between align-items-center">
                                 <h6 class="text-primary font-weight-bold m-0">Promedio de Visitantes por Día de la Semana</h6>
