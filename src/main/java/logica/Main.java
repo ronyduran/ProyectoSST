@@ -33,6 +33,7 @@ public class Main {
     private static Integer grafica1=0;
     private static Integer grafica2=0;
     private static Integer mes1=new Date().getMonth();
+    private static Integer anno1= Calendar.getInstance().get(Calendar.YEAR);
 
 
     public static void main(String[] args) throws SQLException {
@@ -77,6 +78,7 @@ public class Main {
                 grafica1=0;
                 grafica2=0;
                 mes1=new Date().getMonth();
+                anno1= Calendar.getInstance().get(Calendar.YEAR);
                 System.out.println("Conexión Iniciada - " + ctx.getSessionId());
                 usuariosConectados.add(ctx.session);
                 enviarMensajeAClientesConectados("estado:"+"Encendido");
@@ -103,6 +105,7 @@ public class Main {
                 if(data.startsWith("grafica1:")){
                     String recortada=data.substring(9);
                     System.out.println("Mensaje desde grafica 1:"+recortada);
+                    System.out.println(anno1);
                     grafica1=Integer.parseInt(recortada);
                     diasUserGraf1();
 
@@ -111,6 +114,12 @@ public class Main {
                     String recortada=data.substring(5);
                     System.out.println("Mes seleccionado en Grafica 1:"+recortada);
                     mes1=Integer.parseInt(recortada);
+                    diasUserGraf1();
+                }
+                if(data.startsWith("Anno1:")){
+                    String recortada=data.substring(6);
+                    System.out.println("Anno seleccionado en Grafica 1:"+recortada);
+                    anno1=Integer.parseInt(recortada);
                     diasUserGraf1();
                 }
                 if(data.startsWith("grafica2:")){
@@ -483,10 +492,12 @@ public class Main {
             }
         }
         if(grafica1==2){
-            if(cal.get(Calendar.YEAR) == cal2.get(Calendar.YEAR)){
+            //if(cal.get(Calendar.YEAR) == cal2.get(Calendar.YEAR)){
+            if(anno1 == cal2.get(Calendar.YEAR)){
                 out=true;
                 //System.out.println(cal.getTime());
                 //System.out.println("Current week of year is : " +cal.get(Calendar.WEEK_OF_YEAR));
+                System.out.println("Año Actual: " +anno1);
             }
         }
 
