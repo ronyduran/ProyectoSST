@@ -25,6 +25,8 @@
     <script>
         var val1=0;
         var val2=0;
+        var val12=0;
+        var val22=0;
 
         $(document).ready(function() {
 
@@ -80,7 +82,7 @@
 
             }else {
                 if(val1==1){
-                    console.log("entro2")
+                    console.log("entro")
                     var selec12= document.getElementById("mySelect").remove();
                     val1=0;
                 }
@@ -122,11 +124,72 @@
             enviarinfoServer("grafica1:"+i);
         }
         function cambioGra2(){
-            var select2 = document.getElementById("selecgraf2");
-            var i = select2.selectedIndex;
-            modiGra2f(select2.options[i].text);
-            console.log(select2.options[i].text);
-            enviarinfoServer("grafica2:"+i);
+
+                var select2 = document.getElementById("selecgraf2");
+                var i = select2.selectedIndex;
+                if(i==2 && val12==0){
+                    console.log("entro")
+                    var array = ["Enero","Febrero","Marzo","Abril","Mayo","Junio","Julio","Agosto","Septiembre","Octubre","Noviembre","Diciembre"];
+                    var div= document.getElementById("select2-2");
+                    var select22 = document.createElement("select");
+                    select22.id = "mySelect2";
+                    div.appendChild(select22);
+                    for (var j = 0; j < array.length; j++) {
+                        var option = document.createElement("option");
+                        option.value = j;
+                        option.text = array[j];
+                        select22.appendChild(option);
+                    };
+                    select22.value= new Date().getMonth();
+                    document.getElementById("mySelect2").onchange = function() {
+                        enviarinfoServer("Mes2:"+document.getElementById("mySelect2").selectedIndex);
+                        console.log("Mes2:"+document.getElementById("mySelect2").selectedIndex);
+                    };
+                    val12=1;
+
+                }else {
+                    if(val12==1){
+                        console.log("entro2")
+                        var selec22= document.getElementById("mySelect2").remove();
+                        val12=0;
+                    }
+                }
+                if(i==3 && val22==0){
+                    var div= document.getElementById("select2-2");
+                    var select22 = document.createElement("select");
+                    select22.id = "mySelect2";
+                    div.appendChild(select22);
+                    var anno = new Date().getFullYear()
+                    for (var j = 0; j < 5; j++) {
+                        var option = document.createElement("option");
+
+                        option.value = anno-j;
+                        option.text = anno-j;
+                        select22.appendChild(option);
+                    };
+                    select22.value= anno;
+                    document.getElementById("mySelect2").onchange = function() {
+                        var s2= document.getElementById("mySelect2");
+                        var elegido = s2.selectedIndex;
+                        //enviarinfoServer("Anno1:"+document.getElementById("mySelect").selectedIndex.value);
+                        enviarinfoServer("Anno2:"+s2.options[elegido].value);
+                        console.log("Anno2:"+s2.options[elegido].value);
+                    };
+                    val22=1;
+
+                } else {
+                    if(val22==1){
+                        var selec12= document.getElementById("mySelect2").remove();
+                        val22=0;
+                    }
+                }
+
+
+                //console.log("Selecto 2 valor"+document.getElementById("mySelect").selectedIndex);
+                //modiGra1f(select1.options[i].text);
+                console.log(select2.options[i].text);
+                enviarinfoServer("grafica2:"+i);
+
         }
 
     </script>
@@ -151,7 +214,7 @@
                     <li class="nav-item"></li>
                     <li class="nav-item"></li>
                     <li class="nav-item"><a class="nav-link active" href="Grafica%20Estadistica.html"><i class="fas fa-window-maximize"></i><span>Gráficos Estadísticos</span></a></li>
-                    <li class="nav-item"><a class="nav-link" href="ListarUsuariosWeb.html"><i class="fas fa-user"></i><span>Lista Usuarios Web</span></a></li>
+                    <li class="nav-item"><a class="nav-link" href="ListarUsuariosWeb.html"><i class="fas fa-table"></i><span>Lista Usuarios Web</span></a></li>
                     <li class="nav-item"><a class="nav-link" href="infoGeneral.html"><i class="fas fa-user"></i><span>Información General</span></a></li>
                 </ul>
                 <div class="text-center d-none d-md-inline"><button class="btn rounded-circle border-0" id="sidebarToggle" type="button"></button></div>
@@ -204,7 +267,7 @@
                             </div>
 
                             <div class="card-header d-flex justify-content-between align-items-center">
-                                <h6 class="text-primary font-weight-bold m-0">Promedio de Visitantes por Día de la Semana</h6>
+                                <h6 class="text-primary font-weight-bold m-0">Promedio de Visitantes</h6>
                                 <div class="dropdown no-arrow"><button class="btn btn-link btn-sm dropdown-toggle" data-toggle="dropdown" aria-expanded="false" type="button"></button>
                                     <div class="dropdown-menu shadow dropdown-menu-right animated--fade-in">
                                         <p class="text-center dropdown-header">dropdown header:</p><a class="dropdown-item" href="#">&nbsp;Action</a><a class="dropdown-item" href="#">&nbsp;Another action</a>
@@ -218,16 +281,19 @@
                     </div>
                     <div class="col-lg-5 col-xl-4">
                         <div class="card shadow mb-4">
-                            <div class="card-header text-left d-flex justify-content-between align-items-center">
+                            <div id="select2-2" class="card-header text-left d-flex justify-content-between align-items-center">
                                 <h6 class="text-left text-primary font-weight-bold m-0" style="font-size: 21px;color: #020921;">Seleccione gráfico a mostrar:</h6>
                                 <div class="dropdown no-arrow"><button class="btn btn-link btn-sm dropdown-toggle" data-toggle="dropdown" aria-expanded="false" type="button"></button>
                                     <div class="dropdown-menu shadow dropdown-menu-right animated--fade-in">
                                         <p class="text-center dropdown-header">dropdown header:</p><a class="dropdown-item" href="#">&nbsp;Action</a><a class="dropdown-item" href="#">&nbsp;Another action</a>
                                         <div class="dropdown-divider"></div><a class="dropdown-item" href="#">&nbsp;Something else here</a></div>
-                                </div><select name="roles"id="selecgraf2" onchange="cambioGra2()" style="width: 100%"><optgroup label="Seleccione una Opción de Gráfica"><option value="12">Usarios con mascarillas vs sin mascarillas</option><option value="13">Usuarios hombres vs usarios mujeres</option><option value="14">Auxiliar</option></optgroup></select></div>
+                                </div>
+                                <select name="roles" id="selecgraf2" onchange="cambioGra2()" tyle="width: auto"> <option>Día</option> <option>Semana</option><option>Mes</option><option>Año</option></select>
+
+                            </div>
 
                             <div class="card-header d-flex justify-content-between align-items-center">
-                                <h6 class="text-center text-primary font-weight-bold m-0" id="titulo2">Cantidad de Usuarios destectados con y sin Mascarillas del Día</h6>
+                                <h6 class="text-center text-primary font-weight-bold m-0" id="titulo2">Cantidad de Usuarios destectados con y sin Mascarillas</h6>
                                 <div class="dropdown no-arrow"><button class="btn btn-link btn-sm dropdown-toggle" data-toggle="dropdown" aria-expanded="false" type="button"></button>
                                     <div class="dropdown-menu shadow dropdown-menu-right animated--fade-in">
                                         <p class="text-center dropdown-header">dropdown header:</p><a class="dropdown-item" href="#">&nbsp;Action</a><a class="dropdown-item" href="#">&nbsp;Another action</a>

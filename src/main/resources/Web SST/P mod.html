@@ -4,46 +4,21 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
-    <title>Usuarios</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <title>Perfil</title>
     <link rel="stylesheet" href="assets/bootstrap/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i">
     <link rel="stylesheet" href="assets/fonts/fontawesome-all.min.css">
     <link rel="stylesheet" href="assets/fonts/font-awesome.min.css">
     <link rel="stylesheet" href="assets/fonts/fontawesome5-overrides.min.css">
     <link rel="stylesheet" href="assets/css/Team-Boxed.css">
-    <!--===============================================================================================-->
-    <link rel="icon" type="image/png" href="Login_v3/images/icons/favicon.ico"/>
-    <!--===============================================================================================-->
-    <link rel="stylesheet" type="text/css" href="Login_v3/vendor/bootstrap/css/bootstrap.min.css">
-    <!--===============================================================================================-->
-    <link rel="stylesheet" type="text/css" href="Login_v3/fonts/font-awesome-4.7.0/css/font-awesome.min.css">
-    <!--===============================================================================================-->
-    <link rel="stylesheet" type="text/css" href="Login_v3/fonts/iconic/css/material-design-iconic-font.min.css">
-    <!--===============================================================================================-->
-    <link rel="stylesheet" type="text/css" href="Login_v3/vendor/animate/animate.css">
-    <!--===============================================================================================-->
-    <link rel="stylesheet" type="text/css" href="Login_v3/vendor/css-hamburgers/hamburgers.min.css">
-    <!--===============================================================================================-->
-    <link rel="stylesheet" type="text/css" href="Login_v3/vendor/animsition/css/animsition.min.css">
-    <!--===============================================================================================-->
-    <link rel="stylesheet" type="text/css" href="Login_v3/vendor/select2/select2.min.css">
-    <!--===============================================================================================-->
-    <link rel="stylesheet" type="text/css" href="Login_v3/vendor/daterangepicker/daterangepicker.css">
-    <!--===============================================================================================-->
-    <link rel="stylesheet" type="text/css" href="Login_v3/css/util.css">
-    <link rel="stylesheet" type="text/css" href="Login_v3/css/main.css">
-    <!--===============================================================================================-->
-
     <script src="assets/js/jquery.min.js"></script>
     <script src="assets/bootstrap/js/bootstrap.min.js"></script>
+    <script src="assets/js/chart.min.js"></script>
     <script src="assets/js/bs-init.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-easing/1.4.1/jquery.easing.js"></script>
     <script src="assets/js/theme.js"></script>
-   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
     <script src="assets/js/webSocket.js"></script>
-    <script src="Login_v3/js/main.js"></script>
-    
+
     <script>
         $(document).ready(function() {
             conectar();
@@ -71,7 +46,7 @@
                     <li class="nav-item"></li>
                     <li class="nav-item"></li>
                     <li class="nav-item"><a class="nav-link" href="Grafica%20Estadistica.html"><i class="fas fa-window-maximize"></i><span>Gráficos Estadísticos</span></a></li>
-                    <li class="nav-item"><a class="nav-link" href="ListarUsuariosWeb.html"><i class="fas fa-table"></i><span>Lista Usuarios Web</span></a></li>
+                    <li class="nav-item"><a class="nav-link" href="ListarUsuariosWeb.htmll"><i class="fas fa-user"></i><span>Lista Usuarios Web</span></a></li>
                     <li class="nav-item"><a class="nav-link" href="infoGeneral.html"><i class="fas fa-user"></i><span>Información General</span></a></li>
                 </ul>
                 <div class="text-center d-none d-md-inline"><button class="btn rounded-circle border-0" id="sidebarToggle" type="button"></button></div>
@@ -132,84 +107,91 @@
                                 <div class="nav-item dropdown no-arrow"><a class="dropdown-toggle nav-link" data-toggle="dropdown" aria-expanded="false" href="#"><span class="text-uppercase d-none d-lg-inline mr-2 text-gray-600 small"id="usuario">Admin</span><i class="fa fa-user-circle-o" style="height: 17px;width: 7px;"></i></a>
                                     <div
                                         class="dropdown-menu shadow dropdown-menu-right animated--grow-in"><a class="dropdown-item" href="Perfil.html"><i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i>&nbsp;Profile</a>
-                                        <div class="dropdown-divider"></div><a class="dropdown-item" href="/logout"><i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>&nbsp;Logout</a></div>
+                                        <div class="dropdown-divider"></div><a class="dropdown-item" href="login-actualzado.html"><i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>&nbsp;Logout</a></div>
                     </div>
                     </li>
                     </ul>
             </div>
             </nav>
             <div class="container-fluid">
-                <div class="d-sm-flex justify-content-between align-items-center mb-4">
-                    <h3 class="text-dark mb-4">Crear Nuevo Perfil </h3>
-                    <a href="ListarUsuariosWeb.html" class="btn btn-primary btn-lg active" role="button" aria-pressed="true"><i class="fa fa-arrow-left" aria-hidden="true"></i> Volver</a>
-                </div>
-
-                <div>
-                    <div>
-                    
+                <h3 class="text-dark mb-4">Perfil</h3>
+                <div class="row mb-3">
+                    <div class="col-lg-4">
+                        <div class="card mb-3">
+                            <div class="card-body text-center shadow"><img class="rounded-circle mb-3 mt-4" src="assets/img/Avatars/bussiness-man.png" width="160" height="160">
+                                <div class="mb-3"><button class="btn btn-primary btn-sm" type="button">Cambiar Imagen</button></div>
+                            </div>
+                        </div>
+                        <div class="card shadow border-left-primary py-2">
+                            <div class="card-body">
+                                <div class="row align-items-center no-gutters">
+                                    <div class="col mr-2">
+                                        <div class="text-uppercase text-primary font-weight-bold text-xs mb-1"><span style="font-size: 15px;">Rol:</span></div>
+                                        <div class="text-dark font-weight-bold h5 mb-0" style="background: #ffffff;border-width: 0px;border-color: rgb(39,40,42);"><span>Admin</span></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-8">
+                        <div class="row mb-3 d-none">
+                            <div class="col">
+                                <div class="card text-white bg-primary shadow">
+                                    <div class="card-body">
+                                        <div class="row mb-2">
+                                            <div class="col">
+                                                <p class="m-0">Peformance</p>
+                                                <p class="m-0"><strong>65.2%</strong></p>
+                                            </div>
+                                            <div class="col-auto"><i class="fas fa-rocket fa-2x"></i></div>
+                                        </div>
+                                        <p class="text-white-50 small m-0"><i class="fas fa-arrow-up"></i>&nbsp;5% since last month</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col">
+                                <div class="card text-white bg-success shadow">
+                                    <div class="card-body">
+                                        <div class="row mb-2">
+                                            <div class="col">
+                                                <p class="m-0">Peformance</p>
+                                                <p class="m-0"><strong>65.2%</strong></p>
+                                            </div>
+                                            <div class="col-auto"><i class="fas fa-rocket fa-2x"></i></div>
+                                        </div>
+                                        <p class="text-white-50 small m-0"><i class="fas fa-arrow-up"></i>&nbsp;5% since last month</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                         <div class="row">
                             <div class="col">
-                                <div class="card shadow">
+                                <div class="card shadow mb-3">
                                     <div class="card-header py-3">
                                         <p class="text-primary m-0 font-weight-bold">Información General</p>
                                     </div>
                                     <div class="card-body">
-                                        <form  method="POST" action="/insertarWebUser" class="login100-form validate-form">
+                                        <form>
                                             <div class="form-row">
                                                 <div class="col">
-                                                    <div class="form-group validate-input" data-validate = "Ingrese Usuario">
-                                                        <label><strong>Nombre de Usuario</strong></label>
-                                                        <input class="form-control input100" type="text" placeholder="Usuario" name="username">
-
-                                                    </div>
+                                                    <div class="form-group"><label for="username"><strong>Nombre de Usuario</strong></label><input class="form-control" type="text"  name="username" readonly=""></div>
                                                 </div>
                                                 <div class="col">
-                                                    <div class="form-group validate-input" data-validate = "Ingrese Correo Electronico">
-                                                        <label><strong>Correo Electrónico</strong></label>
-                                                        <input class="form-control input100" type="email" placeholder="user@ejemplo.com" name="email">
-                                                    </div>
+                                                    <div class="form-group"><label for="email"><strong>Correo Electrónico</strong></label><input class="form-control" type="email"  name="email" readonly=""></div>
                                                 </div>
-                                               <!-- <div class="col ">
-                                                    <div class="form-group">
-                                                        <label ><strong>Rol:</strong></label>
-                                                    <div class="form-row">
-                                                        <select name="roles"><optgroup label="Asigne Un Rol"><option value="12">Admin</option><option value="13">Supervisor</option><option value="14">Auxiliar</option></optgroup></select>
-
-                                                    </div>
-
-                                                    </div>
-                                                </div>-->
-
                                             </div>
                                             <div class="form-row">
                                                 <div class="col">
-                                                    <div class="form-group validate-input" data-validate = "Ingrese Nombre">
-                                                        <label for="first_name"><strong>Nombres</strong></label>
-                                                        <input class="form-control input100" type="text" placeholder="Jose" name="nombre">
-                                                    </div>
+                                                    <div class="form-group"><label for="first_name"><strong>Nombres</strong></label><input class="form-control" type="text"  name="nombre" readonly=""></div>
                                                 </div>
                                                 <div class="col">
-                                                    <div class="form-group validate-input" data-validate = "Ingrese Apellidos">
-                                                        <label for="first_name"><strong>Apellidos</strong></label>
-                                                        <input class="form-control input100" type="text" placeholder="Peña" name="apellido">
-                                                    </div>
+                                                    <div class="form-group"><label for="first_name"><strong>Apellidos</strong></label><input class="form-control" type="text" placeholder="Diaz" name="apellido" readonly=""></div>
                                                 </div>
                                                 <div class="col">
-                                                    <div class="form-group validate-input" data-validate = "Ingrese Contraseña">
-                                                        <label for="last_name"><strong>Contraseña</strong></label>
-                                                        <input class="form-control input100" type="password" placeholder="Ingrese contraseña" name="pass">
-                                                    </div>
-                                                </div>
-                                                <div class="col">
-                                                    <div class="form-group validate-input" data-validate = "Ingrese Contraseña">
-                                                        <label for="last_name"><strong>Confirmar Contraseña</strong></label>
-                                                        <input class="form-control input100" type="password" placeholder="Confirmar Contraseña" name="conpass">
-                                                    </div>
+                                                    <div class="form-group"><label for="last_name"><strong>Contraseña</strong></label><input class="form-control" type="password" placeholder="Ingrese Contraseña" name="contraseña" readonly=""></div>
                                                 </div>
                                             </div>
-                                            <div class="form-group">
-                                                <button class="btn btn-primary btn-sm" type="submit">Guardar</button>
-                                            </div>
+                                            <div class="form-group"><button class="btn btn-primary btn-sm" type="submit">Editar</button></div>
                                         </form>
                                     </div>
                                 </div>
@@ -219,17 +201,17 @@
                                     </div>
                                     <div class="card-body">
                                         <form>
-                                            <div class="form-group"><label for="address"><strong>Dirección</strong></label><input class="form-control" type="text" placeholder="calle,# casa/Apartamento" name="address"></div>
+                                            <div class="form-group"><label for="address"><strong>Dirección</strong></label><input class="form-control" type="text" placeholder="calle,# casa/Apartamento" name="address" readonly=""></div>
                                             <div class="form-row">
                                                 <div class="col">
-                                                    <div class="form-group"><label for="city"><strong>Ciudad</strong></label><input class="form-control" type="text" placeholder="Santiago" name="city"></div>
-                                                    <div class="form-group"><label for="country"><strong>Numero Telefónico</strong></label><input class="form-control" type="number" placeholder="xxx-xxx-xxxx" name="telefono"></div>
+                                                    <div class="form-group"><label for="city"><strong>Ciudad</strong></label><input class="form-control" type="text" placeholder="Santiago" name="city" readonly=""></div>
+                                                    <div class="form-group"><label for="country"><strong>Numero Telefónico</strong></label><input class="form-control" type="number" placeholder="xxx-xxx-xxxx" name="telefono" readonly=""></div>
                                                 </div>
                                                 <div class="col">
-                                                    <div class="form-group"><label for="country"><strong>Pais</strong></label><input class="form-control" type="text" placeholder="Republica Dominicana " name="country"></div>
+                                                    <div class="form-group"><label for="country"><strong>Pais</strong></label><input class="form-control" type="text" placeholder="Republica Dominicana " name="country" readonly=""></div>
                                                 </div>
                                             </div>
-                                            <div class="form-group"><button class="btn btn-primary btn-sm" type="submit">Guardar</button></div>
+                                            <div class="form-group"><button class="btn btn-primary btn-sm" type="submit">Editar</button></div>
                                         </form>
                                     </div>
                                 </div>-->
@@ -245,23 +227,6 @@
             </div>
         </footer>
     </div><a class="border rounded d-inline scroll-to-top" href="#page-top"><i class="fas fa-angle-up"></i></a></div>
-    <script src="assets/js/theme.js"></script>
-    <!--===============================================================================================-->
-    <script src="Login_v3/vendor/jquery/jquery-3.2.1.min.js"></script>
-    <!--===============================================================================================-->
-    <script src="Login_v3/vendor/animsition/js/animsition.min.js"></script>
-    <!--===============================================================================================-->
-    <script src="Login_v3/vendor/bootstrap/js/popper.js"></script>
-    <script src="Login_v3/vendor/bootstrap/js/bootstrap.min.js"></script>
-    <!--===============================================================================================-->
-    <script src="Login_v3/vendor/select2/select2.min.js"></script>
-    <!--===============================================================================================-->
-    <script src="Login_v3/vendor/daterangepicker/moment.min.js"></script>
-    <script src="Login_v3/vendor/daterangepicker/daterangepicker.js"></script>
-    <!--===============================================================================================-->
-    <script src="Login_v3/vendor/countdowntime/countdowntime.js"></script>
-    <!--===============================================================================================-->
-    <script src="Login_v3/js/main.js"></script>
 
 </body>
 

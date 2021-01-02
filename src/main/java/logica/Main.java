@@ -33,7 +33,9 @@ public class Main {
     private static Integer grafica1=0;
     private static Integer grafica2=0;
     private static Integer mes1=new Date().getMonth();
+    private static Integer mes2=new Date().getMonth();
     private static Integer anno1= Calendar.getInstance().get(Calendar.YEAR);
+    private static Integer anno2= Calendar.getInstance().get(Calendar.YEAR);
 
 
     public static void main(String[] args) throws SQLException {
@@ -46,10 +48,10 @@ public class Main {
         if(modoConexion.isEmpty()) {
             ConexionDB.getInstance().InciarDB();
             System.out.println("Inicio");
-            //UserWeb us= new UserWeb("01", "rony", "rony@sst.com", "pucmm","admin","Rony","Duran");
+            //UserWeb us= new UserWeb("1", "rony", "rony@sst.com", "pucmm","admin","Rony","Duran");
             if(ServiciosUserWeb.getInstancia().todos().isEmpty()){
             UserWeb us= new UserWeb();
-            us.setIdUserWeb("001");
+            us.setIdUserWeb("1");
             us.setUserName("rony");
             us.setPassword("pucmm");
             ServiciosUserWeb.getInstancia().crearObjeto(us);}
@@ -78,7 +80,9 @@ public class Main {
                 grafica1=0;
                 grafica2=0;
                 mes1=new Date().getMonth();
+                mes2=new Date().getMonth();
                 anno1= Calendar.getInstance().get(Calendar.YEAR);
+                anno2= Calendar.getInstance().get(Calendar.YEAR);
                 System.out.println("Conexión Iniciada - " + ctx.getSessionId());
                 usuariosConectados.add(ctx.session);
                 enviarMensajeAClientesConectados("estado:"+"Encendido");
@@ -108,7 +112,6 @@ public class Main {
                     System.out.println(anno1);
                     grafica1=Integer.parseInt(recortada);
                     diasUserGraf1();
-
                 }
                 if(data.startsWith("Mes1:")){
                     String recortada=data.substring(5);
@@ -126,7 +129,22 @@ public class Main {
                     String recortada=data.substring(9);
                     System.out.println("Mensaje desde grafica 2:"+recortada);
                     grafica2=Integer.parseInt(recortada);
-                    //diasUserGraf1();
+                    enviarMensajeAClientesConectados("conMasc:"+contMasc());
+                    enviarMensajeAClientesConectados("sinMasc:"+sintMasc());
+                }
+                if(data.startsWith("Mes2:")){
+                    String recortada=data.substring(5);
+                    System.out.println("Mes seleccionado en Grafica 2:"+recortada);
+                    mes2=Integer.parseInt(recortada);
+                    enviarMensajeAClientesConectados("conMasc:"+contMasc());
+                    enviarMensajeAClientesConectados("sinMasc:"+sintMasc());
+                }
+                if(data.startsWith("Anno2:")){
+                    String recortada=data.substring(6);
+                    System.out.println("Anno seleccionado en Grafica 2:"+recortada);
+                    anno2=Integer.parseInt(recortada);
+                    enviarMensajeAClientesConectados("conMasc:"+contMasc());
+                    enviarMensajeAClientesConectados("sinMasc:"+sintMasc());
                 }
 
 
@@ -206,6 +224,23 @@ public class Main {
 
                    }
                 });
+                post("/insertarWebUser",ctx -> {
+
+                    String usuario= ctx.formParam("username");
+                    String contrasena = ctx.formParam("pass");
+                    String email= ctx.formParam("email");
+                    String nombre = ctx.formParam("nombre");
+                    String apellido = ctx.formParam("apellido");
+                    /*StandardPBEStringEncryptor encryptor = new StandardPBEStringEncryptor();
+                    encryptor.setPassword(mpCryptoPassword);
+                    encryptor.encrypt(contrasena);*/
+
+                    System.out.println(NumidUsuarioWeb()+"--"+usuario+"--"+contrasena+"--"+email+"--"+nombre+"--"+apellido);
+
+                    UserWeb us1= new UserWeb(NumidUsuarioWeb(), usuario, email,  contrasena,"",nombre,apellido);
+                    ServiciosUserWeb.getInstancia().crearObjeto(us1);
+                    ctx.redirect("/ListarUsuariosWeb.html");
+                });
                 get("/logout",ctx -> {
                     ctx.sessionAttribute("usuario", null);
                     ctx.removeCookie("usuario");
@@ -228,6 +263,19 @@ public class Main {
 
                     //ctx.json(map);
 
+                });
+                get("/tableUserWEB",ctx -> {
+                    List<UserWeb> list;
+                    HashMap map = new HashMap();
+
+                    list = ServiciosUserWeb.getInstancia().todos();
+
+                    map.put("data", list);
+
+                    Gson g = new GsonBuilder().setDateFormat("dd/MM/yyyy HH:mm:ss").create();
+                    String res = g.toJson(map);
+                    ctx.header("Content-Type","application/json");
+                    ctx.result(res);
                 });
                 get("/tableEventosLiquido",ctx -> {
                     List<EventoTunelNivleLiquido> list;
@@ -363,6 +411,16 @@ public class Main {
         return cont;
 
     };
+    public static String NumidUsuarioWeb () {
+
+        int cont=0;
+
+        cont=ServiciosUserWeb.getInstancia().todos().size();
+        cont++;
+
+        return Integer.toString(cont);
+
+    };
 
     public static Integer contClientesdelActual () {
 
@@ -414,26 +472,108 @@ public class Main {
 
     public static Integer contMasc(){
         Integer mas=0;
-        Date fecha1 = new Date();
+        if(grafica2==0){
+            Date fecha1 = new Date();
 
-        for (EventoTunelClientes aux: ServicioTunelClientes.getInstancia().todos()) {
-            if(aux.getEstadoMascarilla().equalsIgnoreCase("Si")){
-                if(cambiarFormatoFecha(aux.getFecha()).compareTo(cambiarFormatoFecha(fecha1))==0){
-                mas++;
+            for (EventoTunelClientes aux: ServicioTunelClientes.getInstancia().todos()) {
+                if(aux.getEstadoMascarilla().equalsIgnoreCase("Si")){
+                    if(cambiarFormatoFecha(aux.getFecha()).compareTo(cambiarFormatoFecha(fecha1))==0){
+                        mas++;
+                    }
                 }
             }
         }
+        if(grafica2==1){
+            Calendar cal = Calendar.getInstance();
+            Calendar cal2 = Calendar.getInstance();
+            for (EventoTunelClientes aux: ServicioTunelClientes.getInstancia().todos()) {
+                if(aux.getEstadoMascarilla().equalsIgnoreCase("Si")){
+                    cal.setTime(aux.getFecha());
+                    if(cal.get(Calendar.WEEK_OF_YEAR) == cal2.get(Calendar.WEEK_OF_YEAR)){
+                        mas++;
+
+                    }
+                }
+            }
+        }
+        if(grafica2==2){
+            Calendar cal2 = Calendar.getInstance();
+            for (EventoTunelClientes aux: ServicioTunelClientes.getInstancia().todos()) {
+                if(aux.getEstadoMascarilla().equalsIgnoreCase("Si")){
+                    if(mes2 == cal2.get(Calendar.MONTH)){
+                        mas++;
+
+                    }
+                }
+            }
+        }
+        if(grafica2==3){
+            Calendar cal = Calendar.getInstance();
+            Calendar cal2 = Calendar.getInstance();
+            for (EventoTunelClientes aux: ServicioTunelClientes.getInstancia().todos()) {
+                if(aux.getEstadoMascarilla().equalsIgnoreCase("Si")){
+                    cal.setTime(aux.getFecha());
+                    if(anno2 == cal2.get(Calendar.YEAR)){
+                        mas++;
+
+                    }
+                }
+            }
+        }
+
 
         return mas;
     }
 
     public static Integer sintMasc(){
         Integer sinMas=0;
-        Date fecha1 = new Date();
-        for (EventoTunelClientes aux: ServicioTunelClientes.getInstancia().todos()) {
-            if(aux.getEstadoMascarilla().equalsIgnoreCase("No")){
-                if(cambiarFormatoFecha(aux.getFecha()).compareTo(cambiarFormatoFecha(fecha1))==0) {
-                    sinMas++;
+
+        if(grafica2==0){
+            Date fecha1 = new Date();
+
+            for (EventoTunelClientes aux: ServicioTunelClientes.getInstancia().todos()) {
+                if(aux.getEstadoMascarilla().equalsIgnoreCase("No")){
+                    if(cambiarFormatoFecha(aux.getFecha()).compareTo(cambiarFormatoFecha(fecha1))==0){
+                        sinMas++;
+                    }
+                }
+            }
+        }
+        if(grafica2==1){
+            Calendar cal = Calendar.getInstance();
+            Calendar cal2 = Calendar.getInstance();
+            for (EventoTunelClientes aux: ServicioTunelClientes.getInstancia().todos()) {
+                if(aux.getEstadoMascarilla().equalsIgnoreCase("No")){
+                    cal.setTime(aux.getFecha());
+                    if(cal.get(Calendar.WEEK_OF_YEAR) == cal2.get(Calendar.WEEK_OF_YEAR)){
+                        sinMas++;
+
+                    }
+                }
+            }
+        }
+        if(grafica2==2){
+            Calendar cal2 = Calendar.getInstance();
+            for (EventoTunelClientes aux: ServicioTunelClientes.getInstancia().todos()) {
+                if(aux.getEstadoMascarilla().equalsIgnoreCase("No")){
+
+                    if(mes2 == cal2.get(Calendar.MONTH)){
+                        sinMas++;
+
+                    }
+                }
+            }
+        }
+        if(grafica2==3){
+            Calendar cal = Calendar.getInstance();
+            Calendar cal2 = Calendar.getInstance();
+            for (EventoTunelClientes aux: ServicioTunelClientes.getInstancia().todos()) {
+                if(aux.getEstadoMascarilla().equalsIgnoreCase("No")){
+                    cal.setTime(aux.getFecha());
+                    if(anno2 == cal2.get(Calendar.YEAR)){
+                        sinMas++;
+
+                    }
                 }
             }
         }
@@ -513,6 +653,7 @@ public class Main {
             if(aux.getUserName().equalsIgnoreCase(user)&&aux.getPassword().equalsIgnoreCase(pass)){
                 System.out.println("Validado");
                 u1=aux;
+                break;
             }else {
                 System.out.println("No se puede validar");
                 u1=null;

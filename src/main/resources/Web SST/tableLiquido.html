@@ -31,10 +31,10 @@
         $(document).ready( function () {
            let tbl = $('#example').DataTable( {
 
-               // "ajax": "http://"+ location.hostname + ":" + location.port +"/tableEventosLiquido",
-                "ajax": "https://"+ location.hostname + ":" + location.port +"/tableEventosLiquido",
+                "ajax": "http://"+ location.hostname + ":" + location.port +"/tableEventosLiquido",
+               // "ajax": "https://"+ location.hostname + ":" + location.port +"/tableEventosLiquido",
                 "columns": [
-                    { "data": "idEventoNivelLiquido" },
+                    //{ "data": "idEventoNivelLiquido" },
                     { "data": "nivel" },
                     { "data": "fecha" }
                 ]
@@ -73,7 +73,7 @@
                     <li class="nav-item"></li>
                     <li class="nav-item"></li>
                     <li class="nav-item"><a class="nav-link" href="Grafica%20Estadistica.html"><i class="fas fa-window-maximize"></i><span>Gráficos Estadísticos</span></a></li>
-                    <li class="nav-item"><a class="nav-link" href="ListarUsuariosWeb.html"><i class="fas fa-user"></i><span>Lista Usuarios Web</span></a></li>
+                    <li class="nav-item"><a class="nav-link" href="ListarUsuariosWeb.html"><i class="fas fa-table"></i><span>Lista Usuarios Web</span></a></li>
                     <li class="nav-item"><a class="nav-link" href="infoGeneral.html"><i class="fas fa-user"></i><span>Información General</span></a></li>
                 </ul>
                 <div class="text-center d-none d-md-inline"><button class="btn rounded-circle border-0" id="sidebarToggle" type="button"></button></div>
@@ -158,14 +158,14 @@
                             <table id="example" class="display" style="width:100%">
                                 <thead>
                                 <tr>
-                                    <th>ID Evento</th>
+                                   <!-- <th>ID Evento</th>-->
                                     <th>Nivel (%)</th>
                                     <th>Fecha</th>
                                 </tr>
                                 </thead>
                                 <tfoot>
                                 <tr>
-                                    <th>ID Evento</th>
+                                   <!-- <th>ID Evento</th>-->
                                     <th>Nivel (%)</th>
                                     <th>Fecha</th>
                                 </tr>

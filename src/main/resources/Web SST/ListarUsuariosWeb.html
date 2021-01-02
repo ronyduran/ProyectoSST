@@ -28,16 +28,16 @@
         $(document).ready( function () {
             let tbl = $('#example').DataTable( {
 
-                // "ajax": "http://"+ location.hostname + ":" + location.port +"/tableEventosClientes",
-                "ajax": "https://"+ location.hostname + ":" + location.port +"/tableEventosClientes",
+                 "ajax": "http://"+ location.hostname + ":" + location.port +"/tableUserWEB",
+                //"ajax": "https://"+ location.hostname + ":" + location.port +"/tableUserWEB",
                 "columns": [
-                    { "data": "idEventoCTunelCliente" },
-                    { "data": "idCliente" },
-                    { "data": "estadoMascarilla" },
-                    { "data": "temperatura" },
-                    { "data": "fecha" }
-                ]
+                    { "data": "IdUserWeb" },
+                    { "data": "userName" },
+                    { "data": "nombre" },
+                    { "data": "apellido" },
+                    { "data": "correoElectronico" }
 
+                ]
 
             } );
             setInterval( function () {
@@ -68,7 +68,7 @@
                     <li class="nav-item"></li>
                     <li class="nav-item"></li>
                     <li class="nav-item"><a class="nav-link" href="Grafica%20Estadistica.html"><i class="fas fa-window-maximize"></i><span>Gráficos Estadísticos</span></a></li>
-                    <li class="nav-item"><a class="nav-link active" href="ListarUsuariosWeb.html"><i class="fas fa-user"></i><span>Lista Usuarios Web</span></a></li>
+                    <li class="nav-item"><a class="nav-link active" href="ListarUsuariosWeb.html"><i class="fas fa-table"></i><span>Lista Usuarios Web</span></a></li>
                     <li class="nav-item"><a class="nav-link" href="infoGeneral.html"><i class="fas fa-user"></i><span>Información General</span></a></li>
                 </ul>
                 <div class="text-center d-none d-md-inline"><button class="btn rounded-circle border-0" id="sidebarToggle" type="button"></button></div>
@@ -150,7 +150,7 @@
                             <table id="example" class="display" style="width:100%">
                                 <thead>
                                 <tr>
-                                    <th>ID Usuario</th>
+                                    <th>ID Usuario WEB </th>
                                     <th>Username </th>
                                     <th>Nombre</th>
                                     <th>Apellido</th>
@@ -159,7 +159,7 @@
                                 </thead>
                                 <tfoot>
                                 <tr>
-                                    <th>ID Usuario</th>
+                                    <th>ID Usuario WEB</th>
                                     <th>Username </th>
                                     <th>Nombre</th>
                                     <th>Apellido</th>
