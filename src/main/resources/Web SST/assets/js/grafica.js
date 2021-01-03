@@ -98,7 +98,7 @@ function actualizar() {
     myChart2.update();
 }
 
-function modiGra1f(parametro) {
+/*function modiGra1f(parametro) {
     console.log(parametro);
 
 }
@@ -121,4 +121,4 @@ function modiGra2f(parametro){
         myChart2.update();
     }
 
-}
+}*/

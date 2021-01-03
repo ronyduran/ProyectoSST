@@ -13,6 +13,7 @@
     <link rel="stylesheet" href="assets/fonts/fontawesome5-overrides.min.css">
     <link rel="stylesheet" href="assets/css/Team-Boxed.css">
 
+
     <script src="assets/js/jquery.min.js"></script>
     <script src="assets/bootstrap/js/bootstrap.min.js"></script>
     <script src="assets/js/bs-init.js"></script>
@@ -25,6 +26,28 @@
     <script>
         $(document).ready(function() {
             conectar();
+
+            //Esto es para el HTTPS
+            // const url = "https://" + location.hostname + ":" + location.port + "/showPerfil"
+            //Esto es para el HTTP
+            const Url = "http://" + location.hostname + ":" + location.port + "/showPerfil"
+            $.ajax({
+                url: Url,
+                type: "GET",
+                success:function (result){
+                    console.log(result);
+                    //document.getElementById("nusuario").innerText= result.userName
+                    console.log(result.userName);
+                    $("#nusuario").val(result.userName);
+                    $("#nombre").val(result.nombre);
+                    $("#apellido").val(result.apellido);
+                    $("#email").val(result.correoElectronico);
+                },
+                error:function (error){
+                    console.log('Error ${error}')
+                }
+            })
+
         });
     </script>
 
@@ -135,14 +158,14 @@
                                                 <div class="col">
                                                     <div class="form-group">
                                                         <label><strong>Nombre de Usuario</strong></label>
-                                                        <input class="form-control" type="text"  name="username" readonly="">
+                                                        <input id="nusuario" class="form-control" type="text"  name="username" readonly="">
 
                                                     </div>
                                                 </div>
                                                 <div class="col">
                                                     <div class="form-group">
                                                         <label><strong>Correo Electrónico</strong></label>
-                                                        <input class="form-control" type="email"  name="email" readonly="">
+                                                        <input id="email" class="form-control" type="email"  name="email" readonly="">
                                                     </div>
                                                 </div>
                                                <!-- <div class="col ">
@@ -161,19 +184,13 @@
                                                 <div class="col">
                                                     <div class="form-group">
                                                         <label><strong>Nombres</strong></label>
-                                                        <input class="form-control" type="text"  name="nombre" readonly="">
+                                                        <input id="nombre" class="form-control" type="text"  name="nombre" readonly="">
                                                     </div>
                                                 </div>
                                                 <div class="col">
                                                     <div class="form-group" >
                                                         <label><strong>Apellidos</strong></label>
-                                                        <input class="form-control" type="text"  name="apellido" readonly="">
-                                                    </div>
-                                                </div>
-                                                <div class="col">
-                                                    <div class="form-group ">
-                                                        <label><strong>Contraseña</strong></label>
-                                                        <input class="form-control" type="password"  name="pass"readonly="">
+                                                        <input id="apellido" class="form-control" type="text"  name="apellido" readonly="">
                                                     </div>
                                                 </div>
 

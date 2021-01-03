@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<html>
 <head>
 	<title>Login</title>
 	<meta http-equiv="content-type" content="text/html;charset=utf-8" />
@@ -30,10 +30,30 @@
 	<script src="assets/js/jquery.min.js"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-easing/1.4.1/jquery.easing.js"></script>
 	<script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
-	<script src="assets/js/webSocket.js"></script>
+
+	<script src="http://malsup.github.com/jquery.form.js"></script>
 	<script>
 		$(document).ready(function() {
 			conectar();
+			const Url = "http://" + location.hostname + ":" + location.port + "/autenticar"
+
+			$('#myForm')
+					.ajaxForm({
+						url : Url, // or whatever
+						success : function (response) {
+							//alert("The server says: " + response);
+							if(response.startsWith("Inco")){
+								console.log(response)
+								$("#errolog").text(response);
+								$("#nuser").val(null);
+								$("#pass").val(null);
+							}else{
+								window.location.replace("http://" + location.hostname + ":" + location.port +"/index.html");
+							}
+
+
+						}
+					});
 		});
 	</script>
 </head>
@@ -42,7 +62,7 @@
 	<div class="limiter">
 		<div class="container-login100" style="background-color: rgb(11, 230, 230);">
 			<div class="wrap-login100">
-				<form method="post" action="/autenticar" class="login100-form validate-form">
+				<form  id="myForm" method="post" action="/autenticar" class="login100-form validate-form">
 					<span class="login100-form-logo">
 						<i class="zmdi zmdi-account"></i>
 					</span>
@@ -51,18 +71,20 @@
 						SST Manager Login
 					</span>
 					<div>
-						<span class="text-center" style="color: red"th:utext="${error}"></span>
+						<!--<span class="text-center" style="color: red"th:utext="${error}"></span>-->
+						<p id="errolog" class="text-center" style="color: red"></p>
+
 						<div class="text-center">
 							<hr>
 						</div>
 					</div>
 					<div class="wrap-input100 validate-input" data-validate = "Enter username">
-						<input class="input100" type="text" name="username" placeholder="Username">
+						<input  id="nuser" class="input100" type="text" name="username" placeholder="Username">
 						<span class="focus-input100" data-placeholder="&#xf207;"></span>
 					</div>
 
 					<div class="wrap-input100 validate-input" data-validate="Enter password">
-						<input class="input100" type="password" name="pass" placeholder="Password">
+						<input id="pass" class="input100" type="password" name="pass" placeholder="Password">
 						<span class="focus-input100" data-placeholder="&#xf191;"></span>
 					</div>
 
@@ -93,7 +115,6 @@
 	
 	
 <!--===============================================================================================-->
-	<script src="Login_v3/vendor/jquery/jquery-3.2.1.min.js"></script>
 <!--===============================================================================================-->
 	<script src="Login_v3/vendor/animsition/js/animsition.min.js"></script>
 <!--===============================================================================================-->

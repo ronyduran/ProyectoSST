@@ -131,6 +131,7 @@ public class Main {
                     grafica2=Integer.parseInt(recortada);
                     enviarMensajeAClientesConectados("conMasc:"+contMasc());
                     enviarMensajeAClientesConectados("sinMasc:"+sintMasc());
+                    System.out.println("Mes Grafica 2:"+mes2);
                 }
                 if(data.startsWith("Mes2:")){
                     String recortada=data.substring(5);
@@ -217,10 +218,14 @@ public class Main {
                        }
                         ctx.sessionAttribute("usuario", aux);
                        enviarMensajeAClientesConectados("usuario:"+aux.getUserName());
-                        ctx.redirect("/index.html");
+                       //ctx.redirect("/index.html");
                     }else {
-                       modelo.put("error","Please check username & password!");
-                       ctx.render("Web SST/login-actualzado.html",modelo);
+                       //ctx.status(500);
+                       ctx.result("Incorrecto, por favor verificar username y/o password!");
+                       System.out.println("error enviado");
+                       //ctx.redirect("/login-actualzado.html");
+                       //modelo.put("error","Please check username & password!");
+                       //ctx.render("Web SST/login-actualzado.html",modelo);
 
                    }
                 });
@@ -236,16 +241,37 @@ public class Main {
                     encryptor.encrypt(contrasena);*/
 
                     System.out.println(NumidUsuarioWeb()+"--"+usuario+"--"+contrasena+"--"+email+"--"+nombre+"--"+apellido);
-
+                    if(!usuario.equalsIgnoreCase("")&&!contrasena.equalsIgnoreCase("")&& !email.equalsIgnoreCase("")&& !nombre.equalsIgnoreCase("") && !apellido.equalsIgnoreCase("")){
                     UserWeb us1= new UserWeb(NumidUsuarioWeb(), usuario, email,  contrasena,"",nombre,apellido);
                     ServiciosUserWeb.getInstancia().crearObjeto(us1);
                     ctx.redirect("/ListarUsuariosWeb.html");
+                    }else{
+                        ctx.result("");
+                    }
                 });
                 get("/logout",ctx -> {
                     ctx.sessionAttribute("usuario", null);
                     ctx.removeCookie("usuario");
                     ctx.removeCookie("password");
                     ctx.redirect("/login-actualzado.html");
+                });
+                get("/showPerfil",ctx -> {
+                   // List<UserWeb> list;
+                 //   list = ServiciosUserWeb.getInstancia().todos();
+                    UserWeb user = ctx.sessionAttribute("usuario");
+                    //UserWeb u1=null;
+                    if(user!=null){
+                        System.out.println("entro");
+                        /*for (UserWeb aux: list) {
+                            if(aux==user){}
+                        }*/
+                        Gson g = new GsonBuilder().setDateFormat("dd/MM/yyyy HH:mm:ss").create();
+                        String res = g.toJson(user);
+                        ctx.header("Content-Type","application/json");
+                        ctx.result(res);
+
+                    }
+
                 });
                 get("/tableEventosClientes",ctx -> {
                     List<EventoTunelClientes> list;
@@ -500,7 +526,9 @@ public class Main {
             Calendar cal2 = Calendar.getInstance();
             for (EventoTunelClientes aux: ServicioTunelClientes.getInstancia().todos()) {
                 if(aux.getEstadoMascarilla().equalsIgnoreCase("Si")){
+                    cal2.setTime(aux.getFecha());
                     if(mes2 == cal2.get(Calendar.MONTH)){
+
                         mas++;
 
                     }
@@ -512,7 +540,7 @@ public class Main {
             Calendar cal2 = Calendar.getInstance();
             for (EventoTunelClientes aux: ServicioTunelClientes.getInstancia().todos()) {
                 if(aux.getEstadoMascarilla().equalsIgnoreCase("Si")){
-                    cal.setTime(aux.getFecha());
+                    cal2.setTime(aux.getFecha());
                     if(anno2 == cal2.get(Calendar.YEAR)){
                         mas++;
 
@@ -556,7 +584,7 @@ public class Main {
             Calendar cal2 = Calendar.getInstance();
             for (EventoTunelClientes aux: ServicioTunelClientes.getInstancia().todos()) {
                 if(aux.getEstadoMascarilla().equalsIgnoreCase("No")){
-
+                        cal2.setTime(aux.getFecha());
                     if(mes2 == cal2.get(Calendar.MONTH)){
                         sinMas++;
 
@@ -569,7 +597,7 @@ public class Main {
             Calendar cal2 = Calendar.getInstance();
             for (EventoTunelClientes aux: ServicioTunelClientes.getInstancia().todos()) {
                 if(aux.getEstadoMascarilla().equalsIgnoreCase("No")){
-                    cal.setTime(aux.getFecha());
+                    cal2.setTime(aux.getFecha());
                     if(anno2 == cal2.get(Calendar.YEAR)){
                         sinMas++;
 
