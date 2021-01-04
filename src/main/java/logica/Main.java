@@ -294,7 +294,7 @@ public class Main {
                            ctx.cookie("usuario", aux.getUserName(), 604800);// se crea la cookie por una semana
                            ctx.cookie("password",   encryptor.encrypt(aux.getPassword()), 604800);
                        }
-                        ctx.sessionAttribute("usuario", aux);
+                       ctx.sessionAttribute("usuario", aux);
                        enviarMensajeAClientesConectados("usuario:"+aux.getUserName());
                        //ctx.redirect("/index.html");
                     }else {
