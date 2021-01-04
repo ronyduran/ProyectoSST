@@ -11,18 +11,20 @@ public class UserAppCliente implements Serializable {
     private Integer edad;
     private String correoElectronico;
     private String Password;
+    private String username;
 
-    public UserAppCliente( ) {
+    public UserAppCliente() {
 
     }
 
-    public UserAppCliente(String idCliente, String nombreCompleto, String sexo, Integer edad, String correoElectronico, String password) {
+    public UserAppCliente(String idCliente, String nombreCompleto, String sexo, Integer edad, String correoElectronico, String password, String username) {
         this.idCliente = idCliente;
         this.nombreCompleto = nombreCompleto;
         this.sexo = sexo;
         this.edad = edad;
         this.correoElectronico = correoElectronico;
         Password = password;
+        this.username = username;
     }
 
 
@@ -72,5 +74,13 @@ public class UserAppCliente implements Serializable {
 
     public void setPassword(String password) {
         Password = password;
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
     }
 }

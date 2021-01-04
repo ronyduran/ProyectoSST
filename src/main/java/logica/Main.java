@@ -2,9 +2,11 @@ package logica;
 
 import Servicios.ServicioTunelClientes;
 import Servicios.ServicioTunelLiquifo;
+import Servicios.ServiciosAppCliente;
 import Servicios.ServiciosUserWeb;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.google.gson.JsonObject;
 import io.javalin.Javalin;
 import io.javalin.plugin.rendering.JavalinRenderer;
 import io.javalin.plugin.rendering.template.JavalinThymeleaf;
@@ -20,6 +22,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
 import logica.EventoTunelNivleLiquido;
+import org.h2.util.json.JSONObject;
 import org.jasypt.encryption.pbe.StandardPBEStringEncryptor;
 
 import static io.javalin.apibuilder.ApiBuilder.*;
@@ -55,6 +58,13 @@ public class Main {
             us.setUserName("rony");
             us.setPassword("pucmm");
             ServiciosUserWeb.getInstancia().crearObjeto(us);}
+            if(ServiciosAppCliente.getInstancia().todos().isEmpty()){
+                UserAppCliente uapp= new UserAppCliente();
+                uapp.setIdCliente("2021");
+                uapp.setUsername("rony");
+                uapp.setPassword("pucmm");
+                ServiciosAppCliente.getInstancia().crearObjeto(uapp);
+            }
         }
 
 
@@ -194,7 +204,75 @@ public class Main {
                     //ctx.redirect("/index.html");
                    ctx.redirect("login-actualzado.html");
                         });
+                post("valLogigApp", ctx -> {
 
+                    System.out.println(ctx.body());
+
+                    JsonObject convertedObject = new Gson().fromJson(ctx.body(), JsonObject.class);
+                    String nuser=convertedObject.get("name").toString().replace("\"", "");
+                    String pass= convertedObject.get("pass").toString().replace("\"", "");
+                    System.out.println(nuser);
+                    System.out.println(pass);
+                    List<UserAppCliente> list;
+
+                    UserAppCliente uapp=null;
+                    list = ServiciosAppCliente.getInstancia().todos();
+                    if(list!=null){
+                        for (UserAppCliente aux: list) {
+                            if(aux.getUsername().equalsIgnoreCase(nuser)&&aux.getPassword().equalsIgnoreCase(pass)){
+                                uapp=aux;
+                                System.out.println("encontrado");
+                                break;
+                            }
+                        }
+
+                    }
+                    if(uapp==null){
+                        ctx.result("1000");
+                        ctx.status(500);
+                    }else {
+                        ctx.result(uapp.getIdCliente());
+                        System.out.println(uapp.getIdCliente());
+                    }
+
+
+                } );
+
+                post("inserUserAppp", ctx -> {
+
+                    System.out.println(ctx.body());
+
+                    JsonObject convertedObject = new Gson().fromJson(ctx.body(), JsonObject.class);
+                    String nuser=convertedObject.get("name").toString().replace("\"", "");
+                    String pass= convertedObject.get("pass").toString().replace("\"", "");
+                    String nombrec=convertedObject.get("nombre").toString().replace("\"", "");
+                    String email= convertedObject.get("email").toString().replace("\"", "");
+                    String sex=convertedObject.get("sexo").toString().replace("\"", "");
+                    String id= idAppUserGenerate();
+                    //String pass= convertedObject.get("pass").toString().replace("\"", "");
+                    System.out.println("id:"+id+"---"+"Username:"+nuser+"-------"+"Contrase:"+pass+"-------"+"email:"+email+"-------"+"sexo:"+sex+"-------"+"Nombre Completo:"+nombrec);
+                    //System.out.println(pass);
+                    //List<UserAppCliente> list;
+
+                    Integer igual=0;
+                    UserAppCliente us= new UserAppCliente(id, nombrec, sex, 12, email, pass, nuser);
+                    for (UserAppCliente aux: ServiciosAppCliente.getInstancia().todos()) {
+                        if(us.getUsername().equalsIgnoreCase(aux.getUsername())&& us.getNombreCompleto().equalsIgnoreCase(aux.getNombreCompleto())&&us.getCorreoElectronico().equalsIgnoreCase(aux.getCorreoElectronico())){
+                            System.out.println("usuario ya creado");
+
+                            igual=1;
+                            break;
+                        }
+                    }
+                    if(igual==0){
+                        ServiciosAppCliente.getInstancia().crearObjeto(us);
+                        ctx.result(id);
+                    }else{
+                        ctx.status(500);
+                    }
+
+
+                } );
                 post("/autenticar",ctx -> {
                     String recordar= ctx.formParam("recordar");
                     String nombreUsuario = ctx.formParam("username");
@@ -278,6 +356,24 @@ public class Main {
                     HashMap map = new HashMap();
 
                     list = ServicioTunelClientes.getInstancia().todos();
+
+                    map.put("data", list);
+
+                    Gson g = new GsonBuilder().setDateFormat("dd/MM/yyyy HH:mm:ss").create();
+                    String res = g.toJson(map);
+                    ctx.header("Content-Type","application/json");
+                    ctx.result(res);
+                    //System.out.println(res);
+
+                    //ctx.json(map);
+
+                });
+
+                get("/tableUserAPP",ctx -> {
+                    List<UserAppCliente> list;
+                    HashMap map = new HashMap();
+
+                    list = ServiciosAppCliente.getInstancia().todos();
 
                     map.put("data", list);
 
@@ -447,6 +543,19 @@ public class Main {
         return Integer.toString(cont);
 
     };
+
+    public static String idAppUserGenerate () {
+        String id="";
+        int cont=0;
+
+        cont=ServiciosAppCliente.getInstancia().todos().size();
+        cont++;
+        id="capp-"+Integer.toString(cont);
+        return id;
+
+    };
+
+
 
     public static Integer contClientesdelActual () {
 

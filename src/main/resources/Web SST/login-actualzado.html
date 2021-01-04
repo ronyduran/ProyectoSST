@@ -35,8 +35,8 @@
 	<script>
 		$(document).ready(function() {
 			conectar();
-			const Url = "http://" + location.hostname + ":" + location.port + "/autenticar"
-
+			//const Url = "http://" + location.hostname + ":" + location.port + "/autenticar"
+			const Url= "https://itt.sstproject.me/autenticar"
 			$('#myForm')
 					.ajaxForm({
 						url : Url, // or whatever
@@ -48,7 +48,8 @@
 								$("#nuser").val(null);
 								$("#pass").val(null);
 							}else{
-								window.location.replace("http://" + location.hostname + ":" + location.port +"/index.html");
+								window.location.replace("https://itt.sstproject.me/index.html");
+								//window.location.replace("http://" + location.hostname + ":" + location.port +"/index.html");
 							}
 
 
