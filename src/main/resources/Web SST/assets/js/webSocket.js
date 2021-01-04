@@ -142,7 +142,7 @@ function recibirInformacionServidor(mensaje){
 function conectar() {
     //Esto es para el WebSocket Secure para el HTTPS
     webSocket= new WebSocket("wss://" + location.hostname + ":" + location.port + "/WSEnvio");
-    Esto es para el WebSocket para el HTTP
+    //Esto es para el WebSocket para el HTTP
     //webSocket= new WebSocket("ws://" + location.hostname + ":" + location.port + "/WSEnvio");
 
     webSocket.onmessage = function(data){recibirInformacionServidor(data); console.log("Recibido");}
