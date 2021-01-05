@@ -308,7 +308,7 @@ public class Main {
                    }
                 });
                 post("/insertarWebUser",ctx -> {
-
+                    String id=NumidUsuarioWeb();
                     String usuario= ctx.formParam("username");
                     String contrasena = ctx.formParam("pass");
                     String email= ctx.formParam("email");
@@ -317,14 +317,24 @@ public class Main {
                     /*StandardPBEStringEncryptor encryptor = new StandardPBEStringEncryptor();
                     encryptor.setPassword(mpCryptoPassword);
                     encryptor.encrypt(contrasena);*/
-
-                    System.out.println(NumidUsuarioWeb()+"--"+usuario+"--"+contrasena+"--"+email+"--"+nombre+"--"+apellido);
+                    Integer val=0;
+                    System.out.println(id+"--"+usuario+"--"+contrasena+"--"+email+"--"+nombre+"--"+apellido);
                     if(!usuario.equalsIgnoreCase("")&&!contrasena.equalsIgnoreCase("")&& !email.equalsIgnoreCase("")&& !nombre.equalsIgnoreCase("") && !apellido.equalsIgnoreCase("")){
-                    UserWeb us1= new UserWeb(NumidUsuarioWeb(), usuario, email,  contrasena,"",nombre,apellido);
-                    ServiciosUserWeb.getInstancia().crearObjeto(us1);
-                    ctx.redirect("/ListarUsuariosWeb.html");
+                        UserWeb us1= new UserWeb(id, usuario, email,  contrasena,"",nombre,apellido);
+                        for (UserWeb aux:ServiciosUserWeb.getInstancia().todos()) {
+                            if(usuario.equalsIgnoreCase(aux.getUserName()) && email.equalsIgnoreCase(aux.getCorreoElectronico())){
+                                val=1;
+                                break;
+                            }
+                        }
+                        if(val==0){
+                            ServiciosUserWeb.getInstancia().crearObjeto(us1);
+                        } else{
+                            ctx.result("Aviso:,ya un usuario tiene estos datos, debe de usar otros datos");
+                        }
+                        //ctx.redirect("/ListarUsuariosWeb.html");
                     }else{
-                        ctx.result("");
+                        ctx.result("Aviso: Verificar, no se aceptan campos vacios");
                     }
                 });
                 get("/logout",ctx -> {
@@ -536,11 +546,11 @@ public class Main {
     public static String NumidUsuarioWeb () {
 
         int cont=0;
-
+        String id="";
         cont=ServiciosUserWeb.getInstancia().todos().size();
         cont++;
-
-        return Integer.toString(cont);
+        id="uWeb-"+cont;
+        return id;
 
     };
 

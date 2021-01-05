@@ -13,26 +13,7 @@
     <link rel="stylesheet" href="assets/fonts/fontawesome5-overrides.min.css">
     <link rel="stylesheet" href="assets/css/Team-Boxed.css">
     <!--===============================================================================================-->
-    <link rel="icon" type="image/png" href="Login_v3/images/icons/favicon.ico"/>
-    <!--===============================================================================================-->
-    <link rel="stylesheet" type="text/css" href="Login_v3/vendor/bootstrap/css/bootstrap.min.css">
-    <!--===============================================================================================-->
-    <link rel="stylesheet" type="text/css" href="Login_v3/fonts/font-awesome-4.7.0/css/font-awesome.min.css">
-    <!--===============================================================================================-->
-    <link rel="stylesheet" type="text/css" href="Login_v3/fonts/iconic/css/material-design-iconic-font.min.css">
-    <!--===============================================================================================-->
-    <link rel="stylesheet" type="text/css" href="Login_v3/vendor/animate/animate.css">
-    <!--===============================================================================================-->
-    <link rel="stylesheet" type="text/css" href="Login_v3/vendor/css-hamburgers/hamburgers.min.css">
-    <!--===============================================================================================-->
-    <link rel="stylesheet" type="text/css" href="Login_v3/vendor/animsition/css/animsition.min.css">
-    <!--===============================================================================================-->
-    <link rel="stylesheet" type="text/css" href="Login_v3/vendor/select2/select2.min.css">
-    <!--===============================================================================================-->
-    <link rel="stylesheet" type="text/css" href="Login_v3/vendor/daterangepicker/daterangepicker.css">
-    <!--===============================================================================================-->
-    <link rel="stylesheet" type="text/css" href="Login_v3/css/util.css">
-    <link rel="stylesheet" type="text/css" href="Login_v3/css/main.css">
+
     <!--===============================================================================================-->
 
     <script src="assets/js/jquery.min.js"></script>
@@ -43,10 +24,31 @@
    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
     <script src="assets/js/webSocket.js"></script>
     <script src="Login_v3/js/main.js"></script>
-    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.form/4.3.0/jquery.form.min.js" integrity="sha384-qlmct0AOBiA2VPZkMY3+2WqkHtIQ9lSdAsAn5RUJD/3vA5MKDgSGcdmIv4ycVxyn" crossorigin="anonymous"></script>
+
+
     <script>
         $(document).ready(function() {
             conectar();
+
+            //const Url = "http://" + location.hostname + ":" + location.port + "/insertarWebUser"
+            const Url= "https://itt.sstproject.me/insertarWebUser"
+            $('#myForm')
+                .ajaxForm({
+                    url : Url, // or whatever
+                    success : function (response) {
+                        //alert("The server says: " + response);
+                        if(response.startsWith("Aviso")){
+                            console.log(response)
+                            $("#errolog").text(response);
+                        }else{
+                            location.replace("https://itt.sstproject.me/ListarUsuariosWeb.html");
+                            //location.replace("http://" + location.hostname + ":" + location.port +"/ListarUsuariosWeb.html");
+                        }
+
+
+                    }
+                });
         });
     </script>
 
@@ -155,19 +157,20 @@
                                         <p class="text-primary m-0 font-weight-bold">Información General</p>
                                     </div>
                                     <div class="card-body">
-                                        <form  method="POST" action="/insertarWebUser" class="login100-form validate-form">
+                                        <p id="errolog" class="text-center" style="color: red"></p>
+                                        <form id="myForm" method="POST" action="/insertarWebUser">
                                             <div class="form-row">
                                                 <div class="col">
-                                                    <div class="form-group validate-input" data-validate = "Ingrese Usuario">
+                                                    <div class="form-group">
                                                         <label><strong>Nombre de Usuario</strong></label>
-                                                        <input class="form-control input100" type="text" placeholder="Usuario" name="username">
+                                                        <input class="form-control" type="text" placeholder="Usuario" name="username">
 
                                                     </div>
                                                 </div>
                                                 <div class="col">
-                                                    <div class="form-group validate-input" data-validate = "Ingrese Correo Electronico">
+                                                    <div class="form-group">
                                                         <label><strong>Correo Electrónico</strong></label>
-                                                        <input class="form-control input100" type="email" placeholder="user@ejemplo.com" name="email">
+                                                        <input class="form-control" type="email" placeholder="user@ejemplo.com" name="email">
                                                     </div>
                                                 </div>
                                                <!-- <div class="col ">
@@ -184,27 +187,27 @@
                                             </div>
                                             <div class="form-row">
                                                 <div class="col">
-                                                    <div class="form-group validate-input" data-validate = "Ingrese Nombre">
+                                                    <div class="form-group">
                                                         <label for="first_name"><strong>Nombres</strong></label>
                                                         <input class="form-control input100" type="text" placeholder="Jose" name="nombre">
                                                     </div>
                                                 </div>
                                                 <div class="col">
-                                                    <div class="form-group validate-input" data-validate = "Ingrese Apellidos">
+                                                    <div class="form-group">
                                                         <label for="first_name"><strong>Apellidos</strong></label>
                                                         <input class="form-control input100" type="text" placeholder="Peña" name="apellido">
                                                     </div>
                                                 </div>
                                                 <div class="col">
-                                                    <div class="form-group validate-input" data-validate = "Ingrese Contraseña">
+                                                    <div class="form-group">
                                                         <label for="last_name"><strong>Contraseña</strong></label>
-                                                        <input class="form-control input100" type="password" placeholder="Ingrese contraseña" name="pass">
+                                                        <input class="form-control" type="password" placeholder="Ingrese contraseña" name="pass">
                                                     </div>
                                                 </div>
                                                 <div class="col">
-                                                    <div class="form-group validate-input" data-validate = "Ingrese Contraseña">
+                                                    <div class="form-group">
                                                         <label for="last_name"><strong>Confirmar Contraseña</strong></label>
-                                                        <input class="form-control input100" type="password" placeholder="Confirmar Contraseña" name="conpass">
+                                                        <input class="form-control" type="password" placeholder="Confirmar Contraseña" name="conpass">
                                                     </div>
                                                 </div>
                                             </div>
@@ -247,23 +250,6 @@
         </footer>
     </div><a class="border rounded d-inline scroll-to-top" href="#page-top"><i class="fas fa-angle-up"></i></a></div>
     <script src="assets/js/theme.js"></script>
-    <!--===============================================================================================-->
-    <script src="Login_v3/vendor/jquery/jquery-3.2.1.min.js"></script>
-    <!--===============================================================================================-->
-    <script src="Login_v3/vendor/animsition/js/animsition.min.js"></script>
-    <!--===============================================================================================-->
-    <script src="Login_v3/vendor/bootstrap/js/popper.js"></script>
-    <script src="Login_v3/vendor/bootstrap/js/bootstrap.min.js"></script>
-    <!--===============================================================================================-->
-    <script src="Login_v3/vendor/select2/select2.min.js"></script>
-    <!--===============================================================================================-->
-    <script src="Login_v3/vendor/daterangepicker/moment.min.js"></script>
-    <script src="Login_v3/vendor/daterangepicker/daterangepicker.js"></script>
-    <!--===============================================================================================-->
-    <script src="Login_v3/vendor/countdowntime/countdowntime.js"></script>
-    <!--===============================================================================================-->
-    <script src="Login_v3/js/main.js"></script>
-
 </body>
 
 </html>
