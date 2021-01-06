@@ -8,11 +8,8 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonObject;
 import io.javalin.Javalin;
-import io.javalin.plugin.rendering.JavalinRenderer;
-import io.javalin.plugin.rendering.template.JavalinThymeleaf;
 import org.eclipse.jetty.websocket.api.Session;
 
-import java.sql.Time;
 import java.util.Calendar;
 
 import java.io.IOException;
@@ -21,8 +18,7 @@ import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
-import logica.EventoTunelNivleLiquido;
-import org.h2.util.json.JSONObject;
+
 import org.jasypt.encryption.pbe.StandardPBEStringEncryptor;
 
 import static io.javalin.apibuilder.ApiBuilder.*;
@@ -39,6 +35,8 @@ public class Main {
     private static Integer mes2=new Date().getMonth();
     private static Integer anno1= Calendar.getInstance().get(Calendar.YEAR);
     private static Integer anno2= Calendar.getInstance().get(Calendar.YEAR);
+    private static Date fechaprueba= new Date();
+
 
 
     public static void main(String[] args) throws SQLException {
@@ -51,18 +49,16 @@ public class Main {
         if(modoConexion.isEmpty()) {
             ConexionDB.getInstance().InciarDB();
             System.out.println("Inicio");
-            //UserWeb us= new UserWeb("1", "rony", "rony@sst.com", "pucmm","admin","Rony","Duran");
+
             if(ServiciosUserWeb.getInstancia().todos().isEmpty()){
-            UserWeb us= new UserWeb();
+            UserWeb us= new UserWeb("1", "rony", "rony@sst.com", "pucmm","admin","Rony","Duran");
+            /*UserWeb us= new UserWeb();
             us.setIdUserWeb("1");
             us.setUserName("rony");
-            us.setPassword("pucmm");
+            us.setPassword("pucmm");*/
             ServiciosUserWeb.getInstancia().crearObjeto(us);}
             if(ServiciosAppCliente.getInstancia().todos().isEmpty()){
-                UserAppCliente uapp= new UserAppCliente();
-                uapp.setIdCliente("2021");
-                uapp.setUsername("rony");
-                uapp.setPassword("pucmm");
+                UserAppCliente uapp= new UserAppCliente(idAppUserGenerate(), "Rony Duran", "H", 12, "rony@prueba.com", "pucmm", "rony");
                 ServiciosAppCliente.getInstancia().crearObjeto(uapp);
             }
         }
@@ -204,6 +200,21 @@ public class Main {
                     //ctx.redirect("/index.html");
                    ctx.redirect("login-actualzado.html");
                         });
+
+
+                get("/notificacion",ctx -> {
+                    List<Notificaciones>list= new ArrayList();
+
+                    for (int i=0; i <50;i++){
+                        Notificaciones n= new Notificaciones("Prueba "+1);
+                        list.add(n);
+                    }
+                    Gson g = new Gson();
+                    String res = g.toJson(list);
+                    ctx.header("Content-Type","application/json");
+                    ctx.result(res);
+
+                });
                 post("valLogigApp", ctx -> {
 
                     System.out.println(ctx.body());
