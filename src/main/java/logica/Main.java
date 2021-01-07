@@ -10,6 +10,7 @@ import com.google.gson.JsonObject;
 import io.javalin.Javalin;
 import org.eclipse.jetty.websocket.api.Session;
 
+import java.sql.SQLOutput;
 import java.util.Calendar;
 
 import java.io.IOException;
@@ -209,21 +210,41 @@ public class Main {
                         Notificaciones n= new Notificaciones("Prueba "+i);
                         listNoti.add(n);
                     }*/
-                    Gson g = new Gson();
+                    //Gson g = new Gson();
+                    Gson g = new GsonBuilder().setDateFormat("dd/MM/yyyy HH:mm:ss").create();
                     String res = g.toJson(listNoti);
                     ctx.header("Content-Type","application/json");
                     ctx.result(res);
-
                 });
                 post("/inserNotifi",ctx -> {
                     String notificacion=ctx.formParam("noti",String.class).get();
-                    Notificaciones n1= new Notificaciones(notificacion);
+                    Notificaciones n1= new Notificaciones(idNotificacion(),notificacion,fecha());
                     listNoti.add(n1);
 
-                    System.out.println("Noti:"+n1);
+                    System.out.println("Noti:"+n1.getNotificacion()+"----"+"fecha:"+n1.getFecha());
 
 
                 });
+                post("/deleteNoti",ctx -> {
+                    JsonObject convertedObject = new Gson().fromJson(ctx.body(), JsonObject.class);
+                    String idNoti=convertedObject.get("idNoti").toString().replace("\"", "");
+                   // Integer idxNoti=Integer.parseInt(idNoti);
+                    Notificaciones n1=null;
+                    System.out.println("EL ID a borra es"+idNoti);
+                    for (Notificaciones aux:listNoti) {
+                        if(aux.getIdNoti().equalsIgnoreCase(idNoti)){
+                            n1=aux;
+                        }
+                    }
+                    if(n1!=null){
+                        listNoti.remove(n1);
+                        System.out.println("Tamam del arreglo de las notificaciones"+listNoti.size());
+                    }
+
+
+
+                });
+
                 post("valLogigApp", ctx -> {
 
                     System.out.println(ctx.body());
@@ -551,6 +572,17 @@ public class Main {
             e.printStackTrace();
         }
         return fechaMod;
+    };
+
+    public static String idNotificacion () {
+
+        int cont=0;
+        cont=listNoti.size();
+        cont++;
+        String idFinal= Integer.toString(cont);
+        System.out.println("EL id de las Notificaciones es:"+idFinal);
+        return idFinal;
+
     };
 
     public static Integer contClientesdelGeneral () {
