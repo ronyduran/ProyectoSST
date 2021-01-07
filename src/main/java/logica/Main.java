@@ -37,7 +37,7 @@ public class Main {
     private static Integer anno2= Calendar.getInstance().get(Calendar.YEAR);
     private static Date fechaprueba= new Date();
 
-
+    private static List<Notificaciones>listNoti= new ArrayList();
 
     public static void main(String[] args) throws SQLException {
 
@@ -203,16 +203,25 @@ public class Main {
 
 
                 get("/notificacion",ctx -> {
-                    List<Notificaciones>list= new ArrayList();
+                   // List<Notificaciones>listNoti= new ArrayList();
 
-                    for (int i=0; i <50;i++){
-                        Notificaciones n= new Notificaciones("Prueba "+1);
-                        list.add(n);
-                    }
+                    /*for (int i=0; i <50;i++){
+                        Notificaciones n= new Notificaciones("Prueba "+i);
+                        listNoti.add(n);
+                    }*/
                     Gson g = new Gson();
-                    String res = g.toJson(list);
+                    String res = g.toJson(listNoti);
                     ctx.header("Content-Type","application/json");
                     ctx.result(res);
+
+                });
+                post("/inserNotifi",ctx -> {
+                    String notificacion=ctx.formParam("noti",String.class).get();
+                    Notificaciones n1= new Notificaciones(notificacion);
+                    listNoti.add(n1);
+
+                    System.out.println("Noti:"+n1);
+
 
                 });
                 post("valLogigApp", ctx -> {
