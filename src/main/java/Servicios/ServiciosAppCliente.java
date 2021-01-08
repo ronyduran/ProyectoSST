@@ -31,4 +31,14 @@ public class ServiciosAppCliente extends GestionDB<UserAppCliente> {
 
         return query.getResultList();
     }
+
+    public UserAppCliente buscarPorID(String idUser){
+
+        EntityManager entityManager = getEntityManager();
+
+        Query query = entityManager.createNativeQuery("SELECT * FROM UserAppCliente WHERE UserAppCliente.idCliente like :id", UserAppCliente.class);
+        //query.setParameter("id",idUser);
+        //query.setParameter("id", id);
+        return (UserAppCliente) query.setParameter("id",idUser).getSingleResult();
+    }
 }

@@ -1,6 +1,8 @@
 package logica;
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 public class UserAppCliente implements Serializable {
@@ -12,6 +14,8 @@ public class UserAppCliente implements Serializable {
     private String correoElectronico;
     private String Password;
     private String username;
+    @OneToMany
+    private List<Notificaciones> listNotificaciones;
 
     public UserAppCliente() {
 
@@ -23,8 +27,9 @@ public class UserAppCliente implements Serializable {
         this.sexo = sexo;
         this.edad = edad;
         this.correoElectronico = correoElectronico;
-        Password = password;
+        this.Password = password;
         this.username = username;
+        this.listNotificaciones= new ArrayList<Notificaciones>();
     }
 
 
@@ -83,4 +88,14 @@ public class UserAppCliente implements Serializable {
     public void setUsername(String username) {
         this.username = username;
     }
+
+    public List<Notificaciones> getListNotificaciones() {
+        return listNotificaciones;
+    }
+
+    public void setListNotificaciones(List<Notificaciones> listNotificaciones) {
+        this.listNotificaciones = listNotificaciones;
+    }
+
+
 }

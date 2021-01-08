@@ -32,12 +32,12 @@ public class ServiciosUserWeb extends GestionDB<UserWeb> {
         return query.getResultList();
     }
 
-    public List<UserWeb> buscarPorID(String id){
+    public UserWeb buscarPorID(String id){
 
         EntityManager entityManager = getEntityManager();
-        Query query = entityManager.createNativeQuery("SELECT * FROM UserWeb WHERE UserWeb.IdUserWeb like id", UserWeb.class);
+        Query query = entityManager.createNativeQuery("SELECT * FROM UserWeb WHERE UserWeb.IdUserWeb like :id", UserWeb.class);
         query.setParameter("id",id);
         //query.setParameter("id", id);
-        return query.getResultList();
+        return (UserWeb) query.getResultList();
     }
 }

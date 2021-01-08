@@ -1,9 +1,6 @@
 package logica;
 
-import Servicios.ServicioTunelClientes;
-import Servicios.ServicioTunelLiquifo;
-import Servicios.ServiciosAppCliente;
-import Servicios.ServiciosUserWeb;
+import Servicios.*;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonObject;
@@ -52,7 +49,7 @@ public class Main {
             System.out.println("Inicio");
 
             if(ServiciosUserWeb.getInstancia().todos().isEmpty()){
-            UserWeb us= new UserWeb("1", "rony", "rony@sst.com", "pucmm","admin","Rony","Duran");
+            UserWeb us= new UserWeb(NumidUsuarioWeb(), "rony", "rony@sst.com", "pucmm","admin","Rony","Duran");
             /*UserWeb us= new UserWeb();
             us.setIdUserWeb("1");
             us.setUserName("rony");
@@ -210,35 +207,54 @@ public class Main {
                         Notificaciones n= new Notificaciones("Prueba "+i);
                         listNoti.add(n);
                     }*/
+                    List<Notificaciones>listNotiUsario= new ArrayList();
                     //Gson g = new Gson();
-                    Gson g = new GsonBuilder().setDateFormat("dd/MM/yyyy HH:mm:ss").create();
-                    String res = g.toJson(listNoti);
+                    System.out.println("Id Usuario"+ctx.header("idUsuario"));
+                    String idUsuario= ctx.header("idUsuario");
+                    UserAppCliente u1= ServiciosAppCliente.getInstancia().buscarPorID(idUsuario);
+                    listNotiUsario=u1.getListNotificaciones();
+                    Collections.sort(listNotiUsario, Collections.reverseOrder());
+                    Gson g = new GsonBuilder().setDateFormat("dd/MM/yyyy hh:mm:ss aa").create();
+                    String res = g.toJson(listNotiUsario);
                     ctx.header("Content-Type","application/json");
                     ctx.result(res);
                 });
                 post("/inserNotifi",ctx -> {
                     String notificacion=ctx.formParam("noti",String.class).get();
+                    String idUsuario=ctx.formParam("id",String.class).get();
                     Notificaciones n1= new Notificaciones(idNotificacion(),notificacion,fecha());
-                    listNoti.add(n1);
+                    ServiciosNotificaciones.getInstancia().crearObjeto(n1);
+                    UserAppCliente u1 = ServiciosAppCliente.getInstancia().buscarPorID(idUsuario);
+                    u1.getListNotificaciones().add(n1);
+                    ServiciosAppCliente.getInstancia().editarCampo(u1);
+                    //listNoti.add(n1);
 
                     System.out.println("Noti:"+n1.getNotificacion()+"----"+"fecha:"+n1.getFecha());
 
 
                 });
                 post("/deleteNoti",ctx -> {
+                    List<Notificaciones>listNotiUsario= new ArrayList();
+
                     JsonObject convertedObject = new Gson().fromJson(ctx.body(), JsonObject.class);
                     String idNoti=convertedObject.get("idNoti").toString().replace("\"", "");
+                    String idUsuario=convertedObject.get("idUsuario").toString().replace("\"", "");
+                    UserAppCliente u1= ServiciosAppCliente.getInstancia().buscarPorID(idUsuario);
                    // Integer idxNoti=Integer.parseInt(idNoti);
+                    listNotiUsario=u1.getListNotificaciones();
                     Notificaciones n1=null;
                     System.out.println("EL ID a borra es"+idNoti);
-                    for (Notificaciones aux:listNoti) {
+                    for (Notificaciones aux:listNotiUsario) {
                         if(aux.getIdNoti().equalsIgnoreCase(idNoti)){
                             n1=aux;
                         }
                     }
                     if(n1!=null){
-                        listNoti.remove(n1);
-                        System.out.println("Tamam del arreglo de las notificaciones"+listNoti.size());
+                        listNotiUsario.remove(n1);
+                        //listNoti.remove(n1);
+                        System.out.println("Tamam del arreglo de las notificaciones"+listNotiUsario.size());
+                        u1.setListNotificaciones(listNotiUsario);
+                        ServiciosAppCliente.getInstancia().editarCampo(u1);
                     }
 
 
@@ -577,7 +593,7 @@ public class Main {
     public static String idNotificacion () {
 
         int cont=0;
-        cont=listNoti.size();
+        cont=ServiciosNotificaciones.getInstancia().todos().size();
         cont++;
         String idFinal= Integer.toString(cont);
         System.out.println("EL id de las Notificaciones es:"+idFinal);

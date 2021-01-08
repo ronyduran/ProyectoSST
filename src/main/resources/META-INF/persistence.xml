@@ -11,6 +11,7 @@
         <class>logica.EventoTunelClientes</class>
         <class>logica.UserAppCliente</class>
         <class>logica.UserWeb</class>
+        <class>logica.Notificaciones</class>
        <!-- <class>logica.Main</class>-->
 
         <properties>
