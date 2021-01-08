@@ -8,7 +8,7 @@ public class UserWeb {
     private String userName;
     private String correoElectronico;
     private String password;
-    private String rol;
+    //private String rol;
     private String nombre;
     private String apellido;
 
@@ -16,12 +16,12 @@ public class UserWeb {
 
     }
 
-    public UserWeb(String idUserWeb, String userName, String correoElectronico, String password, String rol, String nombre, String apellido) {
+    public UserWeb(String idUserWeb, String userName, String correoElectronico, String password, String nombre, String apellido) {
         IdUserWeb = idUserWeb;
         this.userName = userName;
         this.correoElectronico = correoElectronico;
         this.password = password;
-        this.rol = rol;
+        //this.rol = rol;
         this.nombre = nombre;
         this.apellido = apellido;
     }
@@ -59,13 +59,13 @@ public class UserWeb {
         this.password = password;
     }
 
-    public String getRol() {
+    /*public String getRol() {
         return rol;
     }
 
     public void setRol(String rol) {
         this.rol = rol;
-    }
+    }*/
 
     public String getNombre() {
         return nombre;

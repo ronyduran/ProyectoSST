@@ -47,37 +47,30 @@ public class Main {
         if(modoConexion.isEmpty()) {
             ConexionDB.getInstance().InciarDB();
             System.out.println("Inicio");
-
             if(ServiciosUserWeb.getInstancia().todos().isEmpty()){
-            UserWeb us= new UserWeb(NumidUsuarioWeb(), "rony", "rony@sst.com", "pucmm","admin","Rony","Duran");
-            /*UserWeb us= new UserWeb();
-            us.setIdUserWeb("1");
-            us.setUserName("rony");
-            us.setPassword("pucmm");*/
-            ServiciosUserWeb.getInstancia().crearObjeto(us);}
+                UserWeb us= new UserWeb(NumidUsuarioWeb(), "rony", "rony@sst.com", "pucmm","Rony","Duran");
+                ServiciosUserWeb.getInstancia().crearObjeto(us);
+            }
             if(ServiciosAppCliente.getInstancia().todos().isEmpty()){
                 UserAppCliente uapp= new UserAppCliente(idAppUserGenerate(), "Rony Duran", "H", 12, "rony@prueba.com", "pucmm", "rony");
                 ServiciosAppCliente.getInstancia().crearObjeto(uapp);
             }
         }
-
+        ModelWeb mode =new ModelWeb();
 
         /*for(int i=0;i<50;i++){
             ServicioTunelLiquifo.getIntacia().crearObjeto(new EventoTunelNivleLiquido("55",fecha()));
         }*/
-
-
         //JavalinRenderer.register(JavalinThymeleaf.INSTANCE, ".html");
+        //ManejoRemover mr = new ManejoRemover(mode);
+        //mr.hilo.start();
 
-        ModelWeb mode =new ModelWeb();
+//--------------------------------------------------------------------------------------------------------------------------------------------------------------------
+//--------------------------------------------------------------------------------------------------------------------------------------------------------------------
+//--------------------------------------------------------------WebSockect Para la Página WEB-------------------------------------------------------------------------
+//--------------------------------------------------------------------------------------------------------------------------------------------------------------------
+//--------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
-
-       // ManejoRemover mr = new ManejoRemover(mode);
-
-       // mr.hilo.start();
-        //-----------------------------
-        //---------------------------------------------------------------------------------------
-        //Prueba WebSockect-----------------------------------------------------------------------
         
         app.ws("/WSEnvio",ws->{
             ws.onConnect(ctx -> {
@@ -151,9 +144,6 @@ public class Main {
                     enviarMensajeAClientesConectados("conMasc:"+contMasc());
                     enviarMensajeAClientesConectados("sinMasc:"+sintMasc());
                 }
-
-
-
             });
 
             ws.onClose(ctx -> {
@@ -165,8 +155,22 @@ public class Main {
             });
 
         });
+//--------------------------------------------------------------------------------------------------------------------------------------------------------------------
+//--------------------------------------------------------------------------------------------------------------------------------------------------------------------
+//--------------------------------------------------------------WebSocket para la APP---------------------------------------------------------------------------------
+//--------------------------------------------------------------------------------------------------------------------------------------------------------------------
+//--------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
-        //---------------------------------------------------------------------------------------
+
+        app.ws("/AppEnvio", wsHandler -> {
+
+        });
+
+//--------------------------------------------------------------------------------------------------------------------------------------------------------------------
+//--------------------------------------------------------------------------------------------------------------------------------------------------------------------
+//-------------------------------------------------EndPoint para la ruta inicio la Página WEB-------------------------------------------------------------------------
+//--------------------------------------------------------------------------------------------------------------------------------------------------------------------
+//--------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
         app.routes(() -> {
 
@@ -199,7 +203,11 @@ public class Main {
                    ctx.redirect("login-actualzado.html");
                         });
 
-
+//--------------------------------------------------------------------------------------------------------------------------------------------------------------------
+//--------------------------------------------------------------------------------------------------------------------------------------------------------------------
+//--------------------------------------------------------------EndPoints para  la APP--------------------------------------------------------------------------------
+//--------------------------------------------------------------------------------------------------------------------------------------------------------------------
+//--------------------------------------------------------------------------------------------------------------------------------------------------------------------
                 get("/notificacion",ctx -> {
                    // List<Notificaciones>listNoti= new ArrayList();
 
@@ -212,25 +220,33 @@ public class Main {
                     System.out.println("Id Usuario"+ctx.header("idUsuario"));
                     String idUsuario= ctx.header("idUsuario");
                     UserAppCliente u1= ServiciosAppCliente.getInstancia().buscarPorID(idUsuario);
-                    listNotiUsario=u1.getListNotificaciones();
-                    Collections.sort(listNotiUsario, Collections.reverseOrder());
-                    Gson g = new GsonBuilder().setDateFormat("dd/MM/yyyy hh:mm:ss aa").create();
-                    String res = g.toJson(listNotiUsario);
-                    ctx.header("Content-Type","application/json");
-                    ctx.result(res);
+                    if(u1!=null){
+                        listNotiUsario=u1.getListNotificaciones();
+                        Collections.sort(listNotiUsario, Collections.reverseOrder());
+                        Gson g = new GsonBuilder().setDateFormat("dd/MM/yyyy hh:mm:ss aa").create();
+                        String res = g.toJson(listNotiUsario);
+                        ctx.header("Content-Type","application/json");
+                        ctx.result(res);
+                    }
+
                 });
                 post("/inserNotifi",ctx -> {
                     String notificacion=ctx.formParam("noti",String.class).get();
                     String idUsuario=ctx.formParam("id",String.class).get();
-                    Notificaciones n1= new Notificaciones(idNotificacion(),notificacion,fecha());
-                    ServiciosNotificaciones.getInstancia().crearObjeto(n1);
-                    UserAppCliente u1 = ServiciosAppCliente.getInstancia().buscarPorID(idUsuario);
-                    u1.getListNotificaciones().add(n1);
-                    ServiciosAppCliente.getInstancia().editarCampo(u1);
-                    //listNoti.add(n1);
+                    if(notificacion!=null && idUsuario!=null){
+                        if(!idUsuario.equalsIgnoreCase("")&&!notificacion.equalsIgnoreCase("")){
+                            Notificaciones n1= new Notificaciones(idNotificacion(),notificacion,fecha());
+                            ServiciosNotificaciones.getInstancia().crearObjeto(n1);
+                            UserAppCliente u1 = ServiciosAppCliente.getInstancia().buscarPorID(idUsuario);
+                            if(u1!=null){
+                                u1.getListNotificaciones().add(n1);
+                                ServiciosAppCliente.getInstancia().editarCampo(u1);
+                                //listNoti.add(n1);
+                                System.out.println("Noti:"+n1.getNotificacion()+"----"+"fecha:"+n1.getFecha());
+                            }
 
-                    System.out.println("Noti:"+n1.getNotificacion()+"----"+"fecha:"+n1.getFecha());
-
+                        }
+                    }
 
                 });
                 post("/deleteNoti",ctx -> {
@@ -240,22 +256,26 @@ public class Main {
                     String idNoti=convertedObject.get("idNoti").toString().replace("\"", "");
                     String idUsuario=convertedObject.get("idUsuario").toString().replace("\"", "");
                     UserAppCliente u1= ServiciosAppCliente.getInstancia().buscarPorID(idUsuario);
-                   // Integer idxNoti=Integer.parseInt(idNoti);
-                    listNotiUsario=u1.getListNotificaciones();
-                    Notificaciones n1=null;
-                    System.out.println("EL ID a borra es"+idNoti);
-                    for (Notificaciones aux:listNotiUsario) {
-                        if(aux.getIdNoti().equalsIgnoreCase(idNoti)){
-                            n1=aux;
+                    if(u1!=null)
+                    {
+                        listNotiUsario=u1.getListNotificaciones();
+                        Notificaciones n1=null;
+                        System.out.println("EL ID a borra es"+idNoti);
+                        for (Notificaciones aux:listNotiUsario) {
+                            if(aux.getIdNoti().equalsIgnoreCase(idNoti)){
+                                n1=aux;
+                            }
+                        }
+                        if(n1!=null){
+                            listNotiUsario.remove(n1);
+                            //listNoti.remove(n1);
+                            System.out.println("Tamam del arreglo de las notificaciones"+listNotiUsario.size());
+                            u1.setListNotificaciones(listNotiUsario);
+                            ServiciosAppCliente.getInstancia().editarCampo(u1);
                         }
                     }
-                    if(n1!=null){
-                        listNotiUsario.remove(n1);
-                        //listNoti.remove(n1);
-                        System.out.println("Tamam del arreglo de las notificaciones"+listNotiUsario.size());
-                        u1.setListNotificaciones(listNotiUsario);
-                        ServiciosAppCliente.getInstancia().editarCampo(u1);
-                    }
+                   // Integer idxNoti=Integer.parseInt(idNoti);
+
 
 
 
@@ -330,6 +350,16 @@ public class Main {
 
 
                 } );
+//--------------------------------------------------------------------------------------------------------------------------------------------------------------------
+//--------------------------------------------------------------------------------------------------------------------------------------------------------------------
+//--------------------------------------------------------------EndPoints para  la Página WEB-------------------------------------------------------------------------
+//--------------------------------------------------------------------------------------------------------------------------------------------------------------------
+//--------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+//---------------------------------------------------------------------------------------------------------------------------------------------------------------------
+//--------------------------------------------------------EdnPoints Manejo de Usuarios de la Página WEB----------------------------------------------------------------
+//---------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
                 post("/autenticar",ctx -> {
                     String recordar= ctx.formParam("recordar");
                     String nombreUsuario = ctx.formParam("username");
@@ -377,7 +407,7 @@ public class Main {
                     Integer val=0;
                     System.out.println(id+"--"+usuario+"--"+contrasena+"--"+email+"--"+nombre+"--"+apellido);
                     if(!usuario.equalsIgnoreCase("")&&!contrasena.equalsIgnoreCase("")&& !email.equalsIgnoreCase("")&& !nombre.equalsIgnoreCase("") && !apellido.equalsIgnoreCase("")){
-                        UserWeb us1= new UserWeb(id, usuario, email,  contrasena,"",nombre,apellido);
+                        UserWeb us1= new UserWeb(id, usuario, email,  contrasena,nombre,apellido);
                         for (UserWeb aux:ServiciosUserWeb.getInstancia().todos()) {
                             if(usuario.equalsIgnoreCase(aux.getUserName()) && email.equalsIgnoreCase(aux.getCorreoElectronico())){
                                 val=1;
@@ -401,8 +431,8 @@ public class Main {
                     ctx.redirect("/login-actualzado.html");
                 });
                 get("/showPerfil",ctx -> {
-                   // List<UserWeb> list;
-                 //   list = ServiciosUserWeb.getInstancia().todos();
+                    // List<UserWeb> list;
+                    //list = ServiciosUserWeb.getInstancia().todos();
                     UserWeb user = ctx.sessionAttribute("usuario");
                     //UserWeb u1=null;
                     if(user!=null){
@@ -414,24 +444,23 @@ public class Main {
                         String res = g.toJson(user);
                         ctx.header("Content-Type","application/json");
                         ctx.result(res);
-
                     }
-
                 });
+
+//--------------------------------------------------------------------------------------------------------------------------------------------------------------------
+//-------------------------------------------------------EndPoints Manejo de Tablas de la Página WEB------------------------------------------------------------------
+//--------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
                 get("/tableEventosClientes",ctx -> {
                     List<EventoTunelClientes> list;
                     HashMap map = new HashMap();
-
                     list = ServicioTunelClientes.getInstancia().todos();
-
                     map.put("data", list);
-
                     Gson g = new GsonBuilder().setDateFormat("dd/MM/yyyy HH:mm:ss").create();
                     String res = g.toJson(map);
                     ctx.header("Content-Type","application/json");
                     ctx.result(res);
                     //System.out.println(res);
-
                     //ctx.json(map);
 
                 });
@@ -441,15 +470,12 @@ public class Main {
                     HashMap map = new HashMap();
 
                     list = ServiciosAppCliente.getInstancia().todos();
-
                     map.put("data", list);
-
                     Gson g = new GsonBuilder().setDateFormat("dd/MM/yyyy HH:mm:ss").create();
                     String res = g.toJson(map);
                     ctx.header("Content-Type","application/json");
                     ctx.result(res);
                     //System.out.println(res);
-
                     //ctx.json(map);
 
                 });
@@ -490,11 +516,16 @@ public class Main {
                     modelo.put("taman",mode.getNivel());
                     modelo.put("notifi",mode.getNotificaciones());
 
-                    ctx.render("/Web SST/index.html", modelo);});*/
+                    ctx.render("/Web SST/index.html", modelo);});
 
-               /* post("/noti",ctx -> {
+               post("/noti",ctx -> {
 
                 });*/
+//--------------------------------------------------------------------------------------------------------------------------------------------------------------------
+//---------------------------------------------------------------EndPoint para recepcion de Datos Raspberry PI--------------------------------------------------------
+//--------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+
                 post("/cliente",ctx -> {
                     String id=ctx.formParam("id",String.class).get();
                     String masc= ctx.formParam("masc",String.class).get();
@@ -511,7 +542,21 @@ public class Main {
                     diasUserGraf1();
 
                 });
-               /* post("/mascarilla",ctx -> {
+
+                post("/nivel",ctx -> {
+                    String nivel= ctx.formParam("taman",String.class).get();
+                    ServicioTunelLiquifo.getIntacia().crearObjeto(new EventoTunelNivleLiquido(nivel,fecha()));
+                    //mode.setNivel(ctx.formParam("taman",Integer.class).get());
+                    System.out.println(ctx.formParam("taman",String.class).get());
+                    enviarMensajeAClientesConectados("nivel:"+nivel);
+                });
+
+                post("/estado",ctx -> {
+                    mode.setEstado(ctx.formParam("esta",String.class).get());
+                    System.out.println(ctx.formParam("esta",String.class).get());
+                    enviarMensajeAClientesConectados("estado:"+mode.getEstado());
+                });
+                /* post("/mascarilla",ctx -> {
                     String noti=ctx.formParam("notfi",String.class).get();
                     mode.conMascarilla(noti);
                     mode.insertNoti(noti);
@@ -526,22 +571,8 @@ public class Main {
                     System.out.println(noti+"--"+"Cantidad:"+mode.getUserSinMascarillla().size());
                     enviarMensajeAClientesConectados("noficiaciones:"+mode.fecha()+"--"+noti);
                     enviarMensajeAClientesConectados("sinMas:"+mode.getUserSinMascarillla().size());
-                });*/
-                post("/nivel",ctx -> {
-                    String nivel= ctx.formParam("taman",String.class).get();
-                    ServicioTunelLiquifo.getIntacia().crearObjeto(new EventoTunelNivleLiquido(nivel,fecha()));
-                    //mode.setNivel(ctx.formParam("taman",Integer.class).get());
-                    System.out.println(ctx.formParam("taman",String.class).get());
-                    enviarMensajeAClientesConectados("nivel:"+nivel);
                 });
-
-
-                post("/estado",ctx -> {
-                    mode.setEstado(ctx.formParam("esta",String.class).get());
-                    System.out.println(ctx.formParam("esta",String.class).get());
-                    enviarMensajeAClientesConectados("estado:"+mode.getEstado());
-                });
-                /*post("/contador",ctx -> {
+                post("/contador",ctx -> {
                     mode.setContador(ctx.formParam("numero",String.class).get());
                     System.out.println(ctx.formParam("numero",String.class).get());
                     enviarMensajeAClientesConectados("cont:"+mode.getContador());
@@ -735,7 +766,6 @@ public class Main {
                 }
             }
         }
-
 
         return mas;
     }
