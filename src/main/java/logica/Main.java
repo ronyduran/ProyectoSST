@@ -23,6 +23,8 @@ import static io.javalin.apibuilder.ApiBuilder.*;
 
 
 public class Main {
+
+
     private static String modoConexion = "";
     public static List<Session> usuariosConectados = new ArrayList<>();
     public static List<EventoTunelClientes> listaEventosClientes = new ArrayList<>();
@@ -173,7 +175,7 @@ public class Main {
 //--------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
         app.routes(() -> {
-
+          //  before(ctx -> );
             path( "/", () -> {
                before("/",ctx -> {
                    UserWeb user = ctx.sessionAttribute("usuario");
@@ -181,7 +183,6 @@ public class Main {
                         String usuario = ctx.cookie("usuario");
                         String password = ctx.cookie("password");
                         if(usuario != null  && password !=null){
-
                             StandardPBEStringEncryptor decryptor = new StandardPBEStringEncryptor();
                             decryptor.setPassword(mpCryptoPassword);
                             user  = validar(usuario, decryptor.decrypt(password));
@@ -189,13 +190,10 @@ public class Main {
                                 ctx.sessionAttribute("usuario", user);
                                 ctx.redirect("/index.html");
                             }
-
                         }
-
                     }else{
                         ctx.redirect("/index.html");
                     }
-
 
                 });
                 get("/",ctx -> {
@@ -208,20 +206,16 @@ public class Main {
 //--------------------------------------------------------------EndPoints para  la APP--------------------------------------------------------------------------------
 //--------------------------------------------------------------------------------------------------------------------------------------------------------------------
 //--------------------------------------------------------------------------------------------------------------------------------------------------------------------
-                get("/notificacion",ctx -> {
-                   // List<Notificaciones>listNoti= new ArrayList();
 
-                    /*for (int i=0; i <50;i++){
-                        Notificaciones n= new Notificaciones("Prueba "+i);
-                        listNoti.add(n);
-                    }*/
-                    List<Notificaciones>listNotiUsario= new ArrayList();
+                get("/notificacion",ctx -> {
+
+                    List<Notificaciones> listNotiUsario;
+
                     //Gson g = new Gson();
                     System.out.println("Id Usuario"+ctx.header("idUsuario"));
                     String idUsuario= ctx.header("idUsuario");
-                    UserAppCliente u1= ServiciosAppCliente.getInstancia().buscarPorID(idUsuario);
-                    if(u1!=null){
-                        listNotiUsario=u1.getListNotificaciones();
+                    if(idUsuario!=null|| !idUsuario.equalsIgnoreCase("")){
+                        listNotiUsario=NotificacionesIDUsuario(idUsuario);
                         Collections.sort(listNotiUsario, Collections.reverseOrder());
                         Gson g = new GsonBuilder().setDateFormat("dd/MM/yyyy hh:mm:ss aa").create();
                         String res = g.toJson(listNotiUsario);
@@ -231,54 +225,44 @@ public class Main {
 
                 });
                 post("/inserNotifi",ctx -> {
+                    List<String>userList;
+
                     String notificacion=ctx.formParam("noti",String.class).get();
                     String idUsuario=ctx.formParam("id",String.class).get();
+                    System.out.println(notificacion+"-----"+idUsuario);
                     if(notificacion!=null && idUsuario!=null){
                         if(!idUsuario.equalsIgnoreCase("")&&!notificacion.equalsIgnoreCase("")){
-                            Notificaciones n1= new Notificaciones(idNotificacion(),notificacion,fecha());
-                            ServiciosNotificaciones.getInstancia().crearObjeto(n1);
-                            UserAppCliente u1 = ServiciosAppCliente.getInstancia().buscarPorID(idUsuario);
-                            if(u1!=null){
-                                u1.getListNotificaciones().add(n1);
-                                ServiciosAppCliente.getInstancia().editarCampo(u1);
-                                //listNoti.add(n1);
+                            if(idUsuario.equalsIgnoreCase("all")){
+                                Notificaciones n1= new Notificaciones(idNotificacion(),notificacion,fecha());
+                                userList= n1.getListIdUsuario();
+                                for (UserAppCliente appCliente:ServiciosAppCliente.getInstancia().todos()) {
+                                    userList.add(appCliente.getIdCliente());
+                                }
+                                n1.setListIdUsuario(userList);
+                                listNoti.add(n1);
+                                System.out.println("Noti:"+n1.getNotificacion()+"----"+"fecha:"+n1.getFecha());
+                            }else{
+                                Notificaciones n1= new Notificaciones(idNotificacion(),notificacion,fecha());
+                                userList= n1.getListIdUsuario();
+                                userList.add(idUsuario);
+                                n1.setListIdUsuario(userList);
+                                listNoti.add(n1);
                                 System.out.println("Noti:"+n1.getNotificacion()+"----"+"fecha:"+n1.getFecha());
                             }
 
                         }
                     }
-
                 });
                 post("/deleteNoti",ctx -> {
-                    List<Notificaciones>listNotiUsario= new ArrayList();
 
                     JsonObject convertedObject = new Gson().fromJson(ctx.body(), JsonObject.class);
                     String idNoti=convertedObject.get("idNoti").toString().replace("\"", "");
                     String idUsuario=convertedObject.get("idUsuario").toString().replace("\"", "");
-                    UserAppCliente u1= ServiciosAppCliente.getInstancia().buscarPorID(idUsuario);
-                    if(u1!=null)
-                    {
-                        listNotiUsario=u1.getListNotificaciones();
-                        Notificaciones n1=null;
+                    if(idUsuario!=null|| !idUsuario.equalsIgnoreCase("")){
                         System.out.println("EL ID a borra es"+idNoti);
-                        for (Notificaciones aux:listNotiUsario) {
-                            if(aux.getIdNoti().equalsIgnoreCase(idNoti)){
-                                n1=aux;
-                            }
-                        }
-                        if(n1!=null){
-                            listNotiUsario.remove(n1);
-                            //listNoti.remove(n1);
-                            System.out.println("Tamam del arreglo de las notificaciones"+listNotiUsario.size());
-                            u1.setListNotificaciones(listNotiUsario);
-                            ServiciosAppCliente.getInstancia().editarCampo(u1);
-                        }
+                        EliminarNotificacionesIDUsuario(idNoti,idUsuario);
+                        System.out.println("Tamam del arreglo de las notificaciones"+listNoti.size());
                     }
-                   // Integer idxNoti=Integer.parseInt(idNoti);
-
-
-
-
                 });
 
                 post("valLogigApp", ctx -> {
@@ -624,7 +608,8 @@ public class Main {
     public static String idNotificacion () {
 
         int cont=0;
-        cont=ServiciosNotificaciones.getInstancia().todos().size();
+        //cont=ServiciosNotificaciones.getInstancia().todos().size();
+        cont=listNoti.size();
         cont++;
         String idFinal= Integer.toString(cont);
         System.out.println("EL id de las Notificaciones es:"+idFinal);
@@ -907,6 +892,30 @@ public class Main {
 
 
             return u1;
+    }
+
+    public static List<Notificaciones> NotificacionesIDUsuario(String idUsuario){
+        List<Notificaciones> listaN= new ArrayList<Notificaciones>();
+
+        for (Notificaciones aux: listNoti) {
+            for (String idU: aux.getListIdUsuario()){
+                if(idU.equalsIgnoreCase(idUsuario)){
+                    System.out.println("Prueba>>>>>"+aux.getNotificacion());
+                    listaN.add(aux);
+                }
+            }
+        }
+
+        return listaN;
+    }
+
+    public static void EliminarNotificacionesIDUsuario(String idNot,String idUsuario){
+
+        for (Notificaciones aux: listNoti) {
+            if (aux.getIdNoti().equalsIgnoreCase(idNot)) {
+                aux.getListIdUsuario().remove(idUsuario);
+            }
+        }
     }
 
 }

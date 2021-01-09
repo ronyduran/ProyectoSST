@@ -95,8 +95,12 @@ public class GestionDB<T> {
             entityManager.remove(entidad);
             entityManager.getTransaction().commit();
             estado = true;
-        } finally {
+        }catch (Exception e) {
+            e.printStackTrace();
+        }
+        finally {
             entityManager.close();
+            System.out.println("Se cerro");
         }
 
         return estado;
@@ -111,6 +115,7 @@ public class GestionDB<T> {
             entityManager.getTransaction().commit();
             estado = true;
         } finally {
+
             entityManager.close();
         }
 
@@ -123,6 +128,8 @@ public class GestionDB<T> {
         try {
             entidad = entityManager.find(this.claseEntidad, id);
             System.out.println("La busqueda ha sidoe existosa!");
+        } catch (Exception e) {
+            e.printStackTrace();
         } finally {
             entityManager.close();
         }
@@ -137,7 +144,10 @@ public class GestionDB<T> {
             CriteriaQuery<T> criteriaQuery = entityManager.getCriteriaBuilder().createQuery(this.claseEntidad);
             criteriaQuery.select(criteriaQuery.from(this.claseEntidad));
             entida = entityManager.createQuery(criteriaQuery).getResultList();
-        } finally {
+        }catch (Exception e) {
+            e.printStackTrace();
+        }
+        finally {
             entityManager.close();
         }
         return entida;

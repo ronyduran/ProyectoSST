@@ -17,6 +17,7 @@
     <script src="assets/bootstrap/js/bootstrap.min.js"></script>
     <script src="assets/js/bs-init.js"></script>
     <script type="text/javascript" src="https://cdn.datatables.net/v/dt/dt-1.10.22/datatables.min.js"></script>
+
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-easing/1.4.1/jquery.easing.js"></script>
     <script src="assets/js/theme.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
@@ -45,6 +46,24 @@
                 tbl.ajax.reload( null, false );
             }, 15000 );
         } );
+
+        function envioNotificaciones() {
+            var txt;
+            //var URL="http://localhost:7000/inserNotifi";
+            var URL="https://"+ location.hostname + ":" + location.port +"inserNotifi";
+
+            var person = prompt("Ingrese el Mensaje:", "");
+            if (person == null || person == "") {
+                txt = "User cancelled the prompt.";
+            } else {
+
+                $.post(URL,
+                    {
+                        id: "all",
+                        noti: person
+                    })
+            }
+        }
     </script>
 
 </head>
@@ -56,6 +75,7 @@
                 <a class="navbar-brand d-flex justify-content-center align-items-center sidebar-brand m-0" href="index.html">
                     <div class="sidebar-brand-icon rotate-n-15"></div>
                     <div class="sidebar-brand-text mx-3"><span>SST Project</span></div>
+
                 </a>
                 <hr class="sidebar-divider my-0">
                 <ul class="nav navbar-nav text-light" id="accordionSidebar">
@@ -139,6 +159,8 @@
                 <div class="container-fluid">
                     <div class="d-sm-flex justify-content-between align-items-center mb-4">
                         <h3 class="text-dark mb-4">Lista Usuario APP </h3>
+                        <button   onclick="envioNotificaciones()" type="button" class="btn btn-lg btn-primary" ><i class="fa fa-plus" aria-hidden="true"></i> Notificaciones</button>
+
                         <!--<a href="Creación%20de%20Usuarios.html" class="btn btn-primary btn-lg active" role="button" aria-pressed="true"><i class="fa fa-plus" aria-hidden="true"></i> Nuevo Perfil</a>-->
                     </div>
                 </div>

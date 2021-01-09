@@ -28,6 +28,7 @@ public class ServiciosNotificaciones  extends GestionDB<Notificaciones> {
     public List<Notificaciones> todos(){
 
         EntityManager entityManager = getEntityManager();
+
         Query query = entityManager.createNativeQuery("SELECT * FROM Notificaciones", Notificaciones.class);
 
         return query.getResultList();

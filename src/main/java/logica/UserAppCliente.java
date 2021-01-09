@@ -14,9 +14,9 @@ public class UserAppCliente implements Serializable {
     private String correoElectronico;
     private String Password;
     private String username;
-    @OneToMany
+   /* @OneToMany
     private List<Notificaciones> listNotificaciones;
-
+*/
     public UserAppCliente() {
 
     }
@@ -29,7 +29,7 @@ public class UserAppCliente implements Serializable {
         this.correoElectronico = correoElectronico;
         this.Password = password;
         this.username = username;
-        this.listNotificaciones= new ArrayList<Notificaciones>();
+        //this.listNotificaciones= new ArrayList<Notificaciones>();
     }
 
 
@@ -89,13 +89,13 @@ public class UserAppCliente implements Serializable {
         this.username = username;
     }
 
-    public List<Notificaciones> getListNotificaciones() {
+    /*public List<Notificaciones> getListNotificaciones() {
         return listNotificaciones;
     }
 
     public void setListNotificaciones(List<Notificaciones> listNotificaciones) {
         this.listNotificaciones = listNotificaciones;
-    }
+    }*/
 
 
 }
