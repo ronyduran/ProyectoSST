@@ -7,7 +7,6 @@ import com.google.gson.JsonObject;
 import io.javalin.Javalin;
 import org.eclipse.jetty.websocket.api.Session;
 
-import java.sql.SQLOutput;
 import java.util.Calendar;
 
 import java.io.IOException;
@@ -491,6 +490,19 @@ public class Main {
 //-------------------------------------------------------EndPoints Manejo de Tablas de la Página WEB------------------------------------------------------------------
 //--------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
+                get("/tableNotiUserWEB",ctx -> {
+                    List<EventoTunelClientes> list;
+                    HashMap map = new HashMap();
+                    list = validarIdClienteAPP();
+                    map.put("data", list);
+                    Gson g = new GsonBuilder().setDateFormat("dd/MM/yyyy HH:mm:ss").create();
+                    String res = g.toJson(map);
+                    ctx.header("Content-Type","application/json");
+                    ctx.result(res);
+                    //System.out.println(res);
+                    //ctx.json(map);
+
+                });
                 get("/tableEventosClientes",ctx -> {
                     List<EventoTunelClientes> list;
                     HashMap map = new HashMap();
@@ -1007,6 +1019,21 @@ public class Main {
            id="uInv";
         }
         return id;
+    }
+
+    public static List<EventoTunelClientes> validarIdClienteAPP(){
+        List<EventoTunelClientes> listaN= new ArrayList<EventoTunelClientes>();
+
+        for (EventoTunelClientes auxE: ServicioTunelClientes.getInstancia().todos()) {
+            for (UserAppCliente aux:ServiciosAppCliente.getInstancia().todos()) {
+                if(auxE.getIdCliente().equalsIgnoreCase(aux.getIdCliente())){
+                    listaN.add(auxE);
+
+                    break;
+                }
+            }
+        }
+        return listaN;
     }
 
     public static void eliminarUserWeb(String id){

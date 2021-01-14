@@ -31,13 +31,15 @@
         $(document).ready( function () {
            let tbl = $('#example').DataTable( {
 
-               // "ajax": "http://"+ location.hostname + ":" + location.port +"/tableEventosLiquido",
-                "ajax": "https://"+ location.hostname + ":" + location.port +"/tableEventosLiquido",
+                "ajax": "http://"+ location.hostname + ":" + location.port +"/tableEventosLiquido",
+               // "ajax": "https://"+ location.hostname + ":" + location.port +"/tableEventosLiquido",
                 "columns": [
                     //{ "data": "idEventoNivelLiquido" },
                     { "data": "nivel" },
                     { "data": "fecha" }
-                ]
+                ],columnDefs: [ { type: 'date', 'targets': [1] } ],
+               order: [[ 1, "desc" ]]
+
 
 
             } );
