@@ -37,6 +37,7 @@
                     { "data": "nombreCompleto" },
                     { "data": "correoElectronico" },
                     { "data": "sexo" },
+                    { "data": "idNFC" },
                     { "data": null }
                 ],
                 "columnDefs": [
@@ -66,7 +67,9 @@
                         enviarinfoServer("EliminarApp:"+data[Object.keys(data)[0]]);
                         Swal.fire(
                             '¡Eliminado!',
+                            'Id Usuario:  '+data[Object.keys(data)[0]],
                             'success'
+
                         )
                     }
                 })
@@ -155,9 +158,8 @@
                 <div class="container-fluid">
                     <div class="d-sm-flex justify-content-between align-items-center mb-4">
                         <h3 class="text-dark mb-4">Lista Usuario APP </h3>
-                        <button   onclick="envioNotificaciones()" type="button" class="btn btn-lg btn-primary" ><i class="fa fa-plus" aria-hidden="true"></i> Notificaciones</button>
-
-                        <!--<a href="Creación%20de%20Usuarios.html" class="btn btn-primary btn-lg active" role="button" aria-pressed="true"><i class="fa fa-plus" aria-hidden="true"></i> Nuevo Perfil</a>-->
+                        <!--<button   onclick="envioNotificaciones()" type="button" class="btn btn-lg btn-primary" ><i class="fa fa-plus" aria-hidden="true"></i> Notificaciones</button>-->
+                        <a href="Creación%20de%20Usuarios-APP.html" class="btn btn-primary btn-lg active" role="button" aria-pressed="true"><i class="fa fa-plus" aria-hidden="true"></i> Nuevo Usuario APP</a>
                     </div>
                 </div>
                 <div class="card shadow">
@@ -174,6 +176,7 @@
                                         <th>Nombre</th>
                                         <th>Email</th>
                                         <th>Sexo</th>
+                                        <th>NFC</th>
                                         <th>Eliminar</th>
                                     </tr>
                                 </thead>
@@ -184,6 +187,7 @@
                                         <th>Nombre</th>
                                         <th>Email</th>
                                         <th>Sexo</th>
+                                        <th>NFC</th>
                                         <th>Eliminar</th>
                                     </tr>
                                 </tfoot>

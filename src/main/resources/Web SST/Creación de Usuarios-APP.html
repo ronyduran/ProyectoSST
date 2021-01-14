@@ -31,8 +31,8 @@
         $(document).ready(function() {
             conectar();
 
-            //const Url = "http://" + location.hostname + ":" + location.port + "/insertarWebUser"
-            const Url= "https://itt.sstproject.me/insertarWebUser"
+            const Url = "http://" + location.hostname + ":" + location.port + "/addUserApp"
+            //const Url= "https://itt.sstproject.me/addUserApp"
             $('#myForm')
                 .ajaxForm({
                     url : Url, // or whatever
@@ -42,8 +42,8 @@
                             console.log(response)
                             $("#errolog").text(response);
                         }else{
-                            location.replace("https://itt.sstproject.me/ListarUsuariosWeb.html");
-                            //location.replace("http://" + location.hostname + ":" + location.port +"/ListarUsuariosWeb.html");
+                            //location.replace("https://itt.sstproject.me/ListarUsuariosAPP");
+                            location.replace("http://" + location.hostname + ":" + location.port +"/ListarUsuariosAPP.html");
                         }
 
 

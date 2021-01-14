@@ -54,7 +54,7 @@ public class Main {
                 ServiciosUserWeb.getInstancia().crearObjeto(us);
             }
             if(ServiciosAppCliente.getInstancia().todos().isEmpty()){
-                UserAppCliente uapp= new UserAppCliente(idAppUserGenerate(), "Rony Duran", "H", 12, "rony@prueba.com", "pucmm", "rony");
+                UserAppCliente uapp= new UserAppCliente(idAppUserGenerate(), "Rony Duran", "H", 12, "rony@prueba.com", "pucmm", "rony","N/A");
                 ServiciosAppCliente.getInstancia().crearObjeto(uapp);
             }
         }
@@ -330,7 +330,7 @@ public class Main {
                     //List<UserAppCliente> list;
 
                     Integer igual=0;
-                    UserAppCliente us= new UserAppCliente(id, nombrec, sex, 12, email, pass, nuser);
+                    UserAppCliente us= new UserAppCliente(id, nombrec, sex, 12, email, pass, nuser,"N/A");
                     for (UserAppCliente aux: ServiciosAppCliente.getInstancia().todos()) {
                         if(us.getUsername().equalsIgnoreCase(aux.getUsername())&& us.getNombreCompleto().equalsIgnoreCase(aux.getNombreCompleto())&&us.getCorreoElectronico().equalsIgnoreCase(aux.getCorreoElectronico())){
                             System.out.println("usuario ya creado");
@@ -421,6 +421,48 @@ public class Main {
                     }else{
                         ctx.result("Aviso: Verificar, no se aceptan campos vacios");
                     }
+                });
+                post("/addUserApp",ctx -> {
+                    String id=idAppUserGenerate();
+                    String usuario= ctx.formParam("username");
+                    String contrasena = ctx.formParam("pass");
+                    String email= ctx.formParam("email");
+                    String nombre = ctx.formParam("nombre");
+                    String sexo = ctx.formParam("sexo");
+                    String conContra = ctx.formParam("conpass");
+                    String nfc = ctx.formParam("NFC");
+                    if(nfc==null){
+                      nfc="N/A";
+
+                    }                    /*StandardPBEStringEncryptor encryptor = new StandardPBEStringEncryptor();
+                    encryptor.setPassword(mpCryptoPassword);
+                    encryptor.encrypt(contrasena);*/
+                    Integer val=0;
+                    System.out.println(id+"--"+usuario+"--"+contrasena+"--------"+conContra+"--"+email+"--"+nombre+"--"+sexo);
+                    if(!usuario.equalsIgnoreCase("")&&!contrasena.equalsIgnoreCase("")&& !email.equalsIgnoreCase("")&& !nombre.equalsIgnoreCase("")){
+                        if(contrasena.equalsIgnoreCase(conContra)){
+                            UserAppCliente us= new UserAppCliente(id, nombre, sexo, 12, email, contrasena, usuario,nfc);
+                            for (UserAppCliente aux:ServiciosAppCliente.getInstancia().todos()) {
+                                if(usuario.equalsIgnoreCase(aux.getUsername()) && email.equalsIgnoreCase(aux.getCorreoElectronico())){
+                                    val=1;
+                                    break;
+                                }
+                            }
+                            if(val==0){
+                                ServiciosAppCliente.getInstancia().crearObjeto(us);
+                            }if(val==1){
+                                ctx.result("Aviso:Ya un usuario tiene estos datos, debe de usar otros datos");
+                            }
+                        }else{
+                            ctx.result("Aviso: Las claves de acceso no coinciden, favor verificar");
+
+                        }
+
+                        //ctx.redirect("/ListarUsuariosWeb.html");
+                    }else{
+                        ctx.result("Aviso: Verificar, no se aceptan campos vacios");
+                    }
+
                 });
                 get("/logout",ctx -> {
                     ctx.sessionAttribute("usuario", null);
@@ -528,6 +570,11 @@ public class Main {
                     String id=ctx.formParam("id",String.class).get();
                     String masc= ctx.formParam("masc",String.class).get();
                     String temp= ctx.formParam("temp",String.class).get();
+                    String nfc= ctx.formParam("nfc",String.class).get();
+
+                    if(nfc!=null){
+                        id=UserAPPNFC(nfc);
+                    }
 
                     System.out.println("Id:"+id+"--"+"Mascarilla:"+masc+"Temperatura:"+temp);
                     ServicioTunelClientes.getInstancia().crearObjeto(new EventoTunelClientes(id,masc,temp,fecha()));
@@ -944,6 +991,22 @@ public class Main {
             ServiciosAppCliente.getInstancia().EliminarPorID(id);
         }
 
+    }
+
+    public static String UserAPPNFC(String idNFC){
+        UserAppCliente ac =null;
+        String id=null;
+        for (UserAppCliente aux: ServiciosAppCliente.getInstancia().todos()) {
+            if(idNFC.equalsIgnoreCase(aux.getIdNFC())){
+                ac=aux;
+                id=ac.getIdCliente();
+                break;
+            }
+        }
+        if (ac==null){
+           id="uInv";
+        }
+        return id;
     }
 
     public static void eliminarUserWeb(String id){

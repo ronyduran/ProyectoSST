@@ -14,6 +14,7 @@ public class UserAppCliente implements Serializable {
     private String correoElectronico;
     private String Password;
     private String username;
+    private String idNFC;
    /* @OneToMany
     private List<Notificaciones> listNotificaciones;
 */
@@ -21,7 +22,7 @@ public class UserAppCliente implements Serializable {
 
     }
 
-    public UserAppCliente(String idCliente, String nombreCompleto, String sexo, Integer edad, String correoElectronico, String password, String username) {
+    public UserAppCliente(String idCliente, String nombreCompleto, String sexo, Integer edad, String correoElectronico, String password, String username, String idNFC) {
         this.idCliente = idCliente;
         this.nombreCompleto = nombreCompleto;
         this.sexo = sexo;
@@ -29,6 +30,7 @@ public class UserAppCliente implements Serializable {
         this.correoElectronico = correoElectronico;
         this.Password = password;
         this.username = username;
+        this.idNFC=idNFC;
         //this.listNotificaciones= new ArrayList<Notificaciones>();
     }
 
@@ -87,6 +89,14 @@ public class UserAppCliente implements Serializable {
 
     public void setUsername(String username) {
         this.username = username;
+    }
+
+    public String getIdNFC() {
+        return idNFC;
+    }
+
+    public void setIdNFC(String idNFC) {
+        this.idNFC = idNFC;
     }
 
     /*public List<Notificaciones> getListNotificaciones() {
