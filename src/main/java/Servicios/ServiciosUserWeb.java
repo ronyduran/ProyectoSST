@@ -2,6 +2,7 @@ package Servicios;
 
 import logica.EventoTunelClientes;
 import logica.GestionDB;
+import logica.UserAppCliente;
 import logica.UserWeb;
 
 import javax.persistence.EntityManager;
@@ -30,6 +31,23 @@ public class ServiciosUserWeb extends GestionDB<UserWeb> {
         Query query = entityManager.createNativeQuery("SELECT * FROM UserWeb", UserWeb.class);
 
         return query.getResultList();
+    }
+
+    public void EliminarPorID(String idUser){
+        try {
+
+            EntityManager entityManager = getEntityManager();
+            Query query = entityManager.createNativeQuery("DELETE FROM UserWeb WHERE UserWeb.IdUserWeb like :id", UserWeb.class);
+            query.setParameter("id",idUser);
+            entityManager.getTransaction().begin();
+            query.executeUpdate();
+            entityManager.getTransaction().commit();
+            entityManager.close();
+        }catch (Exception e){
+            System.out.println(e);
+            System.out.println("No se puede borrar");
+
+        }
     }
 
     public UserWeb buscarPorID(String id){

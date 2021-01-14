@@ -4,7 +4,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
-    <title>Usuarios WEB</title>
+    <title>Usuarios APP</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <link rel="stylesheet" href="assets/bootstrap/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i">
@@ -50,6 +50,17 @@
                     }
                 });
         });
+            function cambioNFc(){
+                var selectNFC = document.getElementById("selecNFC");
+                var NFc= document.getElementById("NFC");
+                console.log(selectNFC.value);
+                if(selectNFC.value==0){
+                    NFc.disabled=true;
+                }else
+                    NFc.disabled=false;
+            }
+
+
     </script>
 
 </head>
@@ -105,8 +116,8 @@
             </nav>
             <div class="container-fluid">
                 <div class="d-sm-flex justify-content-between align-items-center mb-4">
-                    <h3 class="text-dark mb-4">Crear Nuevo Perfil WEB</h3>
-                    <a href="ListarUsuariosWeb.html" class="btn btn-primary btn-lg active" role="button" aria-pressed="true"><i class="fa fa-arrow-left" aria-hidden="true"></i> Volver</a>
+                    <h3 class="text-dark mb-4">Crear Nuevo Perfil APP</h3>
+                    <a href="ListarUsuariosAPP.html" class="btn btn-primary btn-lg active" role="button" aria-pressed="true"><i class="fa fa-arrow-left" aria-hidden="true"></i> Volver</a>
                 </div>
 
                 <div>
@@ -120,7 +131,7 @@
                                     </div>
                                     <div class="card-body">
                                         <p id="errolog" class="text-center" style="color: red"></p>
-                                        <form id="myForm" method="POST" action="/insertarWebUser">
+                                        <form id="myForm" method="POST" action="/addUserApp">
                                             <div class="form-row">
                                                 <div class="col">
                                                     <div class="form-group">
@@ -135,40 +146,39 @@
                                                         <input class="form-control" type="email" placeholder="user@ejemplo.com" name="email">
                                                     </div>
                                                 </div>
-                                               <!-- <div class="col ">
+                                                <div class="col">
                                                     <div class="form-group">
-                                                        <label ><strong>Rol:</strong></label>
-                                                    <div class="form-row">
-                                                        <select name="roles"><optgroup label="Asigne Un Rol"><option value="12">Admin</option><option value="13">Supervisor</option><option value="14">Auxiliar</option></optgroup></select>
+                                                        <label ><strong>Sexo</strong></label>
+                                                        <select class="form-control input100"  name="sexo" id="selecsex" tyle="width: auto"> <option value="H">Masculino</option> <option value="M">Femenino</option></select>
 
                                                     </div>
-
-                                                    </div>
-                                                </div>-->
+                                                </div>
 
                                             </div>
                                             <div class="form-row">
                                                 <div class="col">
                                                     <div class="form-group">
-                                                        <label for="first_name"><strong>Nombres</strong></label>
+                                                        <label ><strong>Nombre Completo</strong></label>
                                                         <input class="form-control input100" type="text" placeholder="Jose" name="nombre">
                                                     </div>
                                                 </div>
                                                 <div class="col">
                                                     <div class="form-group">
-                                                        <label for="first_name"><strong>Apellidos</strong></label>
-                                                        <input class="form-control input100" type="text" placeholder="Peña" name="apellido">
+                                                        <label><strong>ID NFC</strong></label>
+                                                        <select  id="selecNFC" tyle="width: auto" onchange="cambioNFc()"> <optgroup label="¿Tiene NFC?"><option value=0>No</option> <option value=1>Si</option></optgroup></select>
+
+                                                        <input  id="NFC" class="form-control" type="text" placeholder="Id NFC" name="NFC" disabled>
                                                     </div>
                                                 </div>
                                                 <div class="col">
                                                     <div class="form-group">
-                                                        <label for="last_name"><strong>Contraseña</strong></label>
+                                                        <label ><strong>Contraseña</strong></label>
                                                         <input class="form-control" type="password" placeholder="Ingrese contraseña" name="pass">
                                                     </div>
                                                 </div>
                                                 <div class="col">
                                                     <div class="form-group">
-                                                        <label for="last_name"><strong>Confirmar Contraseña</strong></label>
+                                                        <label><strong>Confirmar Contraseña</strong></label>
                                                         <input class="form-control" type="password" placeholder="Confirmar Contraseña" name="conpass">
                                                     </div>
                                                 </div>

@@ -146,6 +146,16 @@ public class Main {
                     enviarMensajeAClientesConectados("conMasc:"+contMasc());
                     enviarMensajeAClientesConectados("sinMasc:"+sintMasc());
                 }
+                if(data.startsWith("EliminarApp:")){
+                    String recortada=data.substring(12);
+                    System.out.println("ID de usuario a borrar es: "+recortada);
+                    eliminarUserAPP(recortada);
+                }
+                if(data.startsWith("EliminarWeb:")){
+                    String recortada=data.substring(12);
+                    System.out.println("ID de usuario a borrar es: "+recortada);
+                    eliminarUserWeb(recortada);
+                }
             });
 
             ws.onClose(ctx -> {
@@ -164,9 +174,13 @@ public class Main {
 //--------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 
-        app.ws("/AppEnvio", wsHandler -> {
+        /*app.ws("/AppEnvio", wsHandler -> {
+            wsHandler.onConnect(ctx -> {
+                ctx.send("Hola este es el web socket");
 
-        });
+            });
+
+        });*/
 
 //--------------------------------------------------------------------------------------------------------------------------------------------------------------------
 //--------------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -916,6 +930,34 @@ public class Main {
                 aux.getListIdUsuario().remove(idUsuario);
             }
         }
+    }
+
+    public static void eliminarUserAPP(String id){
+        UserAppCliente ac =null;
+        for (UserAppCliente aux: ServiciosAppCliente.getInstancia().todos()) {
+            if(id.equalsIgnoreCase(aux.getIdCliente())){
+                ac=aux;
+                break;
+            }
+        }
+        if (ac!=null){
+            ServiciosAppCliente.getInstancia().EliminarPorID(id);
+        }
+
+    }
+
+    public static void eliminarUserWeb(String id){
+        UserWeb aw =null;
+        for (UserWeb aux: ServiciosUserWeb.getInstancia().todos()) {
+            if(id.equalsIgnoreCase(aux.getIdUserWeb())){
+                aw=aux;
+                break;
+            }
+        }
+        if (aw!=null){
+            ServiciosUserWeb.getInstancia().EliminarPorID(id);
+        }
+
     }
 
 }

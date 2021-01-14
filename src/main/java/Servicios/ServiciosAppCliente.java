@@ -6,6 +6,7 @@ import logica.UserWeb;
 
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
+import javax.transaction.Transactional;
 import java.util.List;
 
 public class ServiciosAppCliente extends GestionDB<UserAppCliente> {
@@ -31,6 +32,24 @@ public class ServiciosAppCliente extends GestionDB<UserAppCliente> {
         Query query = entityManager.createNativeQuery("SELECT * FROM UserAppCliente", UserAppCliente.class);
 
         return query.getResultList();
+    }
+
+
+    public void EliminarPorID(String idUser){
+        try {
+
+            EntityManager entityManager = getEntityManager();
+            Query query = entityManager.createNativeQuery("DELETE FROM UserAppCliente WHERE UserAppCliente.idCliente like :id", UserAppCliente.class);
+            query.setParameter("id",idUser);
+            entityManager.getTransaction().begin();
+            query.executeUpdate();
+            entityManager.getTransaction().commit();
+            entityManager.close();
+        }catch (Exception e){
+            System.out.println(e);
+            System.out.println("No se puede borrar");
+
+        }
     }
 
     /*public UserAppCliente buscarPorID(String idUser){
