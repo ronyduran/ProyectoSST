@@ -158,7 +158,7 @@ public class Main {
                 if(data.startsWith("EliminarWeb:")){
                     String recortada=data.substring(12);
                     System.out.println("ID de usuario a borrar es: "+recortada);
-
+                    eliminarUserWeb(recortada);
                 }
                 if(data.startsWith("Inicio:")){
                     String recortada=data.substring(7);
@@ -637,14 +637,15 @@ public class Main {
                     String masc= ctx.formParam("masc",String.class).get();
                     String temp= ctx.formParam("temp",String.class).get();
                     String nfc= ctx.formParam("nfc",String.class).get();
-                    Date fe= ctx.formParam("fecha",Date.class).get();
+                    String fe= ctx.formParam("fecha",String.class).get();
+                    Date fnew= new SimpleDateFormat("dd/MM/yyyy").parse(fe);
 
                     if(nfc!=null){
                         id=UserAPPNFC(nfc);
                     }
 
-                    System.out.println("Id:"+id+"--"+"Mascarilla:"+masc+"Temperatura:"+temp+"La Fecha es"+fe);
-                    ServicioTunelClientes.getInstancia().crearObjeto(new EventoTunelClientes(id,masc,temp,fe));
+                    System.out.println("Id:"+id+"--"+"Mascarilla:"+masc+"Temperatura:"+temp+"La Fecha es"+fnew);
+                    ServicioTunelClientes.getInstancia().crearObjeto(new EventoTunelClientes(id,masc,temp,fnew));
 
 
                     enviarMensajeAClientesConectados("cont:"+contClientesdelActual());
@@ -657,10 +658,12 @@ public class Main {
 
                 post("/addNivelEvento",ctx -> {
                     String nivel= ctx.formParam("taman",String.class).get();
-                    Date fe= ctx.formParam("fecha",Date.class).get();
-                    ServicioTunelLiquifo.getIntacia().crearObjeto(new EventoTunelNivleLiquido(nivel,fe));
+                    String fe= ctx.formParam("fecha",String.class).get();
+                    Date fnew= new SimpleDateFormat("dd/MM/yyyy").parse(fe);
+
+                    ServicioTunelLiquifo.getIntacia().crearObjeto(new EventoTunelNivleLiquido(nivel,fnew));
                     //mode.setNivel(ctx.formParam("taman",Integer.class).get());
-                    System.out.println("El nivel es:"+nivel+"----"+"la fecha es:"+fe);
+                    System.out.println("El nivel es:"+nivel+"----"+"la fecha es:"+fnew);
                     enviarMensajeAClientesConectados("nivel:"+nivel);
                 });
 
