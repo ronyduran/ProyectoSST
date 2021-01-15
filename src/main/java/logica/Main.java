@@ -616,7 +616,7 @@ public class Main {
                     String temp= ctx.formParam("temp",String.class).get();
                     String nfc= ctx.formParam("nfc",String.class).get();
 
-                    if(nfc!=null || !nfc.equalsIgnoreCase("null")){
+                    if(nfc!=null){
                         id=UserAPPNFC(nfc);
                     }
 
@@ -640,7 +640,7 @@ public class Main {
                     String fe= ctx.formParam("fecha",String.class).get();
                     Date fnew= new SimpleDateFormat("dd/MM/yyyy").parse(fe);
 
-                    if(nfc!=null){
+                    if(nfc!=null|| !nfc.equalsIgnoreCase("null")){
                         id=UserAPPNFC(nfc);
                     }
 
