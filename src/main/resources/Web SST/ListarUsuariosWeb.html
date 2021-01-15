@@ -28,8 +28,8 @@
         $(document).ready( function () {
             let tbl = $('#example').DataTable({
 
-                "ajax": "http://" + location.hostname + ":" + location.port + "/tableUserWEB",
-                //"ajax": "https://"+ location.hostname + ":" + location.port +"/tableUserWEB",
+                //"ajax": "http://" + location.hostname + ":" + location.port + "/tableUserWEB",
+                "ajax": "https://"+ location.hostname + ":" + location.port +"/tableUserWEB",
                 "columns": [
                     {"data": "IdUserWeb"},
                     {"data": "userName"},

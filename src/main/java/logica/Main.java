@@ -35,6 +35,9 @@ public class Main {
     private static Integer anno1= Calendar.getInstance().get(Calendar.YEAR);
     private static Integer anno2= Calendar.getInstance().get(Calendar.YEAR);
     private static Date fechaprueba= new Date();
+    private static Date fechaInicio;
+    private static Date fechaFin;
+
 
     private static List<Notificaciones>listNoti= new ArrayList();
 
@@ -77,6 +80,8 @@ public class Main {
             ws.onConnect(ctx -> {
                 grafica1=0;
                 grafica2=0;
+                fechaInicio=null;
+                fechaFin=null;
                 mes1=new Date().getMonth();
                 mes2=new Date().getMonth();
                 anno1= Calendar.getInstance().get(Calendar.YEAR);
@@ -153,7 +158,31 @@ public class Main {
                 if(data.startsWith("EliminarWeb:")){
                     String recortada=data.substring(12);
                     System.out.println("ID de usuario a borrar es: "+recortada);
-                    eliminarUserWeb(recortada);
+
+                }
+                if(data.startsWith("Inicio:")){
+                    String recortada=data.substring(7);
+                    System.out.println("Fecha Inicio es "+recortada);
+                    if(!recortada.equalsIgnoreCase("null")){
+                        fechaInicio=new SimpleDateFormat("dd/MM/yyyy").parse(recortada);
+                        System.out.println(fechaInicio);
+                    }else{
+                        fechaInicio=null;
+                    }
+
+
+                }
+                if(data.startsWith("Final:")){
+                    String recortada=data.substring(6);
+                    System.out.println("Fecha Final es "+recortada);
+                    if(!recortada.equalsIgnoreCase("null")){
+                        fechaFin=new SimpleDateFormat("dd/MM/yyyy").parse(recortada);
+                    }else{
+                        fechaFin=null;
+                    }
+
+                    System.out.println(fechaFin);
+
                 }
             });
 
@@ -249,7 +278,10 @@ public class Main {
                                 Notificaciones n1= new Notificaciones(idNotificacion(),notificacion,fecha());
                                 userList= n1.getListIdUsuario();
                                 for (UserAppCliente appCliente:ServiciosAppCliente.getInstancia().todos()) {
-                                    userList.add(appCliente.getIdCliente());
+                                    if(validarIdClienteNotificacion(appCliente.getIdCliente())){
+                                        userList.add(appCliente.getIdCliente());
+                                        System.out.println(appCliente.getIdCliente());
+                                    }
                                 }
                                 n1.setListIdUsuario(userList);
                                 listNoti.add(n1);
@@ -598,6 +630,38 @@ public class Main {
                     enviarMensajeAClientesConectados("sinMasc:"+sintMasc());
                     diasUserGraf1();
 
+                });
+
+                post("/addClienteEvento",ctx -> {
+                    String id=ctx.formParam("id",String.class).get();
+                    String masc= ctx.formParam("masc",String.class).get();
+                    String temp= ctx.formParam("temp",String.class).get();
+                    String nfc= ctx.formParam("nfc",String.class).get();
+                    Date fe= ctx.formParam("fecha",Date.class).get();
+
+                    if(nfc!=null){
+                        id=UserAPPNFC(nfc);
+                    }
+
+                    System.out.println("Id:"+id+"--"+"Mascarilla:"+masc+"Temperatura:"+temp+"La Fecha es"+fe);
+                    ServicioTunelClientes.getInstancia().crearObjeto(new EventoTunelClientes(id,masc,temp,fe));
+
+
+                    enviarMensajeAClientesConectados("cont:"+contClientesdelActual());
+                    enviarMensajeAClientesConectados("contGeneral:"+contClientesdelGeneral());
+                    enviarMensajeAClientesConectados("conMasc:"+contMasc());
+                    enviarMensajeAClientesConectados("sinMasc:"+sintMasc());
+                    diasUserGraf1();
+
+                });
+
+                post("/addNivelEvento",ctx -> {
+                    String nivel= ctx.formParam("taman",String.class).get();
+                    Date fe= ctx.formParam("fecha",Date.class).get();
+                    ServicioTunelLiquifo.getIntacia().crearObjeto(new EventoTunelNivleLiquido(nivel,fe));
+                    //mode.setNivel(ctx.formParam("taman",Integer.class).get());
+                    System.out.println("El nivel es:"+nivel+"----"+"la fecha es:"+fe);
+                    enviarMensajeAClientesConectados("nivel:"+nivel);
                 });
 
                 post("/nivel",ctx -> {
@@ -1022,19 +1086,93 @@ public class Main {
     }
 
     public static List<EventoTunelClientes> validarIdClienteAPP(){
+        System.out.println("entro 2222");
         List<EventoTunelClientes> listaN= new ArrayList<EventoTunelClientes>();
+        if(fechaInicio==null && fechaFin==null){
+            System.out.println("entro 111");
+            for (EventoTunelClientes auxE: ServicioTunelClientes.getInstancia().todos()) {
+                for (UserAppCliente aux:ServiciosAppCliente.getInstancia().todos()) {
+                    if(auxE.getIdCliente().equalsIgnoreCase(aux.getIdCliente())){
+                            listaN.add(auxE);
+                        break;
+                    }
+                }
+            }
+        }
+        if(fechaInicio!=null && fechaFin!=null){
+            System.out.println("entro ");
+            for (EventoTunelClientes auxE: ServicioTunelClientes.getInstancia().todos()) {
+                for (UserAppCliente aux:ServiciosAppCliente.getInstancia().todos()) {
+                    if(auxE.getIdCliente().equalsIgnoreCase(aux.getIdCliente())){
+                        if(between(auxE.getFecha(),fechaInicio,fechaFin)){
+                            listaN.add(auxE);
+                        }
 
-        for (EventoTunelClientes auxE: ServicioTunelClientes.getInstancia().todos()) {
-            for (UserAppCliente aux:ServiciosAppCliente.getInstancia().todos()) {
-                if(auxE.getIdCliente().equalsIgnoreCase(aux.getIdCliente())){
-                    listaN.add(auxE);
 
+                        break;
+                    }
+                }
+            }
+        }
+
+        return listaN;
+    }
+
+    public static boolean validarIdClienteNotificacion(String id){
+        System.out.println("entro 2222");
+        Boolean p =false;
+        if(fechaInicio==null && fechaFin==null){
+            System.out.println("entro ");
+            for (EventoTunelClientes auxE: ServicioTunelClientes.getInstancia().todos()) {
+                if(auxE.getIdCliente().equalsIgnoreCase(id)){
+                        p=true;
                     break;
                 }
             }
         }
-        return listaN;
+        if(fechaInicio!=null && fechaFin!=null){
+            System.out.println("entro ");
+            for (EventoTunelClientes auxE: ServicioTunelClientes.getInstancia().todos()) {
+                    if(auxE.getIdCliente().equalsIgnoreCase(id)){
+                        if(between(auxE.getFecha(),fechaInicio,fechaFin)){
+                            p=true;
+                        }
+                        break;
+                    }
+            }
+        }
+
+        return p;
     }
+
+
+
+    private static boolean between(Date date, Date dateStart, Date dateEnd) {
+        if (date != null && dateStart != null && dateEnd != null) {
+            return (dateEqualOrAfter(date, dateStart) && dateEqualOrBefore(date, dateEnd));
+
+        }
+        return false;
+    }
+
+    private static boolean dateEqualOrAfter(Date dateInQuestion, Date date2)
+    {
+        if (dateInQuestion.equals(date2))
+            return true;
+
+        return (dateInQuestion.after(date2));
+
+    }
+    private static boolean dateEqualOrBefore(Date dateInQuestion, Date date2)
+    {
+        if (dateInQuestion.equals(date2))
+            return true;
+
+        return (dateInQuestion.before(date2));
+
+    }
+
+
 
     public static void eliminarUserWeb(String id){
         UserWeb aw =null;

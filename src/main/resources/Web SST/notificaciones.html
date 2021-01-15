@@ -26,14 +26,15 @@
     <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
 
     <script>
+        let tbl
         $(document).ready(function() {
             conectar();
         });
         $(document).ready( function () {
-            let tbl = $('#example').DataTable({
+             tbl = $('#example').DataTable({
 
-                "ajax": "http://" + location.hostname + ":" + location.port + "/tableNotiUserWEB",
-                //"ajax": "https://"+ location.hostname + ":" + location.port +"/tableNotiUserWEB",
+                //"ajax": "http://" + location.hostname + ":" + location.port + "/tableNotiUserWEB",
+                "ajax": "https://"+ location.hostname + ":" + location.port +"/tableNotiUserWEB",
                 "columns": [
                     { "data": "idCliente" },
                     { "data": "estadoMascarilla" },
@@ -53,23 +54,11 @@
                 ],*/
 
         });
-            $.fn.dataTable.ext.search.push(
-                function (settings, data, dataIndex) {
-                    var min = $('input[name="daterange"]').startDate.val();
-                    var max = $('input[name="daterange"]').endDate.val();
-                    console.log("Min"+min+"-----"+"Max:"+max);
-                    var startDate = new Date(data[3]);
-                    if (min == null && max == null) { return true; }
-                    if (min == null && startDate <= max) { return true; }
-                    if (max == null && startDate >= min) { return true; }
-                    if (startDate <= max && startDate >= min) { return true; }
-                    return false;
-                }
-            );
+
 
             setInterval( function () {
                 tbl.ajax.reload( null, false );
-            }, 15000 );
+            }, 1500);
         } );
 
         $(function() {
@@ -77,8 +66,8 @@
                 "locale": {
                     "format": "DD/MM/YYYY",
                     "separator": " - ",
-                    "applyLabel": "Apply",
-                    "cancelLabel": "Cancel",
+                    "applyLabel": "Aplicar",
+                    "cancelLabel": "Limpiar",
                     "fromLabel": "From",
                     "toLabel": "To",
                     "customRangeLabel": "Custom",
@@ -93,26 +82,60 @@
                         "Sa"
                     ],
                     "monthNames": [
-                        "January",
-                        "February",
-                        "March",
-                        "April",
-                        "May",
-                        "June",
-                        "July",
-                        "August",
-                        "September",
-                        "October",
-                        "November",
-                        "December"
+                        "Enero",
+                        "Febrero",
+                        "Marzo",
+                        "Abril",
+                        "Mayo",
+                        "Junio",
+                        "Julio",
+                        "Agosto",
+                        "Septiembre",
+                        "Octubre",
+                        "Noviembre",
+                        "Dicember"
                     ],
                     "firstDay": 1
                 },
-                "startDate": "01/01/2021",
-                "endDate": "14/01/2021"
+
             }, function(start, end, label) {
-                console.log('New date range selected: ' + start.format('DD-MM-YYYY') + ' to ' + end.format('DD-MM-YYYY') + ' (predefined range: ' + label + ')');});
+                console.log('New date range selected: ' + start.format('DD-MM-YYYY') + ' to ' + end.format('DD-MM-YYYY') + ' (predefined range: ' + label + ')');
+                enviarinfoServer("Inicio:"+start.format('DD/MM/YYYY'));
+                enviarinfoServer("Final:"+end.format('DD/MM/YYYY') );
+
+            });
+            $('input[name="daterange"]').on('cancel.daterangepicker', function(ev, picker) {
+                $(this).val('');
+                enviarinfoServer("Inicio:"+null);
+                enviarinfoServer("Final:"+null);
+            });
+
+
         });
+        async function envioNotificaciones() {
+            var txt;
+            //var URL="http://localhost:7000/inserNotifi";
+            var URL = "https://" + location.hostname + ":" + location.port + "/inserNotifi";
+
+            const {value: text} = await Swal.fire({
+                input: 'textarea',
+                inputLabel: 'Mensaje',
+                inputPlaceholder: 'Escribe el mensaje aqui...',
+                inputAttributes: {
+                    'aria-label': 'Escribe el mensaje aqui'
+                },
+
+                showCancelButton: true
+            })
+
+            if (text) {
+                $.post(URL,
+                    {
+                        id: "all",
+                        noti: text
+                    })
+            }
+        }
     </script>
 
 </head>
@@ -136,7 +159,7 @@
                     <li class="nav-item"></li>
                     <li class="nav-item"></li>
                     <li class="nav-item"><a class="nav-link" href="Grafica%20Estadistica.html"><i class="fas fa-window-maximize"></i><span>Gráficos Estadísticos</span></a></li>
-                    <li class="nav-item"><a class="nav-link active" href="ListarUsuariosWeb.html"><i class="fas fa-table"></i><span>Lista Usuarios Web</span></a></li>
+                    <li class="nav-item"><a class="nav-link" href="ListarUsuariosWeb.html"><i class="fas fa-table"></i><span>Lista Usuarios Web</span></a></li>
                     <li class="nav-item"><a class="nav-link " href="ListarUsuariosAPP.html"><i class="fas fa-table"></i><span>Lista Usuarios APP</span></a></li>
                     <li class="nav-item"><a class="nav-link" href="infoGeneral.html"><i class="fas fa-user"></i><span>Información General</span></a></li>
                 </ul>
@@ -177,8 +200,13 @@
                     <div class="card-header py-3">
                         <p class="text-primary m-0 font-weight-bold">Ingresos usuarios app  al tunel</p>
                     </div>
-                    <input type="text" name="daterange" value="01/01/2018 - 01/15/2018" />
                     <div class="card-body">
+                        <span class="font-weight-bold" style="color: black;">Seleccione el rango a visualizar:</span>
+                        <input type="text" name="daterange"/>
+
+                        <button   onclick="envioNotificaciones()" type="button" class="btn btn-lg btn-primary" style="float: right; margin-bottom: 25px;"><i class="fa fa-pencil" aria-hidden="true"></i> Escribir Notificacion</button>
+
+
                         <div class="table-responsive table mt-2" id="dataTableP" role="grid" aria-describedby="dataTable_info">
                             <table id="example" class="display" style="width:100%">
                                 <thead>

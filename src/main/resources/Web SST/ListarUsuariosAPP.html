@@ -29,8 +29,8 @@
         $(document).ready( function () {
             let tbl = $('#example').DataTable( {
 
-                 "ajax": "http://"+ location.hostname + ":" + location.port +"/tableUserAPP",
-                //"ajax": "https://"+ location.hostname + ":" + location.port +"/tableUserAPP",
+                // "ajax": "http://"+ location.hostname + ":" + location.port +"/tableUserAPP",
+                "ajax": "https://"+ location.hostname + ":" + location.port +"/tableUserAPP",
                 "columns": [
                     { "data": "idCliente" },
                     { "data": "username" },
@@ -83,23 +83,7 @@
             }, 15000 );
         } );
 
-        function envioNotificaciones() {
-            var txt;
-            //var URL="http://localhost:7000/inserNotifi";
-            var URL="https://"+ location.hostname + ":" + location.port +"/inserNotifi";
 
-            var person = prompt("Ingrese el Mensaje:", "");
-            if (person == null || person == "") {
-                txt = "User cancelled the prompt.";
-            } else {
-
-                $.post(URL,
-                    {
-                        id: "all",
-                        noti: person
-                    })
-            }
-        }
     </script>
 
 </head>

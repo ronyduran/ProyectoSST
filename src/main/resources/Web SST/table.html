@@ -31,8 +31,8 @@
         $(document).ready( function () {
            let tbl = $('#example').DataTable( {
 
-                "ajax": "http://"+ location.hostname + ":" + location.port +"/tableEventosClientes",
-               // "ajax": "https://"+ location.hostname + ":" + location.port +"/tableEventosClientes",
+               // "ajax": "http://"+ location.hostname + ":" + location.port +"/tableEventosClientes",
+               "ajax": "https://"+ location.hostname + ":" + location.port +"/tableEventosClientes",
                 "columns": [
                     //{ "data": "idEventoCTunelCliente" },
                     { "data": "idCliente" },
@@ -107,8 +107,10 @@
             </div>
             </nav>
             <div class="container-fluid">
-                <h3 class="text-dark mb-4">Notificaciones APP</h3>
-                <a href="notificaciones.html" class="btn btn-primary btn-lg active" role="button" aria-pressed="true"><i class="fa fa-plus" aria-hidden="true"></i> Notificaciones APP</a>
+                <div class="d-sm-flex justify-content-between align-items-center mb-4">
+                    <h3 class="text-dark mb-4">Notificaciones APP</h3>
+                    <a href="notificaciones.html" class="btn btn-primary btn-lg active" role="button" aria-pressed="true"><i class="fa fa-plus" aria-hidden="true"></i> Notificaciones APP</a>
+                </div>
 
                 <div class="card shadow">
                     <div class="card-header py-3">
