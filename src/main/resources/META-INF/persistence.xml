@@ -26,8 +26,8 @@
             <property name="connection.pool_size" value="100"/>
             <!-- Indica como será la generación de las tablas en el motor-->
             <!-- ver la documentación: https://docs.oracle.com/javaee/7/tutorial/persistence-intro005.htm -->
-            <!--<property name="javax.persistence.schema-generation.database.action" value="update"/>-->
-            <property name="javax.persistence.schema-generation.database.action" value="create-drop"/>
+            <property name="javax.persistence.schema-generation.database.action" value="update"/>
+            <!--<property name="javax.persistence.schema-generation.database.action" value="create-drop"/>-->
             <!-- <property name="javax.persistence.schema-generation.database.action" value="update"/>-->
         </properties>
     </persistence-unit>
