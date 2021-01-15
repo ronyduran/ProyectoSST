@@ -614,11 +614,11 @@ public class Main {
                     String id=ctx.formParam("id",String.class).get();
                     String masc= ctx.formParam("masc",String.class).get();
                     String temp= ctx.formParam("temp",String.class).get();
-                    String nfc= ctx.formParam("nfc",String.class).get();
+                    //String nfc= ctx.formParam("nfc",String.class).get();
 
-                    if(nfc!=null){
-                        id=UserAPPNFC(nfc);
-                    }
+                    //if(nfc!=null){
+                      //  id=UserAPPNFC(nfc);
+                   // }
 
                     System.out.println("Id:"+id+"--"+"Mascarilla:"+masc+"Temperatura:"+temp);
                     ServicioTunelClientes.getInstancia().crearObjeto(new EventoTunelClientes(id,masc,temp,fecha()));
