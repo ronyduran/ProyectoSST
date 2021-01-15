@@ -616,7 +616,7 @@ public class Main {
                     String temp= ctx.formParam("temp",String.class).get();
                     String nfc= ctx.formParam("nfc",String.class).get();
 
-                    if(nfc!=null){
+                    if(nfc!=null || !nfc.equalsIgnoreCase("null")){
                         id=UserAPPNFC(nfc);
                     }
 
